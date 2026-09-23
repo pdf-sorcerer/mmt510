@@ -32,6 +32,8 @@
 - [x] Domínio de produção padronizado em todo o ecossistema: `https://minrock.vercel.app`.
 - [x] Sincronização do bundle do ScatterLeaf v0.5.2 (`public/scatterleaf.js`) 100% expurgado de dados nominais.
 - [x] Exclusão integral da pasta `.git` local para subida do repositório do zero limpo e desvinculado.
+- [x] Conexão OSINT-Proof do Broker via Variável de Ambiente: Leitura dinâmica de `PUBLIC_SCATTERLEAF_BROKER` no `src/config/site.ts`, permitindo deploy em produção na Vercel com comentários ao vivo sem expor subdomínios pessoais no GitHub.
+- [x] Resolução de Título & Persistência de Discussões: Passagem explícita de `term={title}` em `Comments.astro` e atualização do bundle, garantindo que discussões reais no GitHub persistam e recarreguem perfeitamente no F5 e entre navegadores.
 
 ### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
