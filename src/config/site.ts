@@ -1,0 +1,73 @@
+export interface SiteConfig {
+  title: string;
+  tagline: string;
+  description: string;
+  author: string;
+  siteUrl: string;
+  defaultTheme: 'white' | 'cream' | 'slate' | 'midnight';
+  socialLinks: {
+    github?: string;
+    twitter?: string;
+    linkedin?: string;
+    email?: string;
+  };
+  navLinks: {
+    title: string;
+    href: string;
+  }[];
+  comments?: {
+    enabled: boolean;
+    provider: 'scatterleaf';
+    repo: string;
+    category?: string;
+    theme?: 'auto' | 'light' | 'dark' | 'cream' | 'midnight' | 'slate';
+    lang?: string;
+    broker?: string;
+    clientId?: string;
+    order?: 'oldest' | 'newest';
+    features?: {
+      reactions?: boolean;
+      skinTone?: boolean;
+      sorting?: boolean;
+      codeScroll?: boolean;
+      preview?: boolean;
+      search?: boolean;
+    };
+  };
+}
+
+export const siteConfig: SiteConfig = {
+  title: 'Minrock',
+  tagline: 'Raw ideas from your personal vault, finely polished into an ultra-fast static blog.',
+  description: 'Minimalist, typography-first Astro 7 theme crafted for technical writers and Obsidian vaults. Pure SSG, zero bloat.',
+  author: 'Renato Rezende',
+  // Substitua pelo seu domínio de produção (usado para SEO Canônico, OpenGraph e RSS)
+  // Replace with your production domain (used for Canonical SEO, OpenGraph and RSS feeds)
+  // Can be overridden via environment variable (e.g. Vercel: SITE_URL=https://yourdomain.com)
+  siteUrl: (typeof process !== 'undefined' && process.env?.SITE_URL) || (import.meta as any).env?.SITE_URL || 'https://minrock.vercel.app',
+  defaultTheme: 'cream',
+  socialLinks: {
+    github: 'https://github.com/rnt-rez/minrock',
+    linkedin: 'https://example.com/',
+    email: 'https://example.com/'
+  },
+  navLinks: [
+    { title: 'Home', href: '/' },
+    { title: 'Blog', href: '/blog' },
+    { title: 'Projects', href: '/projects' },
+    { title: 'Tags', href: '/tags' },
+    { title: 'About', href: '/about' }
+  ],
+  comments: {
+    enabled: true,
+    provider: 'scatterleaf',
+    repo: 'rnt-rez/minrock',
+    category: 'General',
+    theme: 'auto',
+    lang: 'auto',
+    clientId: 'Iv23liZHApvnx6e6wtMJ',
+    // Leave broker empty ('') to use ScatterLeaf's instant zero-setup fallback mode,
+    // or provide your own Cloudflare Edge Broker Worker URL for live in-page comments.
+    broker: ''
+  }
+};

@@ -1,0 +1,63 @@
+# 🪨 PROGRESS — Minrock (Doca de Desenvolvimento)
+
+> **Versão:** v0.2.2 | **Status:** 🟢 Produção & Homologação | **Lighthouse:** 100/100  
+> **Autor:** Renato Rezende ([@rnt-rez](https://github.com/rnt-rez)) | **Harness:** `..\estaleiro`
+
+---
+
+## 🎯 Foco Atual & Entregas Consolidadas
+* **Astro 7 SSG:** Tipografia calibrada, 4 temas (White, Cream, Slate, Midnight), zero bloat.
+* **Acessibilidade Universal:** Voice reader acessível, navegação por teclado, WCAG 2.1/2.2 AA.
+* **Obsidian CMS:** Suporte nativo a Markdown com imagens locais e visualizador PhotoSwipe.
+* **Governança Estaleiro:** `AGENTS.md` ativo, Lifecycle Gates, suíte de auditoria (`npm run qa`).
+
+---
+
+## 📋 Sequência de Etapas
+
+### 🟢 Etapa 1: Scaffolding & Design System (Concluída — v0.1.0)
+- [x] Base Astro 7, TypeScript, paletas CSS calibradas e validação QA zerada.
+
+### 🟢 Etapa 2: Recursos, Inclusão e Conteúdo (Concluída — v0.2.0)
+- [x] Busca instantânea Lunr, paginação inferior simplificada e tags com micro-interações.
+- [x] Integração ScatterLeaf v0.4.0 (GitHub App, escopo limpo read:user, buscador estilo Minrock neon e reações independentes).
+- [x] Artigos sobre Obsidian, Domínio próprio, Personalização e Acessibilidade/Valores.
+- [x] RSS Feed 2.0 com auto-discovery `<link rel="alternate">` e botão acessível no rodapé.
+- [x] Auditoria de Acessibilidade, Boas Práticas e SEO com **100/100 no Lighthouse** e 0 erros WCAG.
+
+### 🟢 Etapa 2.1: Blindagem OSINT-Proof, Parametrização e Purga de Git (Concluída — v0.2.2)
+- [x] Isolamento de contatos: botões de redes sociais e email parametrizados com fallback neutro (`https://example.com/`), mantendo no GitHub apenas o repositório público do projeto.
+- [x] Sanitização completa de dados privados, caminhos absolutos e URLs de desenvolvimento.
+- [x] Componentes de interface (`Footer.astro` e `SocialDropdown.astro`) calibrados para abertura segura de links web.
+- [x] Domínio de produção padronizado em todo o ecossistema: `https://minrock.vercel.app`.
+- [x] Sincronização do bundle do ScatterLeaf v0.5.2 (`public/scatterleaf.js`) 100% expurgado de dados nominais.
+- [x] Exclusão integral da pasta `.git` local para subida do repositório do zero limpo e desvinculado.
+
+### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
+- [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
+- [ ] Submissão ao diretório oficial `astro.build/themes`.
+
+### ⚪ Etapa 4: Sistema de Feature Flags ("Rico por padrão, minimalista sob demanda")
+- [ ] Criar objeto `features` no `siteConfig` (`src/config/site.ts`) para controle granular de componentes.
+- [ ] Habilitar todos os recursos por padrão (Experiência Rica / Efeito UAU imediato).
+- [ ] Permitir desativação seletiva para puristas do minimalismo (Obsidian style):
+  - [ ] `search`: Modal e barra de busca Lunr.
+  - [ ] `tableOfContents`: Sumário lateral com scroll-spy no post.
+  - [ ] `readingTime`: Tempo estimado de leitura ("5 min read").
+  - [ ] `themeSwitcher`: Alternador de paletas (Cream, Midnight, Slate, White).
+  - [ ] `tags`: Exibição de chips e nuvem de tags.
+  - [ ] `authorBio`: Card de biografia e avatar do autor no rodapé.
+  - [ ] `socialShare`: Botões de compartilhamento social.
+  - [ ] `comments`: Integração nativa com ScatterLeaf.
+- [ ] Garantir zero overhead de bundle no SSG (componentes desativados não são compilados no HTML final).
+
+---
+
+## 🛠️ Comandos Rápidos
+```bash
+npm run dev             # Dev local (http://localhost:4321)
+npm run qa              # Checagem completa de tipos + build estático
+npm run audit:google    # SERP Preview, Schema.org e Googlebot
+npm run audit:wcag      # Conformidade semântica e Acessibilidade WCAG
+npm run audit:security  # Varredura DevSecOps Sentinel
+```
