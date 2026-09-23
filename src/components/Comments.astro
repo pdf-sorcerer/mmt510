@@ -41,6 +41,7 @@ const isEnabled = Boolean(comments?.enabled);
             broker={comments.broker}
             client-id={comments.clientId}
             title={title}
+            term={title}
             order={comments.order || 'oldest'}
             hide-reactions={comments.features?.reactions === false ? '' : undefined}
             hide-skin-tone={comments.features?.skinTone === false ? '' : undefined}

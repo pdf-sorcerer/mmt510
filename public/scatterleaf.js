@@ -3726,7 +3726,7 @@ Do you want to simulate a local test login (@demo-reader)?`
     );
   }
   getCurrentTerm() {
-    return this._term ? this._term : typeof window > "u" ? "general" : window.location.pathname || "general";
+    return this._term ? this._term : this._title ? this._title.trim() : typeof window > "u" ? "general" : window.location.pathname || "general";
   }
   /**
    * Carrega comentários: tenta o Edge Broker primeiro; se offline, faz fallback gracioso para mock
