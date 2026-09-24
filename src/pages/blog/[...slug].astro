@@ -96,7 +96,7 @@ const currentUrl = new URL(Astro.url.pathname, siteConfig.siteUrl).href;
           <Content />
         </div>
 
-        <ShareBar title={post.data.title} url={currentUrl} />
+        <ShareBar title={post.data.title} url={currentUrl} description={post.data.description} />
 
         <!-- Prev / Next Navigation -->
         <nav class="post-nav" aria-label="Post navigation">

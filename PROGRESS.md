@@ -41,6 +41,12 @@
 - [x] Sincronização ScatterLeaf v0.5.5 — Toolbar Despoluída & Botão Primário Reforçado (24/09/2026):
   - Atualização do bundle `public/scatterleaf.js` com a barra do composer minimalista (mantendo unicamente o seletor `[ 😀 ]`, com as ações de GIF e Imagem encapsuladas no menu de emojis).
   - Botão de envio primário (`.sl-btn-primary` / `[ 🍃 Post note ]`) recalibrado em Azul Royal profundo (`#1f6feb` / hover `#388bfd`) com sutil sombra projetada no logo `🍃`, garantindo alta legibilidade e contraste WCAG AA no dark mode.
+- [x] Modal Rico de Compartilhamento Estilo Notion (24/09/2026):
+  - Substituição do botão estático 'Copy link' no `ShareBar.astro` pelo modal interativo acionado por `[ ⎋ Share ]`.
+  - Mini Preview Card estilo Notion contendo brand badge (`🪨 Minrock`), título do artigo e resumo da postagem.
+  - Barra de URL canônica com botão `[ 🔗 Copy URL ]` e transição de feedback visual instantâneo para `[ ✓ Copied! ]` em verde esmeralda (`#10b981`).
+  - Fileira de 6 botões de compartilhamento social calibrados no design system do Minrock (quadrados com `border-radius: 6px`, sem circularidade excessiva): LinkedIn, X, WhatsApp, Telegram (posicionado cirurgicamente entre WhatsApp e Facebook), Facebook e Email.
+  - Acessibilidade aprimorada (`role="dialog"`, `aria-modal="true"`, foco automático no input, fechamento via ESC ou clique no backdrop e resiliência a View Transitions com `astro:after-swap`).
 
 ### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
