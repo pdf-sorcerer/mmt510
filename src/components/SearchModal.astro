@@ -457,8 +457,13 @@
         openSearchModal();
         return;
       }
-      const targetTag = (e.target as HTMLElement)?.tagName?.toLowerCase();
-      if (e.key === '/' && targetTag !== 'input' && targetTag !== 'textarea') {
+      const path = (typeof e.composedPath === 'function' ? e.composedPath() : []) as HTMLElement[];
+      const isTypingInField = path.some((el) => {
+        if (!el || !el.tagName) return false;
+        const tag = el.tagName.toLowerCase();
+        return tag === 'input' || tag === 'textarea' || el.isContentEditable;
+      });
+      if (e.key === '/' && !isTypingInField) {
         e.preventDefault();
         openSearchModal();
         return;

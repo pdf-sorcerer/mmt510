@@ -74,6 +74,9 @@ export const siteConfig: SiteConfig = {
         (process.env?.PUBLIC_SCATTERLEAF_BROKER || process.env?.SCATTERLEAF_BROKER)) ||
       (import.meta as any).env?.PUBLIC_SCATTERLEAF_BROKER ||
       (import.meta as any).env?.SCATTERLEAF_BROKER ||
-      ''
+      '',
+    features: {
+      images: true
+    }
   }
 };
