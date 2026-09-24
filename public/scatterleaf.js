@@ -1,6 +1,6 @@
-var ke = Object.defineProperty;
-var _e = (C, f, e) => f in C ? ke(C, f, { enumerable: !0, configurable: !0, writable: !0, value: e }) : C[f] = e;
-var h = (C, f, e) => _e(C, typeof f != "symbol" ? f + "" : f, e);
+var _e = Object.defineProperty;
+var ke = (M, f, e) => f in M ? _e(M, f, { enumerable: !0, configurable: !0, writable: !0, value: e }) : M[f] = e;
+var h = (M, f, e) => ke(M, typeof f != "symbol" ? f + "" : f, e);
 const Ee = `
 :host {
   display: block;
@@ -1514,6 +1514,13 @@ button, input, textarea, select {
   box-shadow: var(--sl-shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.15));
   border: 1px solid var(--sl-border);
   background: rgba(0, 0, 0, 0.05);
+  cursor: zoom-in;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease;
+}
+
+.sl-card-body img:not(.sl-emoji-inline):hover {
+  transform: translateY(-2px) scale(1.008);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
 }
 
 .sl-card-body img.sl-emoji-inline,
@@ -3131,8 +3138,160 @@ button, input, textarea, select {
 .sl-mod-chip-remove:hover {
   opacity: 1;
 }
+
+/* ==========================================================================
+   MINI-LIGHTBOX NATIVO COM PAN & ZOOM (EXPANSÃO DE IMAGENS DE COMENTÁRIOS)
+   ========================================================================== */
+.sl-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(8, 8, 11, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: slFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+
+.sl-lightbox-toolbar {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100010;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  background: rgba(22, 24, 29, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 90vw;
+  color: #f3f4f6;
+  font-family: inherit;
+}
+
+.sl-lightbox-caption {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #9ca3af;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sl-lightbox-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sl-lightbox-btn {
+  background: transparent;
+  border: none;
+  color: #d1d5db;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.sl-lightbox-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.sl-lightbox-btn:active {
+  transform: scale(0.95);
+}
+
+.sl-lightbox-btn-close {
+  margin-left: 0.3rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  padding-left: 0.5rem;
+  border-radius: 0 6px 6px 0;
+  width: 34px;
+}
+
+.sl-lightbox-btn-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.sl-lightbox-level {
+  font-size: 0.78rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: #e5e7eb;
+  min-width: 48px;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.sl-lightbox-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.sl-lightbox-stage.is-dragging {
+  cursor: grabbing !important;
+}
+
+.sl-lightbox-img {
+  max-width: 88vw;
+  max-height: 82vh;
+  object-fit: contain;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: center center;
+  transition: transform 0.08s ease-out;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+}
+
+.sl-lightbox-img.is-panning {
+  transition: none !important;
+}
+
+.sl-lightbox-hint {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100010;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
 `;
-class he extends Error {
+class pe extends Error {
   constructor(f = "Sessão expirada ou credenciais inválidas. Faça login novamente.") {
     super(f), this.name = "ScatterAuthError";
   }
@@ -3150,8 +3309,8 @@ class $e {
     return f && (e.Authorization = `Bearer ${f}`), e;
   }
   async handleResponseError(f, e) {
-    const t = await f.json().catch(() => ({})), r = t.error || t.error_description || `${e}: HTTP ${f.status}`;
-    throw f.status === 401 || typeof r == "string" && /bad credentials|unauthorized|sessão expirada/i.test(r) ? new he(r) : new Error(r);
+    const t = await f.json().catch(() => ({})), o = t.error || t.error_description || `${e}: HTTP ${f.status}`;
+    throw f.status === 401 || typeof o == "string" && /bad credentials|unauthorized|sessão expirada/i.test(o) ? new pe(o) : new Error(o);
   }
   /**
    * Auto-Discovery de IDs do repositório e categoria no GitHub
@@ -3161,8 +3320,8 @@ class $e {
       `${this.baseUrl}/api/discovery?repo=${encodeURIComponent(f)}&category=${encodeURIComponent(e)}`
     );
     if (!t.ok) {
-      const r = await t.json().catch(() => ({}));
-      throw new Error(r.error || `Falha no Auto-Discovery: HTTP ${t.status}`);
+      const o = await t.json().catch(() => ({}));
+      throw new Error(o.error || `Falha no Auto-Discovery: HTTP ${t.status}`);
     }
     return await t.json();
   }
@@ -3170,8 +3329,8 @@ class $e {
    * Leitura de discussões e comentários com cache de borda
    */
   async fetchDiscussions(f, e) {
-    const r = this.getToken() ? `&_t=${Date.now()}` : "", a = await fetch(
-      `${this.baseUrl}/api/discussions?repo=${encodeURIComponent(f)}&term=${encodeURIComponent(e)}${r}`,
+    const o = this.getToken() ? `&_t=${Date.now()}` : "", a = await fetch(
+      `${this.baseUrl}/api/discussions?repo=${encodeURIComponent(f)}&term=${encodeURIComponent(e)}${o}`,
       {
         headers: this.getAuthHeaders()
       }
@@ -3191,10 +3350,10 @@ class $e {
       const a = await t.json().catch(() => ({}));
       throw new Error(a.error_description || a.error || `Erro ao trocar código: HTTP ${t.status}`);
     }
-    const r = await t.json();
-    if (!r.access_token)
-      throw new Error(r.error_description || r.error || "Token de acesso não retornado.");
-    return r.access_token;
+    const o = await t.json();
+    if (!o.access_token)
+      throw new Error(o.error_description || o.error || "Token de acesso não retornado.");
+    return o.access_token;
   }
   /**
    * Busca perfil do usuário logado diretamente da API do GitHub usando o Bearer token
@@ -3207,7 +3366,7 @@ class $e {
       }
     });
     if (!e.ok)
-      throw e.status === 401 ? new he("Credenciais inválidas ao carregar perfil do GitHub.") : new Error(`Falha ao obter perfil do usuário: HTTP ${e.status}`);
+      throw e.status === 401 ? new pe("Credenciais inválidas ao carregar perfil do GitHub.") : new Error(`Falha ao obter perfil do usuário: HTTP ${e.status}`);
     const t = await e.json();
     return {
       login: t.login,
@@ -3219,22 +3378,22 @@ class $e {
   /**
    * Criação de nova discussão no GitHub
    */
-  async createDiscussion(f, e, t, r) {
+  async createDiscussion(f, e, t, o) {
     const a = await fetch(`${this.baseUrl}/api/discussions`, {
       method: "POST",
       headers: this.getAuthHeaders(),
-      body: JSON.stringify({ repositoryId: f, categoryId: e, title: t, body: r })
+      body: JSON.stringify({ repositoryId: f, categoryId: e, title: t, body: o })
     });
     return a.ok || await this.handleResponseError(a, "Erro ao criar discussão"), await a.json();
   }
   /**
    * Envio de comentário ou réplica
    */
-  async addComment(f, e, t, r) {
+  async addComment(f, e, t, o) {
     const a = await fetch(`${this.baseUrl}/api/comments`, {
       method: "POST",
       headers: this.getAuthHeaders(),
-      body: JSON.stringify({ discussionId: f, body: e, replyToId: t, repo: r })
+      body: JSON.stringify({ discussionId: f, body: e, replyToId: t, repo: o })
     });
     return a.ok || await this.handleResponseError(a, "Erro ao enviar comentário"), await a.json();
   }
@@ -3242,12 +3401,12 @@ class $e {
    * Edição in-place de comentário
    */
   async updateComment(f, e, t) {
-    const r = await fetch(`${this.baseUrl}/api/comments`, {
+    const o = await fetch(`${this.baseUrl}/api/comments`, {
       method: "PATCH",
       headers: this.getAuthHeaders(),
       body: JSON.stringify({ commentId: f, body: e, repo: t })
     });
-    return r.ok || await this.handleResponseError(r, "Erro ao editar comentário"), await r.json();
+    return o.ok || await this.handleResponseError(o, "Erro ao editar comentário"), await o.json();
   }
   /**
    * Exclusão in-place de comentário
@@ -3271,11 +3430,11 @@ class $e {
   /**
    * Aplica restrição a um usuário (ban ou restrict_media)
    */
-  async setModeration(f, e, t, r) {
+  async setModeration(f, e, t, o) {
     const a = await fetch(`${this.baseUrl}/api/moderation`, {
       method: "POST",
       headers: this.getAuthHeaders(),
-      body: JSON.stringify({ repo: f, username: e, action: t, reason: r })
+      body: JSON.stringify({ repo: f, username: e, action: t, reason: o })
     });
     a.ok || await this.handleResponseError(a, "Erro ao aplicar moderação");
   }
@@ -3309,12 +3468,12 @@ class $e {
       "🧙‍♂️": "THUMBS_UP",
       "🧙‍♀️": "THUMBS_UP",
       "🧙": "THUMBS_UP"
-    }[e] || e, o = await fetch(`${this.baseUrl}/api/reactions`, {
+    }[e] || e, r = await fetch(`${this.baseUrl}/api/reactions`, {
       method: "POST",
       headers: this.getAuthHeaders(),
       body: JSON.stringify({ subjectId: f, content: a, action: t })
     });
-    return o.ok || await this.handleResponseError(o, "Erro ao atualizar reação"), await o.json();
+    return r.ok || await this.handleResponseError(r, "Erro ao atualizar reação"), await r.json();
   }
 }
 const fe = "scatterleaf_skin_tone", Le = [
@@ -3365,22 +3524,22 @@ const fe = "scatterleaf_skin_tone", Le = [
   "🧙‍♂️",
   "🧙‍♀️"
 ]);
-function ie(C, f) {
-  if (!f || f === "default") return C;
-  if (C.includes("‍")) {
-    const t = C.split("‍");
+function ie(M, f) {
+  if (!f || f === "default") return M;
+  if (M.includes("‍")) {
+    const t = M.split("‍");
     return `${t[0].replace(/[\u{1F3FB}-\u{1F3FF}]/gu, "").replace(/\uFE0F/g, "")}${f}‍${t.slice(1).join("‍")}`;
   }
-  return C.replace(/[\u{1F3FB}-\u{1F3FF}]/gu, "").replace(/\uFE0F/g, "") + f;
+  return M.replace(/[\u{1F3FB}-\u{1F3FF}]/gu, "").replace(/\uFE0F/g, "") + f;
 }
-const Me = [
+const Se = [
   { symbol: "👍", namePt: "Gostei", nameEn: "Like" },
   { symbol: "❤️", namePt: "Amei", nameEn: "Love" },
   { symbol: "🚀", namePt: "Sensacional", nameEn: "Rocket" },
   { symbol: "🎉", namePt: "Parabéns", nameEn: "Celebrate" },
   { symbol: "😄", namePt: "Divertido", nameEn: "Laugh" },
   { symbol: "👀", namePt: "De olho", nameEn: "Eyes" }
-], Se = [
+], Me = [
   { id: "typescript", name: "TypeScript" },
   { id: "javascript", name: "JavaScript" },
   { id: "python", name: "Python" },
@@ -3394,27 +3553,27 @@ const Me = [
 ], de = "scatterleaf_recent_gifs";
 function ne() {
   try {
-    const C = localStorage.getItem(de);
-    return C ? JSON.parse(C) : [];
+    const M = localStorage.getItem(de);
+    return M ? JSON.parse(M) : [];
   } catch {
     return [];
   }
 }
-function ve(C, f) {
+function ve(M, f) {
   try {
-    const e = ne().filter((t) => t.url !== C);
-    e.unshift({ url: C, alt: f || "", timestamp: Date.now() }), localStorage.setItem(de, JSON.stringify(e.slice(0, 24)));
+    const e = ne().filter((t) => t.url !== M);
+    e.unshift({ url: M, alt: f || "", timestamp: Date.now() }), localStorage.setItem(de, JSON.stringify(e.slice(0, 24)));
   } catch {
   }
 }
-function Te(C) {
+function Te(M) {
   try {
-    const f = ne().filter((e) => e.url !== C);
+    const f = ne().filter((e) => e.url !== M);
     localStorage.setItem(de, JSON.stringify(f));
   } catch {
   }
 }
-function Ae() {
+function Ie() {
   try {
     localStorage.removeItem(de);
   } catch {
@@ -3423,22 +3582,22 @@ function Ae() {
 const ce = "scatterleaf_recent_images";
 function le() {
   try {
-    const C = localStorage.getItem(ce);
-    return C ? JSON.parse(C) : [];
+    const M = localStorage.getItem(ce);
+    return M ? JSON.parse(M) : [];
   } catch {
     return [];
   }
 }
-function ye(C, f) {
+function xe(M, f) {
   try {
-    const e = le().filter((t) => t.url !== C);
-    e.unshift({ url: C, alt: f || "", timestamp: Date.now() }), localStorage.setItem(ce, JSON.stringify(e.slice(0, 24)));
+    const e = le().filter((t) => t.url !== M);
+    e.unshift({ url: M, alt: f || "", timestamp: Date.now() }), localStorage.setItem(ce, JSON.stringify(e.slice(0, 24)));
   } catch {
   }
 }
-function Ie(C) {
+function Ae(M) {
   try {
-    const f = le().filter((e) => e.url !== C);
+    const f = le().filter((e) => e.url !== M);
     localStorage.setItem(ce, JSON.stringify(f));
   } catch {
   }
@@ -3503,10 +3662,10 @@ const Pe = [
   "escort",
   "sex"
 ];
-function V(C) {
-  if (!C || typeof C != "string")
+function V(M) {
+  if (!M || typeof M != "string")
     return { safe: !1, reason: "URL inválida ou ausente." };
-  const f = C.trim();
+  const f = M.trim();
   if (!f.startsWith("https://"))
     return {
       safe: !1,
@@ -3518,7 +3677,7 @@ function V(C) {
   } catch {
     return { safe: !1, reason: "Formato de URL inválido." };
   }
-  const t = e.hostname.toLowerCase(), r = e.pathname.toLowerCase(), a = e.search.toLowerCase(), o = t + r + a;
+  const t = e.hostname.toLowerCase(), o = e.pathname.toLowerCase(), a = e.search.toLowerCase(), r = t + o + a;
   for (const i of Pe)
     if (t === i || t.endsWith("." + i))
       return {
@@ -3526,7 +3685,7 @@ function V(C) {
         reason: "Domínio bloqueado pelo filtro de conteúdo sensível / adulto."
       };
   for (const i of Be)
-    if (new RegExp(`(^|[-_/.?&=])${i}([-_/.?&=]|$)`, "i").test(o))
+    if (new RegExp(`(^|[-_/.?&=])${i}([-_/.?&=]|$)`, "i").test(r))
       return {
         safe: !1,
         reason: "O link contém termos classificados como potencialmente sensíveis ou adultos."
@@ -3604,39 +3763,55 @@ class je extends HTMLElement {
     h(this, "_imageModalUrl", "");
     h(this, "_imageModalAlt", "");
     h(this, "_imageModalSuccess", null);
+    // Estado do Mini-Lightbox Nativo (Zoom & Pan de Imagens)
+    h(this, "_lightboxOpen", !1);
+    h(this, "_lightboxImgSrc", "");
+    h(this, "_lightboxImgAlt", "");
+    h(this, "_lightboxScale", 1);
+    h(this, "_lightboxTranslateX", 0);
+    h(this, "_lightboxTranslateY", 0);
+    h(this, "_isDraggingImage", !1);
+    h(this, "_dragStartX", 0);
+    h(this, "_dragStartY", 0);
+    h(this, "_dragStartTx", 0);
+    h(this, "_dragStartTy", 0);
     // Fechamento de menus ao clicar fora do componente no document ou tecla Escape
     h(this, "_handleDocumentClick", (e) => {
       let t = !1;
-      const r = e.composedPath();
-      this._openMenuId && (r.some(
-        (o) => {
+      const o = e.composedPath();
+      this._openMenuId && (o.some(
+        (r) => {
           var i;
-          return o instanceof HTMLElement && ((i = o.classList) == null ? void 0 : i.contains("sl-menu-wrapper"));
+          return r instanceof HTMLElement && ((i = r.classList) == null ? void 0 : i.contains("sl-menu-wrapper"));
         }
-      ) || (this._openMenuId = null, t = !0)), this._isCodePickerOpen && (r.some(
-        (o) => {
+      ) || (this._openMenuId = null, t = !0)), this._isCodePickerOpen && (o.some(
+        (r) => {
           var i, s;
-          return o instanceof HTMLElement && (((i = o.classList) == null ? void 0 : i.contains("sl-code-menu-wrapper")) || ((s = o.classList) == null ? void 0 : s.contains("sl-code-picker-popover")));
+          return r instanceof HTMLElement && (((i = r.classList) == null ? void 0 : i.contains("sl-code-menu-wrapper")) || ((s = r.classList) == null ? void 0 : s.contains("sl-code-picker-popover")));
         }
-      ) || (this._isCodePickerOpen = !1, t = !0)), this._isEmojiPickerOpen && (r.some(
-        (o) => {
+      ) || (this._isCodePickerOpen = !1, t = !0)), this._isEmojiPickerOpen && (o.some(
+        (r) => {
           var i, s;
-          return o instanceof HTMLElement && (((i = o.classList) == null ? void 0 : i.contains("sl-emoji-wrapper")) || ((s = o.classList) == null ? void 0 : s.contains("sl-emoji-popover")));
+          return r instanceof HTMLElement && (((i = r.classList) == null ? void 0 : i.contains("sl-emoji-wrapper")) || ((s = r.classList) == null ? void 0 : s.contains("sl-emoji-popover")));
         }
       ) || (this._isEmojiPickerOpen = !1, t = !0)), t && this.render();
     });
     h(this, "_handleDocumentKeydown", (e) => {
       var t;
       if (e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        const r = document.activeElement;
-        if (!(r instanceof HTMLInputElement || r instanceof HTMLTextAreaElement || (r == null ? void 0 : r.isContentEditable))) {
-          const o = (t = this.shadowRoot) == null ? void 0 : t.getElementById("sl-search-input");
-          o && (e.preventDefault(), o.focus());
+        const o = document.activeElement;
+        if (!(o instanceof HTMLInputElement || o instanceof HTMLTextAreaElement || (o == null ? void 0 : o.isContentEditable))) {
+          const r = (t = this.shadowRoot) == null ? void 0 : t.getElementById("sl-search-input");
+          r && (e.preventDefault(), r.focus());
         }
       }
       if (e.key === "Escape") {
-        let r = !1;
-        this._openMenuId && (this._openMenuId = null, r = !0), this._isCodePickerOpen && (this._isCodePickerOpen = !1, r = !0), this._isEmojiPickerOpen && (this._isEmojiPickerOpen = !1, r = !0), this._isMediaModalOpen && (this._isMediaModalOpen = !1, r = !0), this._isImageModalOpen && (this._isImageModalOpen = !1, r = !0), this._searchQuery && (this._searchQuery = "", this._currentPage = 1, r = !0), r && this.render();
+        if (this._lightboxOpen) {
+          this.closeLightbox();
+          return;
+        }
+        let o = !1;
+        this._openMenuId && (this._openMenuId = null, o = !0), this._isCodePickerOpen && (this._isCodePickerOpen = !1, o = !0), this._isEmojiPickerOpen && (this._isEmojiPickerOpen = !1, o = !0), this._isMediaModalOpen && (this._isMediaModalOpen = !1, o = !0), this._isImageModalOpen && (this._isImageModalOpen = !1, o = !0), this._searchQuery && (this._searchQuery = "", this._currentPage = 1, o = !0), o && this.render();
       }
     });
     h(this, "_mediaModalError", null);
@@ -3747,26 +3922,26 @@ class je extends HTMLElement {
   disconnectedCallback() {
     document.removeEventListener("click", this._handleDocumentClick), document.removeEventListener("keydown", this._handleDocumentKeydown), this._themeObserver && (this._themeObserver.disconnect(), this._themeObserver = null);
   }
-  attributeChangedCallback(e, t, r) {
-    if (t !== r) {
-      if (e === "theme" && r)
-        this._theme = r, this._theme === "auto" ? (this.detectAndApplyAutoPalette(), this.setupAutoThemeObserver()) : (this._themeObserver && (this._themeObserver.disconnect(), this._themeObserver = null), this.clearAutoPaletteProperties());
-      else if (e === "repo" && r)
-        this._repo = r, this.loadComments();
-      else if (e === "category" && r)
-        this._category = r, this.loadComments();
-      else if (e === "lang" && r)
-        this._lang = r;
-      else if (e === "broker" && r)
-        this._broker = r, this.initBrokerClient(), this.loadComments();
-      else if (e === "client-id" && r)
-        this._clientId = r;
-      else if (e === "input-position" && (r === "top" || r === "bottom"))
-        this._inputPosition = r;
-      else if (e === "page-size" && r) {
-        const a = parseInt(r, 10);
+  attributeChangedCallback(e, t, o) {
+    if (t !== o) {
+      if (e === "theme" && o)
+        this._theme = o, this._theme === "auto" ? (this.detectAndApplyAutoPalette(), this.setupAutoThemeObserver()) : (this._themeObserver && (this._themeObserver.disconnect(), this._themeObserver = null), this.clearAutoPaletteProperties());
+      else if (e === "repo" && o)
+        this._repo = o, this.loadComments();
+      else if (e === "category" && o)
+        this._category = o, this.loadComments();
+      else if (e === "lang" && o)
+        this._lang = o;
+      else if (e === "broker" && o)
+        this._broker = o, this.initBrokerClient(), this.loadComments();
+      else if (e === "client-id" && o)
+        this._clientId = o;
+      else if (e === "input-position" && (o === "top" || o === "bottom"))
+        this._inputPosition = o;
+      else if (e === "page-size" && o) {
+        const a = parseInt(o, 10);
         this._pageSize = !isNaN(a) && a > 0 ? a : 10, this._currentPage = 1;
-      } else e === "title" ? this._title = r || "" : e === "term" ? this._term = r || "" : e === "order" ? this._order = r === "newest" ? "newest" : "oldest" : e === "hide-reactions" || e === "reactions" ? this._hideReactions = this.hasAttribute("hide-reactions") || this.getAttribute("reactions") === "false" : e === "hide-skin-tone" || e === "skin-tone" ? this._hideSkinTone = this.hasAttribute("hide-skin-tone") || this.getAttribute("skin-tone") === "false" : e === "hide-sorting" || e === "sorting" ? this._hideSorting = this.hasAttribute("hide-sorting") || this.getAttribute("sorting") === "false" : e === "hide-code-scroll" || e === "code-scroll" ? this._hideCodeScroll = this.hasAttribute("hide-code-scroll") || this.getAttribute("code-scroll") === "false" : e === "hide-preview" || e === "preview" ? this._hidePreview = this.hasAttribute("hide-preview") || this.getAttribute("preview") === "false" : e === "hide-search" || e === "search" ? this._hideSearch = this.hasAttribute("hide-search") || this.getAttribute("search") === "false" : e === "enable-moderation" || e === "moderation" ? (this._enableModeration = this.hasAttribute("enable-moderation") || this.getAttribute("moderation") === "true", this.isConnected && this._enableModeration && this._isOwner() && this.loadModerationList()) : (e === "enable-images" || e === "images") && (this._enableImages = this.hasAttribute("enable-images") || this.getAttribute("images") === "true");
+      } else e === "title" ? this._title = o || "" : e === "term" ? this._term = o || "" : e === "order" ? this._order = o === "newest" ? "newest" : "oldest" : e === "hide-reactions" || e === "reactions" ? this._hideReactions = this.hasAttribute("hide-reactions") || this.getAttribute("reactions") === "false" : e === "hide-skin-tone" || e === "skin-tone" ? this._hideSkinTone = this.hasAttribute("hide-skin-tone") || this.getAttribute("skin-tone") === "false" : e === "hide-sorting" || e === "sorting" ? this._hideSorting = this.hasAttribute("hide-sorting") || this.getAttribute("sorting") === "false" : e === "hide-code-scroll" || e === "code-scroll" ? this._hideCodeScroll = this.hasAttribute("hide-code-scroll") || this.getAttribute("code-scroll") === "false" : e === "hide-preview" || e === "preview" ? this._hidePreview = this.hasAttribute("hide-preview") || this.getAttribute("preview") === "false" : e === "hide-search" || e === "search" ? this._hideSearch = this.hasAttribute("hide-search") || this.getAttribute("search") === "false" : e === "enable-moderation" || e === "moderation" ? (this._enableModeration = this.hasAttribute("enable-moderation") || this.getAttribute("moderation") === "true", this.isConnected && this._enableModeration && this._isOwner() && this.loadModerationList()) : (e === "enable-images" || e === "images") && (this._enableImages = this.hasAttribute("enable-images") || this.getAttribute("images") === "true");
       this.render();
     }
   }
@@ -3776,8 +3951,8 @@ class je extends HTMLElement {
     (e === "top" || e === "bottom") && (this._inputPosition = e);
     const t = this.getAttribute("page-size");
     if (t) {
-      const r = parseInt(t, 10);
-      !isNaN(r) && r > 0 && (this._pageSize = r);
+      const o = parseInt(t, 10);
+      !isNaN(o) && o > 0 && (this._pageSize = o);
     }
     this._title = this.getAttribute("title") || "", this._term = this.getAttribute("term") || "", this._order = this.getAttribute("order") === "newest" ? "newest" : "oldest", this._hideReactions = this.hasAttribute("hide-reactions") || this.getAttribute("reactions") === "false", this._hideSkinTone = this.hasAttribute("hide-skin-tone") || this.getAttribute("skin-tone") === "false", this._hideSorting = this.hasAttribute("hide-sorting") || this.getAttribute("sorting") === "false", this._hideCodeScroll = this.hasAttribute("hide-code-scroll") || this.getAttribute("code-scroll") === "false", this._hidePreview = this.hasAttribute("hide-preview") || this.getAttribute("preview") === "false", this._hideSearch = this.hasAttribute("hide-search") || this.getAttribute("search") === "false", this._enableModeration = this.hasAttribute("enable-moderation") || this.getAttribute("moderation") === "true", this._enableImages = this.hasAttribute("enable-images") || this.getAttribute("images") === "true", this.hasAttribute("theme") || this.setAttribute("theme", this._theme), this.initBrokerClient();
   }
@@ -3820,30 +3995,30 @@ class je extends HTMLElement {
   detectAndApplyAutoPalette() {
     if (!(typeof window > "u"))
       try {
-        const e = (_) => {
-          if (!_ || _ === "transparent" || _ === "rgba(0, 0, 0, 0)")
+        const e = ($) => {
+          if (!$ || $ === "transparent" || $ === "rgba(0, 0, 0, 0)")
             return null;
-          if (_.startsWith("#")) {
-            let I = _.slice(1);
-            if ((I.length === 3 || I.length === 4) && (I = I.split("").map((H) => H + H).join("")), I.length >= 6)
+          if ($.startsWith("#")) {
+            let A = $.slice(1);
+            if ((A.length === 3 || A.length === 4) && (A = A.split("").map((F) => F + F).join("")), A.length >= 6)
               return {
-                r: parseInt(I.substring(0, 2), 16),
-                g: parseInt(I.substring(2, 4), 16),
-                b: parseInt(I.substring(4, 6), 16)
+                r: parseInt(A.substring(0, 2), 16),
+                g: parseInt(A.substring(2, 4), 16),
+                b: parseInt(A.substring(4, 6), 16)
               };
           }
-          const B = _.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-          return B ? {
-            r: parseInt(B[1], 10),
-            g: parseInt(B[2], 10),
-            b: parseInt(B[3], 10)
+          const j = $.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+          return j ? {
+            r: parseInt(j[1], 10),
+            g: parseInt(j[2], 10),
+            b: parseInt(j[3], 10)
           } : null;
-        }, t = window.getComputedStyle(document.documentElement), r = window.getComputedStyle(document.body), a = this.parentElement || document.body, o = window.getComputedStyle(a), i = (_) => {
-          for (const B of _) {
-            const I = o.getPropertyValue(B).trim() || r.getPropertyValue(B).trim() || t.getPropertyValue(B).trim();
-            if (I) {
-              const H = e(I);
-              if (H) return H;
+        }, t = window.getComputedStyle(document.documentElement), o = window.getComputedStyle(document.body), a = this.parentElement || document.body, r = window.getComputedStyle(a), i = ($) => {
+          for (const j of $) {
+            const A = r.getPropertyValue(j).trim() || o.getPropertyValue(j).trim() || t.getPropertyValue(j).trim();
+            if (A) {
+              const F = e(A);
+              if (F) return F;
             }
           }
           return null;
@@ -3859,17 +4034,17 @@ class je extends HTMLElement {
           "--bg"
         ]);
         if (!s) {
-          let _ = this;
-          for (; _; ) {
-            const B = window.getComputedStyle(_).backgroundColor, I = e(B);
-            if (I) {
-              s = I;
+          let $ = this;
+          for (; $; ) {
+            const j = window.getComputedStyle($).backgroundColor, A = e(j);
+            if (A) {
+              s = A;
               break;
             }
-            _ = _.parentElement;
+            $ = $.parentElement;
           }
         }
-        s || (s = e(r.backgroundColor) || e(t.backgroundColor) || { r: 255, g: 255, b: 255 });
+        s || (s = e(o.backgroundColor) || e(t.backgroundColor) || { r: 255, g: 255, b: 255 });
         let d = i([
           "--sl-text",
           "--page-text",
@@ -3880,17 +4055,17 @@ class je extends HTMLElement {
           "--text"
         ]);
         if (!d) {
-          let _ = this;
-          for (; _; ) {
-            const B = window.getComputedStyle(_).color, I = e(B);
-            if (I) {
-              d = I;
+          let $ = this;
+          for (; $; ) {
+            const j = window.getComputedStyle($).color, A = e(j);
+            if (A) {
+              d = A;
               break;
             }
-            _ = _.parentElement;
+            $ = $.parentElement;
           }
         }
-        let n = i([
+        let l = i([
           "--sl-accent",
           "--page-accent",
           "--color-accent",
@@ -3899,20 +4074,20 @@ class je extends HTMLElement {
           "--accent",
           "--brand"
         ]);
-        if (!n) {
-          const _ = document.querySelector("a");
-          _ && (n = e(window.getComputedStyle(_).color));
+        if (!l) {
+          const $ = document.querySelector("a");
+          $ && (l = e(window.getComputedStyle($).color));
         }
-        const g = document.documentElement.classList.contains("dark") || document.body.classList.contains("dark") || document.documentElement.getAttribute("data-theme") === "dark" || document.body.getAttribute("data-theme") === "dark" || document.body.getAttribute("data-page-theme") === "midnight" || document.body.getAttribute("data-page-theme") === "slate" || document.body.getAttribute("data-page-theme") === "terminal", T = 0.2126 * s.r + 0.7152 * s.g + 0.0722 * s.b, p = g || T < 128;
-        d || (d = p ? { r: 230, g: 237, b: 243 } : { r: 28, g: 25, b: 23 }), n || (n = p ? { r: 88, g: 166, b: 255 } : { r: 146, g: 64, b: 14 });
-        let w, y, x, $, v, A, P;
-        if (p) {
-          const _ = Math.min(255, Math.round(s.r + 15)), B = Math.min(255, Math.round(s.g + 18)), I = Math.min(255, Math.round(s.b + 22));
-          w = `rgb(${_}, ${B}, ${I})`, y = "rgba(0, 0, 0, 0.35)", x = "rgba(255, 255, 255, 0.12)", $ = `rgba(${d.r}, ${d.g}, ${d.b}, 0.62)`, v = `rgb(${Math.min(255, n.r + 30)}, ${Math.min(255, n.g + 30)}, ${Math.min(255, n.b + 30)})`, A = `rgba(${n.r}, ${n.g}, ${n.b}, 0.16)`, P = `rgba(${n.r}, ${n.g}, ${n.b}, 0.35)`;
+        const b = document.documentElement.classList.contains("dark") || document.body.classList.contains("dark") || document.documentElement.getAttribute("data-theme") === "dark" || document.body.getAttribute("data-theme") === "dark" || document.body.getAttribute("data-page-theme") === "midnight" || document.body.getAttribute("data-page-theme") === "slate" || document.body.getAttribute("data-page-theme") === "terminal", T = 0.2126 * s.r + 0.7152 * s.g + 0.0722 * s.b, g = b || T < 128;
+        d || (d = g ? { r: 230, g: 237, b: 243 } : { r: 28, g: 25, b: 23 }), l || (l = g ? { r: 88, g: 166, b: 255 } : { r: 146, g: 64, b: 14 });
+        let k, w, _, L, x, I, B;
+        if (g) {
+          const $ = Math.min(255, Math.round(s.r + 15)), j = Math.min(255, Math.round(s.g + 18)), A = Math.min(255, Math.round(s.b + 22));
+          k = `rgb(${$}, ${j}, ${A})`, w = "rgba(0, 0, 0, 0.35)", _ = "rgba(255, 255, 255, 0.12)", L = `rgba(${d.r}, ${d.g}, ${d.b}, 0.62)`, x = `rgb(${Math.min(255, l.r + 30)}, ${Math.min(255, l.g + 30)}, ${Math.min(255, l.b + 30)})`, I = `rgba(${l.r}, ${l.g}, ${l.b}, 0.16)`, B = `rgba(${l.r}, ${l.g}, ${l.b}, 0.35)`;
         } else
-          w = "rgba(255, 255, 255, 0.96)", y = "rgba(0, 0, 0, 0.035)", x = "rgba(0, 0, 0, 0.12)", $ = `rgba(${d.r}, ${d.g}, ${d.b}, 0.65)`, v = `rgb(${n.r}, ${n.g}, ${n.b})`, A = `rgba(${n.r}, ${n.g}, ${n.b}, 0.12)`, P = `rgba(${n.r}, ${n.g}, ${n.b}, 0.28)`;
-        const O = `rgb(${n.r}, ${n.g}, ${n.b})`;
-        this.style.setProperty("--sl-bg", `rgb(${s.r}, ${s.g}, ${s.b})`), this.style.setProperty("--sl-surface", w), this.style.setProperty("--sl-tab-bg", y), this.style.setProperty("--sl-border", x), this.style.setProperty("--sl-text", `rgb(${d.r}, ${d.g}, ${d.b})`), this.style.setProperty("--sl-text-muted", $), this.style.setProperty("--sl-accent", O), this.style.setProperty("--sl-accent-hover", O), this.style.setProperty("--sl-mention-color", v), this.style.setProperty("--sl-mention-bg", A), this.style.setProperty("--sl-mention-border", P), p ? (this.style.setProperty("--sl-btn-primary-bg", "#1f6feb"), this.style.setProperty("--sl-btn-primary-hover", "#388bfd")) : (this.style.setProperty("--sl-btn-primary-bg", O), this.style.setProperty("--sl-btn-primary-hover", O));
+          k = "rgba(255, 255, 255, 0.96)", w = "rgba(0, 0, 0, 0.035)", _ = "rgba(0, 0, 0, 0.12)", L = `rgba(${d.r}, ${d.g}, ${d.b}, 0.65)`, x = `rgb(${l.r}, ${l.g}, ${l.b})`, I = `rgba(${l.r}, ${l.g}, ${l.b}, 0.12)`, B = `rgba(${l.r}, ${l.g}, ${l.b}, 0.28)`;
+        const D = `rgb(${l.r}, ${l.g}, ${l.b})`;
+        this.style.setProperty("--sl-bg", `rgb(${s.r}, ${s.g}, ${s.b})`), this.style.setProperty("--sl-surface", k), this.style.setProperty("--sl-tab-bg", w), this.style.setProperty("--sl-border", _), this.style.setProperty("--sl-text", `rgb(${d.r}, ${d.g}, ${d.b})`), this.style.setProperty("--sl-text-muted", L), this.style.setProperty("--sl-accent", D), this.style.setProperty("--sl-accent-hover", D), this.style.setProperty("--sl-mention-color", x), this.style.setProperty("--sl-mention-bg", I), this.style.setProperty("--sl-mention-border", B), g ? (this.style.setProperty("--sl-btn-primary-bg", "#1f6feb"), this.style.setProperty("--sl-btn-primary-hover", "#388bfd")) : (this.style.setProperty("--sl-btn-primary-bg", D), this.style.setProperty("--sl-btn-primary-hover", D));
       } catch (e) {
         console.warn("🍃 [ScatterLeaf] Erro ao auto-computar paleta do tema:", e);
       }
@@ -3980,8 +4155,8 @@ class je extends HTMLElement {
         window.opener.postMessage({ type: "scatterleaf-oauth-code", code: t }, "*"), window.close();
         return;
       }
-      const r = window.location.pathname + window.location.hash;
-      window.history.replaceState({}, document.title, r), await this.exchangeOAuthCode(t);
+      const o = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, document.title, o), await this.exchangeOAuthCode(t);
     }
   }
   /**
@@ -3994,8 +4169,8 @@ class je extends HTMLElement {
     }
     try {
       this._isLoading = !0, this.render();
-      const t = window.location.origin + window.location.pathname, r = await this._brokerClient.exchangeOAuthCode(e, t), a = await this._brokerClient.fetchGitHubUserProfile(r);
-      this._authToken = r, this._currentUser = a, sessionStorage.setItem("scatterleaf_token", r), sessionStorage.setItem("scatterleaf_user", JSON.stringify(a)), await this.loadComments(), this._enableModeration && this._isOwner() && await this.loadModerationList(), this._isLoading = !1, this.render(), this.dispatchEvent(
+      const t = window.location.origin + window.location.pathname, o = await this._brokerClient.exchangeOAuthCode(e, t), a = await this._brokerClient.fetchGitHubUserProfile(o);
+      this._authToken = o, this._currentUser = a, sessionStorage.setItem("scatterleaf_token", o), sessionStorage.setItem("scatterleaf_user", JSON.stringify(a)), await this.loadComments(), this._enableModeration && this._isOwner() && await this.loadModerationList(), this._isLoading = !1, this.render(), this.dispatchEvent(
         new CustomEvent("scatterleaf-login", {
           detail: { user: a },
           bubbles: !0,
@@ -4004,8 +4179,8 @@ class je extends HTMLElement {
       );
     } catch (t) {
       this._isLoading = !1, this.render();
-      const r = t instanceof Error ? t.message : "Falha na autenticação";
-      alert(`🍃 [ScatterLeaf Auth] ${r}`);
+      const o = t instanceof Error ? t.message : "Falha na autenticação";
+      alert(`🍃 [ScatterLeaf Auth] ${o}`);
     }
   }
   /**
@@ -4020,21 +4195,21 @@ Deseja simular um login local de teste (@demo-reader)?` : `🍃 ScatterLeaf Play
 No "client-id" configured yet.
 Do you want to simulate a local test login (@demo-reader)?`
       )) {
-        const n = {
+        const l = {
           login: "demo-reader",
           avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4",
           name: "Demo Reader",
           url: "https://github.com"
         };
-        this._currentUser = n, this._authToken = "mock_token_local", sessionStorage.setItem("scatterleaf_token", this._authToken), sessionStorage.setItem("scatterleaf_user", JSON.stringify(n)), this._enableModeration && this._isOwner() && this.loadModerationList(), this.render();
+        this._currentUser = l, this._authToken = "mock_token_local", sessionStorage.setItem("scatterleaf_token", this._authToken), sessionStorage.setItem("scatterleaf_user", JSON.stringify(l)), this._enableModeration && this._isOwner() && this.loadModerationList(), this.render();
       }
       return;
     }
-    const e = encodeURIComponent(window.location.origin + window.location.pathname), t = encodeURIComponent("read:user"), r = `https://github.com/login/oauth/authorize?client_id=${this._clientId}&scope=${t}&redirect_uri=${e}`, a = 600, o = 700, i = window.screen.width / 2 - a / 2, s = window.screen.height / 2 - o / 2;
+    const e = encodeURIComponent(window.location.origin + window.location.pathname), t = encodeURIComponent("read:user"), o = `https://github.com/login/oauth/authorize?client_id=${this._clientId}&scope=${t}&redirect_uri=${e}`, a = 600, r = 700, i = window.screen.width / 2 - a / 2, s = window.screen.height / 2 - r / 2;
     window.open(
-      r,
+      o,
       "scatterleaf-oauth-popup",
-      `width=${a},height=${o},top=${s},left=${i},scrollbars=yes,status=yes`
+      `width=${a},height=${r},top=${s},left=${i},scrollbars=yes,status=yes`
     );
   }
   /**
@@ -4052,7 +4227,7 @@ Do you want to simulate a local test login (@demo-reader)?`
    * Identifica se um erro lançado é decorrente de falha de autenticação/token expirado
    */
   isAuthError(e) {
-    return e instanceof he ? !0 : e instanceof Error ? /bad credentials|unauthorized|sessão expirada|http 401/i.test(e.message) : !1;
+    return e instanceof pe ? !0 : e instanceof Error ? /bad credentials|unauthorized|sessão expirada|http 401/i.test(e.message) : !1;
   }
   /**
    * Trata expiração de token (HTTP 401 / Bad credentials).
@@ -4075,9 +4250,9 @@ Do you want to simulate a local test login (@demo-reader)?`
    * Verifica se o usuário autenticado é o proprietário do repositório
    */
   _isOwner() {
-    var t, r;
+    var t, o;
     if (!((t = this._currentUser) != null && t.login) || !this._repo) return !1;
-    const e = (r = this._repo.split("/")[0]) == null ? void 0 : r.toLowerCase();
+    const e = (o = this._repo.split("/")[0]) == null ? void 0 : o.toLowerCase();
     return !!(e && this._currentUser.login.toLowerCase() === e);
   }
   /**
@@ -4105,20 +4280,20 @@ Do you want to simulate a local test login (@demo-reader)?`
       );
       return;
     }
-    const r = t === "ban" ? this.currentLang === "pt" ? "banir" : "ban" : this.currentLang === "pt" ? "restringir mídia de" : "restrict media for";
+    const o = t === "ban" ? this.currentLang === "pt" ? "banir" : "ban" : this.currentLang === "pt" ? "restringir mídia de" : "restrict media for";
     if (confirm(
-      this.currentLang === "pt" ? `Tem certeza que deseja ${r} @${e}?` : `Are you sure you want to ${r} @${e}?`
+      this.currentLang === "pt" ? `Tem certeza que deseja ${o} @${e}?` : `Are you sure you want to ${o} @${e}?`
     ))
       try {
         await this._brokerClient.setModeration(this._repo, e, t), await this.loadModerationList(), alert(
           this.currentLang === "pt" ? `🍃 @${e} foi moderado com sucesso (${t === "ban" ? "banido" : "sem mídia"}).` : `🍃 @${e} moderated successfully (${t === "ban" ? "banned" : "media restricted"}).`
         );
-      } catch (o) {
-        if (this.isAuthError(o)) {
+      } catch (r) {
+        if (this.isAuthError(r)) {
           this.handleExpiredSession(!1);
           return;
         }
-        alert((o == null ? void 0 : o.message) || "Erro ao moderar usuário");
+        alert((r == null ? void 0 : r.message) || "Erro ao moderar usuário");
       }
   }
   /**
@@ -4130,16 +4305,16 @@ Do you want to simulate a local test login (@demo-reader)?`
     )))
       try {
         await this._brokerClient.removeModeration(this._repo, e), await this.loadModerationList();
-        const r = this._expandedModCategory;
-        r && this._moderatedUsers.filter(
-          (o) => o.action === (r === "ban" ? "ban" : "restrict_media")
+        const o = this._expandedModCategory;
+        o && this._moderatedUsers.filter(
+          (r) => r.action === (o === "ban" ? "ban" : "restrict_media")
         ).length === 0 && (this._expandedModCategory = null, this.render());
-      } catch (r) {
-        if (this.isAuthError(r)) {
+      } catch (o) {
+        if (this.isAuthError(o)) {
           this.handleExpiredSession(!1);
           return;
         }
-        alert((r == null ? void 0 : r.message) || "Erro ao remover moderação");
+        alert((o == null ? void 0 : o.message) || "Erro ao remover moderação");
       }
   }
   /**
@@ -4156,11 +4331,11 @@ Do you want to simulate a local test login (@demo-reader)?`
       if (this._brokerClient || this.initBrokerClient(), this._brokerClient) {
         const t = await this._brokerClient.discover(this._repo, this._category);
         this._repositoryId = t.repositoryId, this._categoryId = ((e = t.defaultCategory) == null ? void 0 : e.id) || null;
-        const r = this.getCurrentTerm(), a = await this._brokerClient.fetchDiscussions(this._repo, r);
-        a.discussion && (this._discussionId = a.discussion.id), this._comments = (a.comments || []).map((o) => ({
-          ...o,
-          originalLang: o.originalLang || this.detectTextLanguage(o.body),
-          replies: (o.replies || []).map((i) => ({
+        const o = this.getCurrentTerm(), a = await this._brokerClient.fetchDiscussions(this._repo, o);
+        a.discussion && (this._discussionId = a.discussion.id), this._comments = (a.comments || []).map((r) => ({
+          ...r,
+          originalLang: r.originalLang || this.detectTextLanguage(r.body),
+          replies: (r.replies || []).map((i) => ({
             ...i,
             originalLang: i.originalLang || this.detectTextLanguage(i.body)
           }))
@@ -4175,7 +4350,7 @@ Do you want to simulate a local test login (@demo-reader)?`
     }
   }
   loadMockComments() {
-    const e = this.currentLang, t = e === "pt", r = e === "es", a = this.getCurrentTerm().toLowerCase();
+    const e = this.currentLang, t = e === "pt", o = e === "es", a = this.getCurrentTerm().toLowerCase();
     if (a.includes("obsidian")) {
       this._comments = [
         {
@@ -4186,9 +4361,9 @@ Do you want to simulate a local test login (@demo-reader)?`
             url: "https://github.com",
             isAuthor: !0
           },
-          body: t ? "Bem-vindo à discussão do guia de conexão do **Obsidian Vault** com o Minrock! 🍃 Se você tiver dúvidas sobre os passos do assistente do Vault CMS ou sobre o formato Page Bundle, deixe uma mensagem aqui." : r ? "¡Bienvenido a la discusión de la guía de conexión de **Obsidian Vault** con Minrock! 🍃 Si tienes dudas sobre los pasos del asistente de Vault CMS o el formato Page Bundle, deja un mensaje aquí." : "Welcome to the **Obsidian Vault** + Minrock integration discussion! 🍃 If you have questions about the Vault CMS wizard steps or the Page Bundle format, leave a message below.",
-          createdAt: t ? "há 15 minutos" : r ? "hace 15 minutos" : "15 minutes ago",
-          originalLang: t ? "pt" : r ? "es" : "en",
+          body: t ? "Bem-vindo à discussão do guia de conexão do **Obsidian Vault** com o Minrock! 🍃 Se você tiver dúvidas sobre os passos do assistente do Vault CMS ou sobre o formato Page Bundle, deixe uma mensagem aqui." : o ? "¡Bienvenido a la discusión de la guía de conexión de **Obsidian Vault** con Minrock! 🍃 Si tienes dudas sobre los pasos del asistente de Vault CMS o el formato Page Bundle, deja un mensaje aquí." : "Welcome to the **Obsidian Vault** + Minrock integration discussion! 🍃 If you have questions about the Vault CMS wizard steps or the Page Bundle format, leave a message below.",
+          createdAt: t ? "há 15 minutos" : o ? "hace 15 minutos" : "15 minutes ago",
+          originalLang: t ? "pt" : o ? "es" : "en",
           reactions: [
             { content: "👍", count: 5, viewerHasReacted: !0 },
             { content: "🚀", count: 3, viewerHasReacted: !1 }
@@ -4232,9 +4407,9 @@ Do you want to simulate a local test login (@demo-reader)?`
             url: "https://github.com",
             isAuthor: !1
           },
-          body: t ? "O vídeo do David Kimball no final do artigo ajudou bastante a visualizar o fluxo de publicação com o Git status bar do Obsidian!" : r ? "¡El vídeo de David Kimball al final del artículo ayudó muchísimo a visualizar el flujo de publicación con la barra de Git en Obsidian!" : "David Kimball's walkthrough video at the end of the post really helped clarify the Git push workflow in Obsidian's status bar!",
-          createdAt: t ? "há 12 minutos" : r ? "hace 12 minutos" : "12 minutes ago",
-          originalLang: t ? "pt" : r ? "es" : "en",
+          body: t ? "O vídeo do David Kimball no final do artigo ajudou bastante a visualizar o fluxo de publicação com o Git status bar do Obsidian!" : o ? "¡El vídeo de David Kimball al final del artículo ayudó muchísimo a visualizar el flujo de publicación con la barra de Git en Obsidian!" : "David Kimball's walkthrough video at the end of the post really helped clarify the Git push workflow in Obsidian's status bar!",
+          createdAt: t ? "há 12 minutos" : o ? "hace 12 minutos" : "12 minutes ago",
+          originalLang: t ? "pt" : o ? "es" : "en",
           reactions: [{ content: "🎉", count: 4, viewerHasReacted: !1 }],
           replies: []
         }
@@ -4251,9 +4426,9 @@ Do you want to simulate a local test login (@demo-reader)?`
             url: "https://github.com",
             isAuthor: !0
           },
-          body: t ? "Qual é a sua opinião sobre o ritmo tipográfico e o espaçamento para leitura de blocos longos de código técnico no Minrock?" : r ? "¿Cuál es tu opinión sobre el ritmo tipográfico y el espaciado para leer bloques largos de código técnico en Minrock?" : "What are your thoughts on Minrock's typographic rhythm and line height when reading long technical code blocks?",
-          createdAt: t ? "há 20 minutos" : r ? "hace 20 minutos" : "20 minutes ago",
-          originalLang: t ? "pt" : r ? "es" : "en",
+          body: t ? "Qual é a sua opinião sobre o ritmo tipográfico e o espaçamento para leitura de blocos longos de código técnico no Minrock?" : o ? "¿Cuál es tu opinión sobre el ritmo tipográfico y el espaciado para leer bloques largos de código técnico en Minrock?" : "What are your thoughts on Minrock's typographic rhythm and line height when reading long technical code blocks?",
+          createdAt: t ? "há 20 minutos" : o ? "hace 20 minutos" : "20 minutes ago",
+          originalLang: t ? "pt" : o ? "es" : "en",
           reactions: [
             { content: "👍", count: 6, viewerHasReacted: !0 },
             { content: "💡", count: 4, viewerHasReacted: !1 }
@@ -4283,9 +4458,9 @@ Do you want to simulate a local test login (@demo-reader)?`
             url: "https://github.com",
             isAuthor: !1
           },
-          body: t ? "A hierarquia limpa de títulos (`h2`, `h3`) e listas compactas mantém o foco total na substância técnica do artigo." : r ? "La jerarquía limpia de encabezados (`h2`, `h3`) y listas compactas mantiene el foco total en la sustancia técnica del artículo." : "The clean headings hierarchy (`h2`, `h3`) and compact lists keep the focus entirely on technical substance.",
-          createdAt: t ? "há 8 minutos" : r ? "hace 8 minutos" : "8 minutes ago",
-          originalLang: t ? "pt" : r ? "es" : "en",
+          body: t ? "A hierarquia limpa de títulos (`h2`, `h3`) e listas compactas mantém o foco total na substância técnica do artigo." : o ? "La jerarquía limpia de encabezados (`h2`, `h3`) y listas compactas mantiene el foco total en la sustancia técnica del artículo." : "The clean headings hierarchy (`h2`, `h3`) and compact lists keep the focus entirely on technical substance.",
+          createdAt: t ? "há 8 minutos" : o ? "hace 8 minutos" : "8 minutes ago",
+          originalLang: t ? "pt" : o ? "es" : "en",
           reactions: [{ content: "🎉", count: 2, viewerHasReacted: !1 }],
           replies: []
         }
@@ -4301,9 +4476,9 @@ Do you want to simulate a local test login (@demo-reader)?`
           url: "https://github.com",
           isAuthor: !0
         },
-        body: t ? "Bem-vindo ao **ScatterLeaf**! 🍃 Este é um comentário nativo renderizado diretamente via Shadow DOM, com zero iframes e suporte a Markdown." : r ? "¡Bienvenido a **ScatterLeaf**! 🍃 Este es un comentario nativo renderizado directamente a través de Shadow DOM, sin iframes y con soporte para Markdown." : "Welcome to **ScatterLeaf**! 🍃 This is a native comment rendered directly via Shadow DOM, with zero iframes and full Markdown support.",
-        createdAt: t ? "há 10 minutos" : r ? "hace 10 minutos" : "10 minutes ago",
-        originalLang: t ? "pt" : r ? "es" : "en",
+        body: t ? "Bem-vindo ao **ScatterLeaf**! 🍃 Este é um comentário nativo renderizado diretamente via Shadow DOM, com zero iframes e suporte a Markdown." : o ? "¡Bienvenido a **ScatterLeaf**! 🍃 Este es un comentario nativo renderizado directamente a través de Shadow DOM, sin iframes y con soporte para Markdown." : "Welcome to **ScatterLeaf**! 🍃 This is a native comment rendered directly via Shadow DOM, with zero iframes and full Markdown support.",
+        createdAt: t ? "há 10 minutos" : o ? "hace 10 minutos" : "10 minutes ago",
+        originalLang: t ? "pt" : o ? "es" : "en",
         reactions: [
           { content: "👍", count: 4, viewerHasReacted: !0 },
           { content: "❤️", count: 6, viewerHasReacted: !1 },
@@ -4363,7 +4538,7 @@ Do you want to simulate a local test login (@demo-reader)?`
           isAuthor: !1
         },
         body: "¡Excelente proyecto! El tema Warm Paper (**Cream**) queda fenomenal para leer artículos largos.",
-        createdAt: t ? "há 8 minutos" : r ? "hace 8 minutos" : "8 minutes ago",
+        createdAt: t ? "há 8 minutos" : o ? "hace 8 minutos" : "8 minutes ago",
         originalLang: "es",
         reactions: [{ content: "🎉", count: 3, viewerHasReacted: !1 }],
         replies: []
@@ -4516,69 +4691,69 @@ Do you want to simulate a local test login (@demo-reader)?`
    */
   parseMarkdown(e) {
     if (!e) return "";
-    const t = [], r = "SLCODEBLOCKTOKEN";
-    let o = e.replace(
+    const t = [], o = "SLCODEBLOCKTOKEN";
+    let r = e.replace(
       /```([a-zA-Z0-9_-]*)\r?\n?([\s\S]*?)```/g,
       (i, s, d) => {
-        const n = (s || "code").trim().toLowerCase(), p = d.replace(/^\n+|\n+$/g, "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").split(/\r?\n/), w = p.map(
-          (N, q) => `<span class="sl-code-line"><span class="sl-line-num">${q + 1}</span><span class="sl-line-code">${N || " "}</span></span>`
-        ).join(""), y = p.length > 20, x = this.currentLang === "pt", $ = x ? "Copiar" : "Copy", v = x ? "Copiar código" : "Copy code", A = x ? "Rolar para cima" : "Scroll up", P = x ? "Rolar para baixo" : "Scroll down", O = y ? `${n} · ${p.length} ${x ? "linhas" : "lines"}` : n, _ = x ? `Mostrar todas as ${p.length} linhas` : `Show all ${p.length} lines`, B = y && !this._hideCodeScroll ? `
-            <div class="sl-code-scroll-controls" aria-label="${x ? "Navegação do código" : "Code navigation"}">
-              <button type="button" class="sl-code-scroll-btn sl-scroll-up" title="${A}" aria-label="${A}">
+        const l = (s || "code").trim().toLowerCase(), g = d.replace(/^\n+|\n+$/g, "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").split(/\r?\n/), k = g.map(
+          (N, W) => `<span class="sl-code-line"><span class="sl-line-num">${W + 1}</span><span class="sl-line-code">${N || " "}</span></span>`
+        ).join(""), w = g.length > 20, _ = this.currentLang === "pt", L = _ ? "Copiar" : "Copy", x = _ ? "Copiar código" : "Copy code", I = _ ? "Rolar para cima" : "Scroll up", B = _ ? "Rolar para baixo" : "Scroll down", D = w ? `${l} · ${g.length} ${_ ? "linhas" : "lines"}` : l, $ = _ ? `Mostrar todas as ${g.length} linhas` : `Show all ${g.length} lines`, j = w && !this._hideCodeScroll ? `
+            <div class="sl-code-scroll-controls" aria-label="${_ ? "Navegação do código" : "Code navigation"}">
+              <button type="button" class="sl-code-scroll-btn sl-scroll-up" title="${I}" aria-label="${I}">
                 <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
                   <path d="M8 3.5a.75.75 0 0 1 .53.22l4.5 4.5a.75.75 0 0 1-1.06 1.06L8 5.31 4.03 9.28a.75.75 0 0 1-1.06-1.06l4.5-4.5A.75.75 0 0 1 8 3.5Z"/>
                 </svg>
               </button>
-              <button type="button" class="sl-code-scroll-btn sl-scroll-down" title="${P}" aria-label="${P}">
+              <button type="button" class="sl-code-scroll-btn sl-scroll-down" title="${B}" aria-label="${B}">
                 <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
                   <path d="M8 12.5a.75.75 0 0 1-.53-.22l-4.5-4.5a.75.75 0 0 1 1.06-1.06L8 10.69l3.97-3.97a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-.53.22Z"/>
                 </svg>
               </button>
             </div>
             <div class="sl-code-expand-bar">
-              <button type="button" class="sl-code-expand-btn" data-lines="${p.length}">
+              <button type="button" class="sl-code-expand-btn" data-lines="${g.length}">
                 <span>↕</span>
-                <span class="sl-expand-text">${_}</span>
+                <span class="sl-expand-text">${$}</span>
               </button>
             </div>
-          ` : "", I = `
-          <div class="sl-code-block ${y ? "sl-code-block-long sl-collapsed" : ""}" data-lang="${n}">
+          ` : "", A = `
+          <div class="sl-code-block ${w ? "sl-code-block-long sl-collapsed" : ""}" data-lang="${l}">
             <div class="sl-code-header">
-              <span class="sl-code-badge">${O}</span>
-              <button type="button" class="sl-code-copy-btn" title="${v}" aria-label="${v}">
+              <span class="sl-code-badge">${D}</span>
+              <button type="button" class="sl-code-copy-btn" title="${x}" aria-label="${x}">
                 <svg class="sl-copy-icon" viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
                   <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
                   <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
                 </svg>
-                <span class="sl-copy-text">${$}</span>
+                <span class="sl-copy-text">${L}</span>
               </button>
             </div>
-            <pre class="sl-code-pre"><code class="sl-code-body">${w}</code></pre>
-            ${B}
+            <pre class="sl-code-pre"><code class="sl-code-body">${k}</code></pre>
+            ${j}
           </div>
-        `.trim(), H = t.length;
-        return t.push(I), `${r}${H}ENDTOKEN`;
+        `.trim(), F = t.length;
+        return t.push(A), `${o}${F}ENDTOKEN`;
       }
     ).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return o = o.replace(/`([^`]+)`/g, '<code class="sl-inline-code">$1</code>'), o = o.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>"), o = o.replace(/__([^_]+)__/g, "<strong>$1</strong>"), o = o.replace(/\*([^*]+)\*/g, "<em>$1</em>"), o = o.replace(/_([^_]+)_/g, "<em>$1</em>"), o = o.replace(/~~([^~]+)~~/g, "<del>$1</del>"), o = o.replace(
+    return r = r.replace(/`([^`]+)`/g, '<code class="sl-inline-code">$1</code>'), r = r.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>"), r = r.replace(/__([^_]+)__/g, "<strong>$1</strong>"), r = r.replace(/\*([^*]+)\*/g, "<em>$1</em>"), r = r.replace(/_([^_]+)_/g, "<em>$1</em>"), r = r.replace(/~~([^~]+)~~/g, "<del>$1</del>"), r = r.replace(
       /!\[([^\]]*)\]\(((?:https?:\/\/|data:image\/)[^\s)]+)\)/g,
       (i, s, d) => {
-        const n = V(d);
-        return n.safe ? `<img src="${d}" alt="${s}" class="sl-embedded-img" loading="lazy" />` : `<span class="sl-blocked-media-notice" title="${n.reason || "Conteúdo potencialmente sensível"}">⚠️ [Mídia bloqueada: filtro de conteúdo sensível / link não seguro]</span>`;
+        const l = V(d);
+        return l.safe ? `<img src="${d}" alt="${s}" class="sl-embedded-img" loading="lazy" />` : `<span class="sl-blocked-media-notice" title="${l.reason || "Conteúdo potencialmente sensível"}">⚠️ [Mídia bloqueada: filtro de conteúdo sensível / link não seguro]</span>`;
       }
-    ), o = o.replace(
+    ), r = r.replace(
       /\[([^\]]+)\]\(([^)]+)\)/g,
       '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-    ), o = o.replace(
+    ), r = r.replace(
       /(^|[^"'])(https?:\/\/[^\s<]+)/g,
       '$1<a href="$2" target="_blank" rel="noopener noreferrer">$2</a>'
-    ), o = o.replace(
+    ), r = r.replace(
       /@([a-zA-Z0-9-_]+)/g,
       '<a href="https://github.com/$1" target="_blank" rel="noopener noreferrer" class="sl-mention">@$1</a>'
-    ), o = o.replace(/\n\n/g, "</p><p>"), o = o.replace(/\n/g, "<br />"), t.forEach((i, s) => {
-      const d = `${r}${s}ENDTOKEN`;
-      o = o.replace(new RegExp(`<p>\\s*${d}\\s*<\\/p>`, "g"), i), o = o.replace(new RegExp(d, "g"), i);
-    }), `<p>${o}</p>`;
+    ), r = r.replace(/\n\n/g, "</p><p>"), r = r.replace(/\n/g, "<br />"), t.forEach((i, s) => {
+      const d = `${o}${s}ENDTOKEN`;
+      r = r.replace(new RegExp(`<p>\\s*${d}\\s*<\\/p>`, "g"), i), r = r.replace(new RegExp(d, "g"), i);
+    }), `<p>${r}</p>`;
   }
   /**
    * Formata datas de maneira inteligente, contextual e regionalizada (Intl API)
@@ -4590,37 +4765,37 @@ Do you want to simulate a local test login (@demo-reader)?`
     const t = new Date(e);
     if (isNaN(t.getTime()))
       return { relative: e, full: e };
-    const r = typeof navigator < "u" && navigator.language ? navigator.language : this.currentLang === "pt" ? "pt-BR" : "en-US", a = new Intl.DateTimeFormat(r, {
+    const o = typeof navigator < "u" && navigator.language ? navigator.language : this.currentLang === "pt" ? "pt-BR" : "en-US", a = new Intl.DateTimeFormat(o, {
       dateStyle: "medium",
       timeStyle: "short"
-    }).format(t), o = Math.floor((Date.now() - t.getTime()) / 1e3), i = this.currentLang, s = i === "pt", d = i === "es";
-    if (o < 60)
+    }).format(t), r = Math.floor((Date.now() - t.getTime()) / 1e3), i = this.currentLang, s = i === "pt", d = i === "es";
+    if (r < 60)
       return {
         relative: s ? "agora mesmo" : d ? "ahora mismo" : "just now",
         full: a
       };
-    if (o < 3600) {
-      const g = Math.floor(o / 60);
+    if (r < 3600) {
+      const b = Math.floor(r / 60);
       return {
-        relative: s ? `há ${g} ${g === 1 ? "minuto" : "minutos"}` : d ? `hace ${g} ${g === 1 ? "minuto" : "minutos"}` : `${g} ${g === 1 ? "minute" : "minutes"} ago`,
+        relative: s ? `há ${b} ${b === 1 ? "minuto" : "minutos"}` : d ? `hace ${b} ${b === 1 ? "minuto" : "minutos"}` : `${b} ${b === 1 ? "minute" : "minutes"} ago`,
         full: a
       };
     }
-    if (o < 86400) {
-      const g = Math.floor(o / 3600);
+    if (r < 86400) {
+      const b = Math.floor(r / 3600);
       return {
-        relative: s ? `há ${g} ${g === 1 ? "hora" : "horas"}` : d ? `hace ${g} ${g === 1 ? "hora" : "horas"}` : `${g} ${g === 1 ? "hour" : "hours"} ago`,
+        relative: s ? `há ${b} ${b === 1 ? "hora" : "horas"}` : d ? `hace ${b} ${b === 1 ? "hora" : "horas"}` : `${b} ${b === 1 ? "hour" : "hours"} ago`,
         full: a
       };
     }
-    if (o < 604800) {
-      const g = Math.floor(o / 86400);
+    if (r < 604800) {
+      const b = Math.floor(r / 86400);
       return {
-        relative: s ? `há ${g} ${g === 1 ? "dia" : "dias"}` : d ? `hace ${g} ${g === 1 ? "día" : "días"}` : `${g} ${g === 1 ? "day" : "days"} ago`,
+        relative: s ? `há ${b} ${b === 1 ? "dia" : "dias"}` : d ? `hace ${b} ${b === 1 ? "día" : "días"}` : `${b} ${b === 1 ? "day" : "days"} ago`,
         full: a
       };
     }
-    return { relative: new Intl.DateTimeFormat(r, {
+    return { relative: new Intl.DateTimeFormat(o, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric"
@@ -4631,8 +4806,8 @@ Do you want to simulate a local test login (@demo-reader)?`
    */
   detectTextLanguage(e) {
     if (!e || e.trim().length === 0) return this._lang;
-    const t = e.toLowerCase().replace(/[*_`#]/g, "").replace(/https?:\/\/\S+/g, "").replace(/@\w+/g, ""), r = (t.match(/\b(o|a|os|as|de|do|da|em|um|uma|para|com|não|que|isso|este|esta|muito|bom|bem|projeto|comentário|genial|manteiga|artigo|leitura)\b/g) || []).length * 2 + (t.match(/[ãõéêáàçíú]/g) || []).length * 3, a = (t.match(/\b(the|and|this|is|that|with|for|you|have|not|but|from|are|was|they|will|all|would|there|what|out|about|who|get|which|go|me|when|make|can|like|time|no|just|know|take|people|into|year|your|good|some|could|them|see|other|than|then|now|look|only|come|its|over|think|also|back|after|use|two|how|our|work|first|well|way|even|new|want|because|any|these|give|day|most|us|welcome|native|having|scroll|stutter)\b/g) || []).length * 2, o = (t.match(/\b(el|la|los|las|de|del|en|un|una|por|con|para|esto|este|esta|muy|bien|es|son|pero|como|más|sus|le|ya|o|fue|ha|sí|porque|cuando|sin|sobre|ser|tiene|también|me|hasta|hay|donde|quien|desde|todo|nos|durante|todos|uno|les|ni|contra|otros|ese|eso|ante|ellos|mí|antes|algunos|qué|unos|yo|otro|otras|otra|él|tanto|esa|estos|mucho|quienes|nada|muchos|cual|poco|ella|estar|estas|algunas|algo|nosotros|queda|excelente|artículos)\b/g) || []).length * 2 + (t.match(/[¿¡ñ]/g) || []).length * 4, i = (t.match(/\b(le|la|les|de|du|des|en|et|un|une|pour|avec|dans|que|qui|est|sont|sur|ce|cette|ces|mais|ou|donc|or|ni|car|très|bien)\b/g) || []).length * 2 + (t.match(/[œçèêàâôûëï]/g) || []).length * 3, s = Math.max(r, a, o, i);
-    return s < 2 ? this.currentLang : s === r ? "pt" : s === a ? "en" : s === o ? "es" : s === i ? "fr" : this.currentLang;
+    const t = e.toLowerCase().replace(/[*_`#]/g, "").replace(/https?:\/\/\S+/g, "").replace(/@\w+/g, ""), o = (t.match(/\b(o|a|os|as|de|do|da|em|um|uma|para|com|não|que|isso|este|esta|muito|bom|bem|projeto|comentário|genial|manteiga|artigo|leitura)\b/g) || []).length * 2 + (t.match(/[ãõéêáàçíú]/g) || []).length * 3, a = (t.match(/\b(the|and|this|is|that|with|for|you|have|not|but|from|are|was|they|will|all|would|there|what|out|about|who|get|which|go|me|when|make|can|like|time|no|just|know|take|people|into|year|your|good|some|could|them|see|other|than|then|now|look|only|come|its|over|think|also|back|after|use|two|how|our|work|first|well|way|even|new|want|because|any|these|give|day|most|us|welcome|native|having|scroll|stutter)\b/g) || []).length * 2, r = (t.match(/\b(el|la|los|las|de|del|en|un|una|por|con|para|esto|este|esta|muy|bien|es|son|pero|como|más|sus|le|ya|o|fue|ha|sí|porque|cuando|sin|sobre|ser|tiene|también|me|hasta|hay|donde|quien|desde|todo|nos|durante|todos|uno|les|ni|contra|otros|ese|eso|ante|ellos|mí|antes|algunos|qué|unos|yo|otro|otras|otra|él|tanto|esa|estos|mucho|quienes|nada|muchos|cual|poco|ella|estar|estas|algunas|algo|nosotros|queda|excelente|artículos)\b/g) || []).length * 2 + (t.match(/[¿¡ñ]/g) || []).length * 4, i = (t.match(/\b(le|la|les|de|du|des|en|et|un|une|pour|avec|dans|que|qui|est|sont|sur|ce|cette|ces|mais|ou|donc|or|ni|car|très|bien)\b/g) || []).length * 2 + (t.match(/[œçèêàâôûëï]/g) || []).length * 3, s = Math.max(o, a, r, i);
+    return s < 2 ? this.currentLang : s === o ? "pt" : s === a ? "en" : s === r ? "es" : s === i ? "fr" : this.currentLang;
   }
   getVisitorLang() {
     return this.currentLang;
@@ -4654,25 +4829,25 @@ Do you want to simulate a local test login (@demo-reader)?`
   }
   async toggleTranslate(e) {
     const t = (T) => {
-      for (const p of T) {
-        if (p.id === e) return p;
-        if (p.replies) {
-          const w = t(p.replies);
-          if (w) return w;
+      for (const g of T) {
+        if (g.id === e) return g;
+        if (g.replies) {
+          const k = t(g.replies);
+          if (k) return k;
         }
       }
       return null;
-    }, r = t(this._comments);
-    if (!r) return;
-    if (r.isShowingTranslation) {
-      r.isShowingTranslation = !1, this.render();
+    }, o = t(this._comments);
+    if (!o) return;
+    if (o.isShowingTranslation) {
+      o.isShowingTranslation = !1, this.render();
       return;
     }
-    if (r.translatedBody) {
-      r.isShowingTranslation = !0, this.render();
+    if (o.translatedBody) {
+      o.isShowingTranslation = !0, this.render();
       return;
     }
-    const a = this.currentLang, o = a === "pt", s = o ? "pt" : a === "es" ? "es" : "en", g = o ? {
+    const a = this.currentLang, r = a === "pt", s = r ? "pt" : a === "es" ? "es" : "en", b = r ? {
       1: "Welcome to **ScatterLeaf**! 🍃 This is a native comment rendered directly via Shadow DOM, with zero iframes and Markdown support.",
       "1-1": "@vault-author Isso é genial! Ter Shadow DOM nativo deixa a rolagem suave como manteiga, sem nenhum engasgo de iframe.",
       "1-2": "@sarah-eng Exactly! Page scrolling does not suffer from visual jumping caused by iframe resizing.",
@@ -4683,23 +4858,23 @@ Do you want to simulate a local test login (@demo-reader)?`
       "1-2": "@sarah-eng Exato! A rolagem da página não sofre com os pulos visuais de redimensionamento do iframe.",
       2: "Excellent project! The Warm Paper (**Cream**) theme looks phenomenal for reading long articles."
     };
-    if (g[e]) {
-      r.translatedBody = g[e], r.isShowingTranslation = !0, this.render();
+    if (b[e]) {
+      o.translatedBody = b[e], o.isShowingTranslation = !0, this.render();
       return;
     }
     this._isTranslatingId = e, this.render();
     try {
-      const T = r.originalLang || this.detectTextLanguage(r.body), p = r.body.replace(/[#*`_~]/g, ""), y = await (await fetch(
-        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(p.slice(0, 500))}&langpair=${T}|${s}`
+      const T = o.originalLang || this.detectTextLanguage(o.body), g = o.body.replace(/[#*`_~]/g, ""), w = await (await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(g.slice(0, 500))}&langpair=${T}|${s}`
       )).json();
-      y && y.responseData && y.responseData.translatedText ? r.translatedBody = y.responseData.translatedText : r.translatedBody = o ? `[Tradução]: ${r.body}` : `[Translation]: ${r.body}`;
+      w && w.responseData && w.responseData.translatedText ? o.translatedBody = w.responseData.translatedText : o.translatedBody = r ? `[Tradução]: ${o.body}` : `[Translation]: ${o.body}`;
     } catch (T) {
-      console.warn("🍃 [ScatterLeaf] Erro na tradução automática:", T), r.translatedBody = o ? `[Tradução]: ${r.body}` : `[Translation]: ${r.body}`;
+      console.warn("🍃 [ScatterLeaf] Erro na tradução automática:", T), o.translatedBody = r ? `[Tradução]: ${o.body}` : `[Translation]: ${o.body}`;
     } finally {
-      this._isTranslatingId = null, r.isShowingTranslation = !0, this.render();
+      this._isTranslatingId = null, o.isShowingTranslation = !0, this.render();
     }
   }
-  toggleSpeak(e, t, r) {
+  toggleSpeak(e, t, o) {
     if (typeof window > "u" || !("speechSynthesis" in window)) {
       alert(
         this._lang === "pt" ? "Seu navegador não possui suporte à síntese de voz (Web Speech API)." : "Your browser does not support Speech Synthesis (Web Speech API)."
@@ -4711,17 +4886,17 @@ Do you want to simulate a local test login (@demo-reader)?`
       return;
     }
     window.speechSynthesis.cancel(), this._speakingId = e, this.render();
-    const o = t.replace(/```[\s\S]*?(?:```|$)|~~~[\s\S]*?(?:~~~|$)/g, "").replace(/[*_`#]/g, "").replace(/https?:\/\/\S+/g, "link").replace(/\s+/g, " ").trim() || (this._lang === "pt" ? "Este comentário contém apenas um bloco de código." : "This comment contains only a code block."), i = new SpeechSynthesisUtterance(o), d = r && {
+    const r = t.replace(/```[\s\S]*?(?:```|$)|~~~[\s\S]*?(?:~~~|$)/g, "").replace(/[*_`#]/g, "").replace(/https?:\/\/\S+/g, "link").replace(/\s+/g, " ").trim() || (this._lang === "pt" ? "Este comentário contém apenas um bloco de código." : "This comment contains only a code block."), i = new SpeechSynthesisUtterance(r), d = o && {
       pt: "pt-BR",
       en: "en-US",
       es: "es-ES",
       fr: "fr-FR",
       de: "de-DE",
       it: "it-IT"
-    }[r] || r || (this._lang === "pt" ? "pt-BR" : "en-US");
+    }[o] || o || (this._lang === "pt" ? "pt-BR" : "en-US");
     if (i.lang = d, "speechSynthesis" in window) {
-      const n = window.speechSynthesis.getVoices(), g = d.slice(0, 2).toLowerCase(), T = n.find(
-        (p) => p.lang.replace("_", "-").toLowerCase().startsWith(g)
+      const l = window.speechSynthesis.getVoices(), b = d.slice(0, 2).toLowerCase(), T = l.find(
+        (g) => g.lang.replace("_", "-").toLowerCase().startsWith(b)
       );
       T && (i.voice = T);
     }
@@ -4734,12 +4909,12 @@ Do you want to simulate a local test login (@demo-reader)?`
   render() {
     if (!this.shadowRoot) return;
     const e = this._comments.reduce(
-      (o, i) => {
+      (r, i) => {
         var s;
-        return o + 1 + (((s = i.replies) == null ? void 0 : s.length) || 0);
+        return r + 1 + (((s = i.replies) == null ? void 0 : s.length) || 0);
       },
       0
-    ), t = this.currentLang === "pt" ? "Comentários" : "Comments", r = this.renderComposer(), a = this._isLoading ? `<div style="text-align: center; padding: 2.5rem; color: var(--sl-text-muted);">
+    ), t = this.currentLang === "pt" ? "Comentários" : "Comments", o = this.renderComposer(), a = this._isLoading ? `<div style="text-align: center; padding: 2.5rem; color: var(--sl-text-muted);">
            <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem; animation: spin 1s infinite linear;">🍃</span>
            ${this.currentLang === "pt" ? "Carregando notas na brisa..." : "Floating notes in the breeze..."}
          </div>` : this.renderCommentsList();
@@ -4764,21 +4939,22 @@ Do you want to simulate a local test login (@demo-reader)?`
           </span>
         </header>
 
-        ${this._inputPosition === "top" ? r : ""}
+        ${this._inputPosition === "top" ? o : ""}
         ${this.renderCommentsToolbar()}
         ${this.renderModerationBar()}
         ${a}
-        ${this._inputPosition === "bottom" ? r : ""}
+        ${this._inputPosition === "bottom" ? o : ""}
       </div>
       ${this._isMediaModalOpen ? this.renderMediaModal() : ""}
       ${this._isImageModalOpen ? this.renderImageModal() : ""}
+      ${this._lightboxOpen ? this.renderLightbox() : ""}
     `, this.attachEvents();
   }
   /**
    * Renderiza o Modal Seguro de Inserção de GIFs (Anti-NSFW)
    */
   renderMediaModal() {
-    const e = this.currentLang === "pt", t = e ? "Inserir GIF" : "Insert GIF", r = e ? "Filtro Anti-NSFW ativo: URLs passam por validação estrita de segurança e integridade." : "Anti-NSFW filter active: URLs undergo strict security and integrity checks.", a = e ? "URL do GIF (HTTPS obrigatório):" : "GIF URL (Strict HTTPS):", o = e ? "Descrição do GIF / Alt text (Opcional):" : "GIF description / Alt text (Optional):", i = e ? "Cancelar" : "Cancel", s = e ? "Inserir GIF" : "Insert GIF", d = ne();
+    const e = this.currentLang === "pt", t = e ? "Inserir GIF" : "Insert GIF", o = e ? "Filtro Anti-NSFW ativo: URLs passam por validação estrita de segurança e integridade." : "Anti-NSFW filter active: URLs undergo strict security and integrity checks.", a = e ? "URL do GIF (HTTPS obrigatório):" : "GIF URL (Strict HTTPS):", r = e ? "Descrição do GIF / Alt text (Opcional):" : "GIF description / Alt text (Optional):", i = e ? "Cancelar" : "Cancel", s = e ? "Inserir GIF" : "Insert GIF", d = ne();
     return `
       <div class="sl-modal-backdrop" id="media-modal-backdrop">
         <div class="sl-modal-box" role="dialog" aria-modal="true" aria-labelledby="sl-media-modal-title">
@@ -4792,7 +4968,7 @@ Do you want to simulate a local test login (@demo-reader)?`
 
           <div class="sl-modal-body">
             <div class="sl-modal-notice">
-              <span>${r}</span>
+              <span>${o}</span>
             </div>
 
             <!-- Inserção por URL segura -->
@@ -4814,7 +4990,7 @@ Do you want to simulate a local test login (@demo-reader)?`
 
             <!-- Descrição / Alt Text -->
             <div class="sl-modal-input-group">
-              <label class="sl-modal-label" for="media-alt-input">${o}</label>
+              <label class="sl-modal-label" for="media-alt-input">${r}</label>
               <input
                 type="text"
                 class="sl-modal-input"
@@ -4858,12 +5034,12 @@ Do you want to simulate a local test login (@demo-reader)?`
                 </div>
                 <div class="sl-modal-recents-grid ${this._isManagingRecentGifs ? "sl-managing-recents" : ""}">
                   ${d.map(
-      (n) => `
+      (l) => `
                     <div class="sl-recent-gif-wrapper">
-                      <button type="button" class="sl-recent-gif-item" data-url="${n.url}" data-alt="${n.alt || ""}" title="${n.alt || n.url}">
-                        <img src="${n.url}" alt="${n.alt || "GIF"}" loading="lazy" />
+                      <button type="button" class="sl-recent-gif-item" data-url="${l.url}" data-alt="${l.alt || ""}" title="${l.alt || l.url}">
+                        <img src="${l.url}" alt="${l.alt || "GIF"}" loading="lazy" />
                       </button>
-                      <button type="button" class="sl-btn-delete-recent-gif" data-url="${n.url}" title="${e ? "Remover este GIF dos recentes" : "Remove this GIF from recents"}" aria-label="${e ? "Remover GIF" : "Remove GIF"}">✕</button>
+                      <button type="button" class="sl-btn-delete-recent-gif" data-url="${l.url}" title="${e ? "Remover este GIF dos recentes" : "Remove this GIF from recents"}" aria-label="${e ? "Remover GIF" : "Remove GIF"}">✕</button>
                     </div>
                   `
     ).join("")}
@@ -4894,7 +5070,7 @@ Do you want to simulate a local test login (@demo-reader)?`
    * Renderiza o Modal Seguro de Inserção de Imagens (Apenas via URL HTTPS)
    */
   renderImageModal() {
-    const e = this.currentLang === "pt", t = e ? "Inserir imagem" : "Insert image", r = e ? "Filtro Anti-NSFW ativo: Insira um link direto HTTPS seguro da sua imagem (Imgur, Cloudinary, GitHub, etc.)." : "Anti-NSFW filter active: Enter a secure HTTPS direct link to your image (Imgur, Cloudinary, GitHub, etc.).", a = e ? "URL da Imagem (HTTPS obrigatório):" : "Image URL (Strict HTTPS):", o = e ? "Descrição da Imagem / Alt text (Opcional):" : "Image description / Alt text (Optional):", i = e ? "Cancelar" : "Cancel", s = e ? "Inserir Imagem" : "Insert Image", d = le();
+    const e = this.currentLang === "pt", t = e ? "Inserir imagem" : "Insert image", o = e ? "Filtro Anti-NSFW ativo: Insira um link direto HTTPS seguro da sua imagem (Imgur, Cloudinary, GitHub, etc.)." : "Anti-NSFW filter active: Enter a secure HTTPS direct link to your image (Imgur, Cloudinary, GitHub, etc.).", a = e ? "URL da Imagem (HTTPS obrigatório):" : "Image URL (Strict HTTPS):", r = e ? "Descrição da Imagem / Alt text (Opcional):" : "Image description / Alt text (Optional):", i = e ? "Cancelar" : "Cancel", s = e ? "Inserir Imagem" : "Insert Image", d = le();
     return `
       <div class="sl-modal-backdrop" id="image-modal-backdrop">
         <div class="sl-modal-box" role="dialog" aria-modal="true" aria-labelledby="sl-image-modal-title">
@@ -4908,7 +5084,7 @@ Do you want to simulate a local test login (@demo-reader)?`
 
           <div class="sl-modal-body">
             <div class="sl-modal-notice">
-              <span>${r}</span>
+              <span>${o}</span>
             </div>
 
             <!-- Inserção por URL segura -->
@@ -4930,7 +5106,7 @@ Do you want to simulate a local test login (@demo-reader)?`
 
             <!-- Descrição / Alt Text -->
             <div class="sl-modal-input-group">
-              <label class="sl-modal-label" for="image-alt-input">${o}</label>
+              <label class="sl-modal-label" for="image-alt-input">${r}</label>
               <input
                 type="text"
                 class="sl-modal-input"
@@ -4974,12 +5150,12 @@ Do you want to simulate a local test login (@demo-reader)?`
                 </div>
                 <div class="sl-modal-recents-grid ${this._isManagingRecentImages ? "sl-managing-recents" : ""}">
                   ${d.map(
-      (n) => `
+      (l) => `
                     <div class="sl-recent-gif-wrapper">
-                      <button type="button" class="sl-recent-image-item sl-recent-gif-item" data-url="${n.url}" data-alt="${n.alt || ""}" title="${n.alt || n.url}">
-                        <img src="${n.url}" alt="${n.alt || "Imagem"}" loading="lazy" />
+                      <button type="button" class="sl-recent-image-item sl-recent-gif-item" data-url="${l.url}" data-alt="${l.alt || ""}" title="${l.alt || l.url}">
+                        <img src="${l.url}" alt="${l.alt || "Imagem"}" loading="lazy" />
                       </button>
-                      <button type="button" class="sl-btn-delete-recent-image sl-btn-delete-recent-gif" data-url="${n.url}" title="${e ? "Remover esta imagem dos recentes" : "Remove this image from recents"}" aria-label="${e ? "Remover Imagem" : "Remove Image"}">✕</button>
+                      <button type="button" class="sl-btn-delete-recent-image sl-btn-delete-recent-gif" data-url="${l.url}" title="${e ? "Remover esta imagem dos recentes" : "Remove this image from recents"}" aria-label="${e ? "Remover Imagem" : "Remove Image"}">✕</button>
                     </div>
                   `
     ).join("")}
@@ -5007,6 +5183,65 @@ Do you want to simulate a local test login (@demo-reader)?`
     `;
   }
   /**
+   * Renderiza a visualização imersiva do Mini-Lightbox Nativo (Zoom & Pan)
+   */
+  renderLightbox() {
+    const e = this.currentLang === "pt", t = e ? "Aproximar zoom (+)" : "Zoom in (+)", o = e ? "Afastar zoom (-)" : "Zoom out (-)", a = e ? "Redefinir zoom (1:1)" : "Reset zoom (1:1)", r = e ? "Fechar visualização (Esc)" : "Close view (Esc)", i = Math.round(this._lightboxScale * 100);
+    return `
+      <div class="sl-lightbox-backdrop" id="sl-lightbox-backdrop" role="dialog" aria-modal="true" aria-label="${e ? "Visualizador de Imagem" : "Image Viewer"}">
+        <div class="sl-lightbox-toolbar">
+          <div class="sl-lightbox-title">${this.escapeHtml(this._lightboxImgAlt || (e ? "Imagem" : "Image"))}</div>
+          <div class="sl-lightbox-actions">
+            <span class="sl-lightbox-badge" id="sl-lightbox-badge">${i}%</span>
+            <button type="button" class="sl-lightbox-btn" id="sl-lightbox-zoom-out" title="${o}" aria-label="${o}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+            </button>
+            <button type="button" class="sl-lightbox-btn" id="sl-lightbox-zoom-in" title="${t}" aria-label="${t}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+            </button>
+            <button type="button" class="sl-lightbox-btn" id="sl-lightbox-reset" title="${a}" aria-label="${a}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            </button>
+            <button type="button" class="sl-lightbox-btn sl-lightbox-btn-close" id="sl-lightbox-close" title="${r}" aria-label="${r}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+        <div class="sl-lightbox-stage" id="sl-lightbox-stage">
+          <img
+            class="sl-lightbox-img ${this._lightboxScale > 1.05 ? "sl-zoomed" : ""}"
+            id="sl-lightbox-img"
+            src="${this.escapeHtml(this._lightboxImgSrc)}"
+            alt="${this.escapeHtml(this._lightboxImgAlt)}"
+            draggable="false"
+            style="transform: translate(${this._lightboxTranslateX}px, ${this._lightboxTranslateY}px) scale(${this._lightboxScale});"
+          />
+        </div>
+        <div class="sl-lightbox-hint">
+          ${e ? "Dica: Arraste para mover • Roda do mouse ou duplo clique para zoom • Esc para fechar" : "Tip: Drag to pan • Mouse wheel or double click to zoom • Esc to close"}
+        </div>
+      </div>
+    `;
+  }
+  openLightbox(e, t = "") {
+    this._lightboxImgSrc = e, this._lightboxImgAlt = t, this._lightboxScale = 1, this._lightboxTranslateX = 0, this._lightboxTranslateY = 0, this._lightboxOpen = !0, this.render();
+  }
+  closeLightbox() {
+    this._lightboxOpen = !1, this._lightboxScale = 1, this._lightboxTranslateX = 0, this._lightboxTranslateY = 0, this._isDraggingImage = !1, this.render();
+  }
+  setLightboxZoom(e) {
+    const t = Math.max(0.5, Math.min(4, e));
+    this._lightboxScale = Math.round(t * 100) / 100, this._lightboxScale <= 1 && (this._lightboxTranslateX = 0, this._lightboxTranslateY = 0), this.updateLightboxTransform();
+  }
+  resetLightboxTransform() {
+    this._lightboxScale = 1, this._lightboxTranslateX = 0, this._lightboxTranslateY = 0, this.updateLightboxTransform();
+  }
+  updateLightboxTransform(e = !1) {
+    var a, r;
+    const t = (a = this.shadowRoot) == null ? void 0 : a.getElementById("sl-lightbox-img"), o = (r = this.shadowRoot) == null ? void 0 : r.getElementById("sl-lightbox-badge");
+    t && (e ? t.classList.add("sl-panning") : t.classList.remove("sl-panning"), this._lightboxScale > 1.05 ? t.classList.add("sl-zoomed") : t.classList.remove("sl-zoomed"), t.style.transform = `translate(${this._lightboxTranslateX}px, ${this._lightboxTranslateY}px) scale(${this._lightboxScale})`, o && (o.textContent = `${Math.round(this._lightboxScale * 100)}%`));
+  }
+  /**
    * Renderiza o Menu Popover Flutuante com as Linguagens Populares
    */
   renderCodePicker() {
@@ -5015,11 +5250,11 @@ Do you want to simulate a local test login (@demo-reader)?`
       <div class="sl-code-picker-popover" role="menu" aria-label="${t}">
         <div class="sl-code-picker-title">${t}</div>
         <div class="sl-code-lang-grid">
-          ${Se.map(
-      (r) => `
-            <button type="button" class="sl-code-lang-btn" data-lang="${r.id}" role="menuitem" title="${r.name}">
-              <span class="sl-code-lang-name">${r.name}</span>
-              <span class="sl-code-lang-tag">${r.id}</span>
+          ${Me.map(
+      (o) => `
+            <button type="button" class="sl-code-lang-btn" data-lang="${o.id}" role="menuitem" title="${o.name}">
+              <span class="sl-code-lang-name">${o.name}</span>
+              <span class="sl-code-lang-tag">${o.id}</span>
             </button>
           `
     ).join("")}
@@ -5032,27 +5267,27 @@ Do you want to simulate a local test login (@demo-reader)?`
    * Suporta seleção prévia do usuário ou template com placeholder pré-selecionado
    */
   insertCodeBlock(e = "typescript") {
-    var A, P, O, _;
-    const t = (A = this.shadowRoot) == null ? void 0 : A.getElementById("composer-textarea");
+    var I, B, D, $;
+    const t = (I = this.shadowRoot) == null ? void 0 : I.getElementById("composer-textarea");
     if (!t) return;
-    const r = ((P = this._savedComposerSelection) == null ? void 0 : P.start) ?? t.selectionStart ?? this._composerText.length, a = ((O = this._savedComposerSelection) == null ? void 0 : O.end) ?? t.selectionEnd ?? this._composerText.length, i = t.value.substring(r, a) || (this.currentLang === "pt" ? "// Seu código aqui" : "// Your code here"), s = t.value.substring(0, r), d = t.value.substring(a), n = s.length > 0 && !s.endsWith(`
-`), g = d.length > 0 && !d.startsWith(`
-`), T = n ? `
-` : "", w = `${T}\`\`\`${e}
+    const o = ((B = this._savedComposerSelection) == null ? void 0 : B.start) ?? t.selectionStart ?? this._composerText.length, a = ((D = this._savedComposerSelection) == null ? void 0 : D.end) ?? t.selectionEnd ?? this._composerText.length, i = t.value.substring(o, a) || (this.currentLang === "pt" ? "// Seu código aqui" : "// Your code here"), s = t.value.substring(0, o), d = t.value.substring(a), l = s.length > 0 && !s.endsWith(`
+`), b = d.length > 0 && !d.startsWith(`
+`), T = l ? `
+` : "", k = `${T}\`\`\`${e}
 ${i}
-\`\`\`${g ? `
-` : ""}`, y = s + w + d;
-    this._composerText = y, this._isCodePickerOpen = !1, this._savedComposerSelection = null;
-    const x = s.length + T.length + 3 + e.length + 1, $ = x + i.length;
+\`\`\`${b ? `
+` : ""}`, w = s + k + d;
+    this._composerText = w, this._isCodePickerOpen = !1, this._savedComposerSelection = null;
+    const _ = s.length + T.length + 3 + e.length + 1, L = _ + i.length;
     this.render();
-    const v = (_ = this.shadowRoot) == null ? void 0 : _.getElementById("composer-textarea");
-    v && (v.focus(), v.setSelectionRange(x, $), v.style.height = "auto", v.style.height = `${v.scrollHeight}px`);
+    const x = ($ = this.shadowRoot) == null ? void 0 : $.getElementById("composer-textarea");
+    x && (x.focus(), x.setSelectionRange(_, L), x.style.height = "auto", x.style.height = `${x.scrollHeight}px`);
   }
   /**
    * Renderiza a Caixa de Escrita Principal (com Abas Escreva / Prévia, Aa e Autenticação)
    */
   renderComposer() {
-    const e = this._hidePreview ? !0 : this._activeTab === "write", t = this._fontMode === "monospace", r = this.currentLang === "pt" ? "Deixe uma nota ou comentário..." : "Leave a note or comment...", a = this.currentLang === "pt" ? "Escreva" : "Write", o = this.currentLang === "pt" ? "Prévia" : "Preview", i = this.currentLang === "pt" ? "Nada para pré-visualizar ainda." : "Nothing to preview yet.", s = this.currentLang === "pt" ? "Entre com GitHub" : "Sign in with GitHub", d = this.currentLang === "pt" ? "Publicar nota" : "Post note";
+    const e = this._hidePreview ? !0 : this._activeTab === "write", t = this._fontMode === "monospace", o = this.currentLang === "pt" ? "Deixe uma nota ou comentário..." : "Leave a note or comment...", a = this.currentLang === "pt" ? "Escreva" : "Write", r = this.currentLang === "pt" ? "Prévia" : "Preview", i = this.currentLang === "pt" ? "Nada para pré-visualizar ainda." : "Nothing to preview yet.", s = this.currentLang === "pt" ? "Entre com GitHub" : "Sign in with GitHub", d = this.currentLang === "pt" ? "Publicar nota" : "Post note";
     return `
       <div class="sl-composer" part="composer">
         <!-- Barra de Abas e Ações (Bloco de Código </> e Controle Tipográfico Aa) -->
@@ -5063,7 +5298,7 @@ ${i}
             </button>
             ${this._hidePreview ? "" : `
               <button class="sl-tab ${e ? "" : "sl-tab-active"}" id="tab-preview" role="tab" aria-selected="${!e}">
-                ${o}
+                ${r}
               </button>
             `}
           </div>
@@ -5082,7 +5317,7 @@ ${i}
 
         <!-- Área de Edição / Prévia -->
         <div class="sl-composer-body">
-          ${e ? `<textarea class="sl-textarea ${t ? "sl-monospace" : ""}" id="composer-textarea" placeholder="${r}" part="textarea">${this._composerText}</textarea>` : `<div class="sl-preview-area ${t ? "sl-monospace" : ""}" part="preview-area">
+          ${e ? `<textarea class="sl-textarea ${t ? "sl-monospace" : ""}" id="composer-textarea" placeholder="${o}" part="textarea">${this._composerText}</textarea>` : `<div class="sl-preview-area ${t ? "sl-monospace" : ""}" part="preview-area">
                   ${this._composerText ? this.parseMarkdown(this._composerText) : `<span class="sl-preview-empty">${i}</span>`}
                 </div>`}
         </div>
@@ -5279,14 +5514,14 @@ ${i}
           "🎯"
         ]
       }
-    ], t = this.currentLang === "pt" ? "Inserir GIF" : "Insert GIF", r = this.currentLang === "pt" ? "Emojis & Ícones" : "Emojis & Icons", a = ie("👊", this._selectedSkinTone), o = this.currentLang === "pt" ? "Tom de pele (clique para escolher)" : "Skin tone (click to choose)";
+    ], t = this.currentLang === "pt" ? "Inserir GIF" : "Insert GIF", o = this.currentLang === "pt" ? "Emojis & Ícones" : "Emojis & Icons", a = ie("👊", this._selectedSkinTone), r = this.currentLang === "pt" ? "Tom de pele (clique para escolher)" : "Skin tone (click to choose)";
     return `
       <div class="sl-emoji-popover" id="emoji-popover" part="emoji-popover">
         <div class="sl-emoji-header">
           <div style="display: flex; align-items: center; gap: 0.45rem;">
-            <span class="sl-emoji-title">${r}</span>
+            <span class="sl-emoji-title">${o}</span>
             ${this._hideSkinTone ? "" : `
-              <button type="button" class="sl-skin-tone-toggle-btn ${this._isSkinTonePanelOpen ? "sl-tone-active" : ""}" id="btn-skin-tone-toggle" title="${o}">
+              <button type="button" class="sl-skin-tone-toggle-btn ${this._isSkinTonePanelOpen ? "sl-tone-active" : ""}" id="btn-skin-tone-toggle" title="${r}">
                 <span>${a}</span>
               </button>
             `}
@@ -5306,9 +5541,9 @@ ${i}
             </div>
             <div class="sl-skin-tone-options">
               ${Le.map((i) => {
-      const s = ie("👊", i.modifier), d = this._selectedSkinTone === i.modifier || this._selectedSkinTone === "default" && i.modifier === "", n = this.currentLang === "pt" ? i.namePt : i.nameEn;
+      const s = ie("👊", i.modifier), d = this._selectedSkinTone === i.modifier || this._selectedSkinTone === "default" && i.modifier === "", l = this.currentLang === "pt" ? i.namePt : i.nameEn;
       return `
-                  <button type="button" class="sl-tone-btn ${d ? "sl-tone-selected" : ""}" data-tone-mod="${i.modifier || "default"}" title="${n}">
+                  <button type="button" class="sl-tone-btn ${d ? "sl-tone-selected" : ""}" data-tone-mod="${i.modifier || "default"}" title="${l}">
                     ${s}
                   </button>
                 `;
@@ -5324,10 +5559,10 @@ ${i}
               <span class="sl-emoji-category-title">${i.name}</span>
               <div class="sl-emoji-grid">
                 ${i.emojis.map((s) => {
-        const d = Ce.has(s), n = d ? ie(s, this._selectedSkinTone) : s;
+        const d = Ce.has(s), l = d ? ie(s, this._selectedSkinTone) : s;
         return `
-                      <button type="button" class="sl-emoji-item" data-emoji="${n}" data-base-emoji="${s}" data-toneable="${d ? "true" : "false"}" title="${n}">
-                        ${n}
+                      <button type="button" class="sl-emoji-item" data-emoji="${l}" data-base-emoji="${s}" data-toneable="${d ? "true" : "false"}" title="${l}">
+                        ${l}
                       </button>
                     `;
       }).join("")}
@@ -5357,12 +5592,12 @@ ${i}
     if (!this.shadowRoot) return;
     const t = this.shadowRoot.getElementById("composer-textarea");
     if (!t) return;
-    const r = t.selectionStart ?? t.value.length, a = t.selectionEnd ?? t.value.length, o = t.value, i = o.substring(0, r), s = o.substring(a);
+    const o = t.selectionStart ?? t.value.length, a = t.selectionEnd ?? t.value.length, r = t.value, i = r.substring(0, o), s = r.substring(a);
     t.value = i + e + s, this._composerText = t.value;
-    const d = r + e.length;
+    const d = o + e.length;
     this._isEmojiPickerOpen = !1, this.render();
-    const n = this.shadowRoot.getElementById("composer-textarea");
-    n && (n.focus(), n.setSelectionRange(d, d));
+    const l = this.shadowRoot.getElementById("composer-textarea");
+    l && (l.focus(), l.setSelectionRange(d, d));
   }
   /**
    * Renderiza a Lista Completa com Threads e Respostas Aninhadas
@@ -5376,27 +5611,27 @@ ${i}
     if (!e)
       t = [...this._comments];
     else {
-      const r = e.startsWith("@") ? e.slice(1) : e, a = r.split(/\s+/).filter(Boolean), o = [];
+      const o = e.startsWith("@") ? e.slice(1) : e, a = o.split(/\s+/).filter(Boolean), r = [];
       for (const i of this._comments) {
         let s = 0;
-        const d = i.author.login.toLowerCase(), n = i.body.toLowerCase();
-        if (d === r ? s += 100 : d.startsWith(r) ? s += 60 : d.includes(r) && (s += 40), n.includes(e) || n.includes(r))
+        const d = i.author.login.toLowerCase(), l = i.body.toLowerCase();
+        if (d === o ? s += 100 : d.startsWith(o) ? s += 60 : d.includes(o) && (s += 40), l.includes(e) || l.includes(o))
           s += 35;
         else
-          for (const g of a)
-            n.includes(g) && (s += 10);
+          for (const b of a)
+            l.includes(b) && (s += 10);
         if (i.replies && i.replies.length > 0)
-          for (const g of i.replies) {
-            const T = g.author.login.toLowerCase(), p = g.body.toLowerCase();
-            if (T === r ? s += 50 : T.includes(r) && (s += 25), p.includes(e) || p.includes(r))
+          for (const b of i.replies) {
+            const T = b.author.login.toLowerCase(), g = b.body.toLowerCase();
+            if (T === o ? s += 50 : T.includes(o) && (s += 25), g.includes(e) || g.includes(o))
               s += 20;
             else
-              for (const w of a)
-                p.includes(w) && (s += 5);
+              for (const k of a)
+                g.includes(k) && (s += 5);
           }
-        s > 0 && o.push({ comment: i, score: s });
+        s > 0 && r.push({ comment: i, score: s });
       }
-      o.sort((i, s) => s.score - i.score), t = o.map((i) => i.comment);
+      r.sort((i, s) => s.score - i.score), t = r.map((i) => i.comment);
     }
     return e || (t = this.sortComments(t, this._order)), t;
   }
@@ -5405,11 +5640,11 @@ ${i}
    * priorizando comentários fixados pelo autor (pinned) no topo da discussão.
    */
   sortComments(e, t) {
-    const r = [], a = [];
+    const o = [], a = [];
     for (const i of e)
-      !!(i.isPinned || i.body.includes("<!-- sl:pinned -->") || i.body.includes("<!-- pinned -->")) ? r.push(i) : a.push(i);
-    const o = a.every((i) => i.createdAt && !isNaN(Date.parse(i.createdAt)));
-    return t === "newest" ? o ? a.sort((i, s) => Date.parse(s.createdAt) - Date.parse(i.createdAt)) : a.reverse() : o && a.sort((i, s) => Date.parse(i.createdAt) - Date.parse(s.createdAt)), [...r, ...a];
+      !!(i.isPinned || i.body.includes("<!-- sl:pinned -->") || i.body.includes("<!-- pinned -->")) ? o.push(i) : a.push(i);
+    const r = a.every((i) => i.createdAt && !isNaN(Date.parse(i.createdAt)));
+    return t === "newest" ? r ? a.sort((i, s) => Date.parse(s.createdAt) - Date.parse(i.createdAt)) : a.reverse() : r && a.sort((i, s) => Date.parse(i.createdAt) - Date.parse(s.createdAt)), [...o, ...a];
   }
   /**
    * Renderiza a Barra de Moderação do Proprietário do Repositório (quando enable-moderation ativo)
@@ -5417,67 +5652,67 @@ ${i}
   renderModerationBar() {
     if (!this._enableModeration || !this._isOwner())
       return "";
-    const e = this.currentLang === "pt", t = this.currentLang === "es", r = e ? "Painel de Moderação KV (Proprietário)" : t ? "Panel de Moderación KV (Propietario)" : "KV Moderation Bar (Repo Owner)", a = e ? "Atualizar lista de moderação" : "Refresh moderation list", o = e ? "Recolher painel de moderação" : "Collapse moderation panel", i = e ? "Expandir painel de moderação" : "Expand moderation panel", s = this._moderatedUsers.filter((v) => v.action === "ban"), d = this._moderatedUsers.filter((v) => v.action === "restrict_media"), n = this._expandedModCategory === "ban", g = this._expandedModCategory === "media", T = `sl-mod-pill ${s.length > 0 ? "sl-mod-pill-ban-active" : "sl-mod-pill-neutral"} ${n ? "sl-mod-pill-open" : ""}`, p = `sl-mod-pill ${d.length > 0 ? "sl-mod-pill-media-active" : "sl-mod-pill-neutral"} ${g ? "sl-mod-pill-open" : ""}`, w = e ? "Banidos" : t ? "Bloqueados" : "Banned", y = e ? "Sem Mídia" : t ? "Sin Medios" : "No Media";
-    let x = "";
+    const e = this.currentLang === "pt", t = this.currentLang === "es", o = e ? "Painel de Moderação KV (Proprietário)" : t ? "Panel de Moderación KV (Propietario)" : "KV Moderation Bar (Repo Owner)", a = e ? "Atualizar lista de moderação" : "Refresh moderation list", r = e ? "Recolher painel de moderação" : "Collapse moderation panel", i = e ? "Expandir painel de moderação" : "Expand moderation panel", s = this._moderatedUsers.filter((x) => x.action === "ban"), d = this._moderatedUsers.filter((x) => x.action === "restrict_media"), l = this._expandedModCategory === "ban", b = this._expandedModCategory === "media", T = `sl-mod-pill ${s.length > 0 ? "sl-mod-pill-ban-active" : "sl-mod-pill-neutral"} ${l ? "sl-mod-pill-open" : ""}`, g = `sl-mod-pill ${d.length > 0 ? "sl-mod-pill-media-active" : "sl-mod-pill-neutral"} ${b ? "sl-mod-pill-open" : ""}`, k = e ? "Banidos" : t ? "Bloqueados" : "Banned", w = e ? "Sem Mídia" : t ? "Sin Medios" : "No Media";
+    let _ = "";
     if (this._expandedModCategory !== null) {
-      const v = this._expandedModCategory === "ban" ? s : d, A = this._expandedModCategory === "ban", P = A ? e ? "Nenhum usuário banido. Para restringir alguém, use o menu ••• no comentário dele." : t ? "Ningún usuario bloqueado. Para restringir a alguien, usa el menú ••• en su comentario." : "No banned users. To restrict someone, use the ••• menu on their comment." : e ? "Nenhum usuário com mídia restrita. Para restringir mídia, use o menu ••• no comentário dele." : t ? "Ningún usuario sin medios. Para restringir medios, usa el menú ••• en su comentario." : "No media-restricted users. To restrict media, use the ••• menu on their comment.";
-      v.length === 0 ? x = `
+      const x = this._expandedModCategory === "ban" ? s : d, I = this._expandedModCategory === "ban", B = I ? e ? "Nenhum usuário banido. Para restringir alguém, use o menu ••• no comentário dele." : t ? "Ningún usuario bloqueado. Para restringir a alguien, usa el menú ••• en su comentario." : "No banned users. To restrict someone, use the ••• menu on their comment." : e ? "Nenhum usuário com mídia restrita. Para restringir mídia, use o menu ••• no comentário dele." : t ? "Ningún usuario sin medios. Para restringir medios, usa el menú ••• en su comentario." : "No media-restricted users. To restrict media, use the ••• menu on their comment.";
+      x.length === 0 ? _ = `
           <div class="sl-mod-drawer">
-            <span class="sl-mod-empty-text">${P}</span>
+            <span class="sl-mod-empty-text">${B}</span>
           </div>
-        ` : x = `
+        ` : _ = `
           <div class="sl-mod-drawer">
-            ${v.map((_) => {
-        const B = A ? "sl-mod-chip-ban" : "sl-mod-chip-media", I = A ? w : y, H = e ? `Remover moderação de @${_.username}` : `Remove moderation for @${_.username}`;
+            ${x.map(($) => {
+        const j = I ? "sl-mod-chip-ban" : "sl-mod-chip-media", A = I ? k : w, F = e ? `Remover moderação de @${$.username}` : `Remove moderation for @${$.username}`;
         return `
-              <div class="sl-mod-chip ${B}">
-                <span class="sl-mod-chip-user" title="@${this.escapeHtml(_.username)}">@${this.escapeHtml(_.username)}</span>
-                <span class="sl-mod-chip-action">${I}</span>
+              <div class="sl-mod-chip ${j}">
+                <span class="sl-mod-chip-user" title="@${this.escapeHtml($.username)}">@${this.escapeHtml($.username)}</span>
+                <span class="sl-mod-chip-action">${A}</span>
                 <button type="button" class="sl-mod-chip-remove" data-user="${this.escapeHtml(
-          _.username
-        )}" title="${H}" aria-label="${H}">✕</button>
+          $.username
+        )}" title="${F}" aria-label="${F}">✕</button>
               </div>
             `;
       }).join("")}
           </div>
         `;
     }
-    const $ = this._isModerationCollapsed ? "" : `
+    const L = this._isModerationCollapsed ? "" : `
         <div class="sl-mod-subcard">
           <div class="sl-mod-pills" role="tablist">
-            <button type="button" class="${T}" id="sl-mod-pill-ban" aria-expanded="${n}">
-              <span>🚫 ${w} (${s.length})</span>
-              <span class="sl-mod-pill-arrow">${n ? "▲" : "▼"}</span>
+            <button type="button" class="${T}" id="sl-mod-pill-ban" aria-expanded="${l}">
+              <span>🚫 ${k} (${s.length})</span>
+              <span class="sl-mod-pill-arrow">${l ? "▲" : "▼"}</span>
             </button>
-            <button type="button" class="${p}" id="sl-mod-pill-media" aria-expanded="${g}">
-              <span>🔇 ${y} (${d.length})</span>
-              <span class="sl-mod-pill-arrow">${g ? "▲" : "▼"}</span>
+            <button type="button" class="${g}" id="sl-mod-pill-media" aria-expanded="${b}">
+              <span>🔇 ${w} (${d.length})</span>
+              <span class="sl-mod-pill-arrow">${b ? "▲" : "▼"}</span>
             </button>
           </div>
-          ${x}
+          ${_}
         </div>
       `;
     return `
-      <div class="sl-moderation-bar ${this._isModerationCollapsed ? "sl-mod-bar-collapsed" : ""}" role="region" aria-label="${r}">
+      <div class="sl-moderation-bar ${this._isModerationCollapsed ? "sl-mod-bar-collapsed" : ""}" role="region" aria-label="${o}">
         <div class="sl-mod-bar-header">
           <div class="sl-mod-bar-title">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
               <path d="M7.47 10.78a.75.75 0 001.06 0l3.75-3.75a.75.75 0 00-1.06-1.06L8.5 8.69V3a.75.75 0 00-1.5 0v5.69L4.28 5.97a.75.75 0 00-1.06 1.06l3.75 3.75zM8 0a8 8 0 100 16A8 8 0 008 0z" />
             </svg>
-            <span>🛡️ ${r}</span>
+            <span>🛡️ ${o}</span>
           </div>
           <div class="sl-mod-bar-actions">
             <button type="button" class="sl-mod-refresh-btn" id="sl-mod-refresh" title="${a}" ${this._isModerationLoading ? "disabled" : ""}>
               ${this._isModerationLoading ? "⌛" : "🔄"}
             </button>
-            <button type="button" class="sl-mod-toggle-btn" id="sl-mod-toggle-collapse" aria-expanded="${!this._isModerationCollapsed}" title="${this._isModerationCollapsed ? i : o}">
+            <button type="button" class="sl-mod-toggle-btn" id="sl-mod-toggle-collapse" aria-expanded="${!this._isModerationCollapsed}" title="${this._isModerationCollapsed ? i : r}">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sl-mod-chevron ${this._isModerationCollapsed ? "" : "sl-mod-chevron-open"}">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
           </div>
         </div>
-        ${$}
+        ${L}
       </div>
     `;
   }
@@ -5487,9 +5722,9 @@ ${i}
   renderCommentsToolbar() {
     if (this._comments.length === 0 && !this._searchQuery || this._hideSearch && this._hideSorting && !this._searchQuery)
       return "";
-    const e = this.currentLang === "pt", t = this._comments.length, r = this.getFilteredComments().length, a = this._searchQuery.trim().length > 0;
-    let o = "";
-    a ? o = e ? `${r} de ${t} encontrados` : `${r} of ${t} found` : o = `${t} ${e ? t === 1 ? "comentário" : "comentários" : t === 1 ? "comment" : "comments"}`;
+    const e = this.currentLang === "pt", t = this._comments.length, o = this.getFilteredComments().length, a = this._searchQuery.trim().length > 0;
+    let r = "";
+    a ? r = e ? `${o} de ${t} encontrados` : `${o} of ${t} found` : r = `${t} ${e ? t === 1 ? "comentário" : "comentários" : t === 1 ? "comment" : "comments"}`;
     const i = this._order === "newest" ? e ? "Mais recentes" : "Newest first" : e ? "Mais antigos" : "Oldest first", s = this._order === "newest" ? e ? "Ordenado por mais recentes. Clique para mais antigos." : "Sorted by newest. Click for oldest." : e ? "Ordenado por mais antigos. Clique para mais recentes." : "Sorted by oldest. Click for newest.", d = this._hideSearch ? "" : `
         <div class="sl-search-wrapper" part="search-wrapper">
           <svg class="sl-search-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -5509,7 +5744,7 @@ ${i}
           />
           ${this._searchQuery ? `<button type="button" class="sl-search-clear-btn" id="sl-search-clear" part="search-clear-btn" title="${e ? "Limpar busca (Esc)" : "Clear search (Esc)"}">✕</button>` : `<kbd class="sl-search-kbd" title="${e ? "Pressione / para buscar" : "Press / to search"}">/</kbd>`}
         </div>
-      `, n = this._hideSorting ? "" : `
+      `, l = this._hideSorting ? "" : `
         <button type="button" class="sl-sort-btn" id="btn-sort-toggle" part="sort-btn" title="${s}" aria-label="${s}">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="m3 16 4 4 4-4"/>
@@ -5525,9 +5760,9 @@ ${i}
         ${d}
         <div class="sl-toolbar-actions" part="toolbar-actions">
           <div class="sl-toolbar-count" part="toolbar-count">
-            <span>${o}</span>
+            <span>${r}</span>
           </div>
-          ${n}
+          ${l}
         </div>
       </div>
     `;
@@ -5538,12 +5773,12 @@ ${i}
   renderCommentsList() {
     const e = this._searchQuery.trim().length > 0, t = this.getFilteredComments();
     if (t.length === 0) {
-      const g = this.currentLang === "pt", T = e ? g ? `Nenhum comentário encontrado para "${this._searchQuery}".` : `No comments found for "${this._searchQuery}".` : g ? "Nenhum comentário por aqui ainda. Seja o primeiro a semear uma reflexão!" : "No comments here yet. Be the first to scatter an idea!";
+      const b = this.currentLang === "pt", T = e ? b ? `Nenhum comentário encontrado para "${this._searchQuery}".` : `No comments found for "${this._searchQuery}".` : b ? "Nenhum comentário por aqui ainda. Seja o primeiro a semear uma reflexão!" : "No comments here yet. Be the first to scatter an idea!";
       return `
         ${e ? `
           <div class="sl-search-banner" part="search-banner">
-            <span>🔍 ${g ? "0 comentários encontrados" : "0 comments found"}</span>
-            <button type="button" class="sl-search-banner-clear" part="search-banner-clear">${g ? "Limpar busca" : "Clear search"}</button>
+            <span>🔍 ${b ? "0 comentários encontrados" : "0 comments found"}</span>
+            <button type="button" class="sl-search-banner-clear" part="search-banner-clear">${b ? "Limpar busca" : "Clear search"}</button>
           </div>
         ` : ""}
         <div class="sl-empty" part="empty">
@@ -5552,60 +5787,60 @@ ${i}
         </div>
       `;
     }
-    const r = t.length, a = Math.max(1, Math.ceil(r / this._pageSize));
+    const o = t.length, a = Math.max(1, Math.ceil(o / this._pageSize));
     this._currentPage > a && (this._currentPage = a);
-    const o = (this._currentPage - 1) * this._pageSize, i = o + this._pageSize, s = t.slice(o, i);
+    const r = (this._currentPage - 1) * this._pageSize, i = r + this._pageSize, s = t.slice(r, i);
     let d = "";
     if (e) {
-      const g = this.currentLang === "pt";
+      const b = this.currentLang === "pt";
       d = `
         <div class="sl-search-banner" part="search-banner">
-          <span>🔍 ${g ? `${r} comentário(s) para` : `${r} comment(s) for`} "<strong>${this.escapeHtml(this._searchQuery)}</strong>"</span>
-          <button type="button" class="sl-search-banner-clear" part="search-banner-clear">${g ? "Limpar busca" : "Clear search"}</button>
+          <span>🔍 ${b ? `${o} comentário(s) para` : `${o} comment(s) for`} "<strong>${this.escapeHtml(this._searchQuery)}</strong>"</span>
+          <button type="button" class="sl-search-banner-clear" part="search-banner-clear">${b ? "Limpar busca" : "Clear search"}</button>
         </div>
       `;
     }
-    let n = "";
-    if (r > this._pageSize) {
-      const g = this.currentLang === "pt", T = g ? "‹ Anterior" : "‹ Previous", p = g ? "Próxima ›" : "Next ›", w = g ? `Página ${this._currentPage} de ${a} • ${r} comentários` : `Page ${this._currentPage} of ${a} • ${r} comments`;
-      let y = "";
-      for (let x = 1; x <= a; x++) {
-        const $ = x === this._currentPage;
-        y += `
-          <button class="sl-page-btn ${$ ? "sl-page-active" : ""}" data-page="${x}" part="page-btn" ${$ ? 'aria-current="page"' : ""}>
-            ${x}
+    let l = "";
+    if (o > this._pageSize) {
+      const b = this.currentLang === "pt", T = b ? "‹ Anterior" : "‹ Previous", g = b ? "Próxima ›" : "Next ›", k = b ? `Página ${this._currentPage} de ${a} • ${o} comentários` : `Page ${this._currentPage} of ${a} • ${o} comments`;
+      let w = "";
+      for (let _ = 1; _ <= a; _++) {
+        const L = _ === this._currentPage;
+        w += `
+          <button class="sl-page-btn ${L ? "sl-page-active" : ""}" data-page="${_}" part="page-btn" ${L ? 'aria-current="page"' : ""}>
+            ${_}
           </button>
         `;
       }
-      n = `
-        <nav class="sl-pagination" part="pagination" aria-label="${g ? "Paginação de comentários" : "Comments pagination"}">
+      l = `
+        <nav class="sl-pagination" part="pagination" aria-label="${b ? "Paginação de comentários" : "Comments pagination"}">
           <div class="sl-pagination-controls">
             <button class="sl-page-btn sl-page-nav-btn btn-prev-page" part="page-btn-prev" ${this._currentPage <= 1 ? "disabled" : ""}>
               ${T}
             </button>
-            ${y}
+            ${w}
             <button class="sl-page-btn sl-page-nav-btn btn-next-page" part="page-btn-next" ${this._currentPage >= a ? "disabled" : ""}>
-              ${p}
+              ${g}
             </button>
           </div>
-          <span class="sl-pagination-info" part="pagination-info">${w}</span>
+          <span class="sl-pagination-info" part="pagination-info">${k}</span>
         </nav>
       `;
     }
     return `
       <div class="sl-list" part="list">
         ${d}
-        ${s.map((g) => this.renderCommentCard(g)).join("")}
-        ${n}
+        ${s.map((b) => this.renderCommentCard(b)).join("")}
+        ${l}
       </div>
     `;
   }
   /**
    * Renderiza um Card de Comentário Individual
    */
-  renderCommentCard(e, t = !1, r) {
-    var Z, U, W;
-    const a = this._repo ? this._repo.split("/")[0].toLowerCase() : "", i = e.author.isAuthor || a && e.author.login.toLowerCase() === a ? `<span class="sl-author-badge" part="author-badge">${this.currentLang === "pt" ? "Autor" : "Author"}</span>` : "", s = !t && !!(e.isPinned || e.body.includes("<!-- sl:pinned -->") || e.body.includes("<!-- pinned -->")), d = s ? `<span class="sl-pinned-badge" part="pinned-badge" title="${this.currentLang === "pt" ? "Comentário fixado no topo pelo autor" : "Comment pinned to top by author"}"><span>📌</span><span>${this.currentLang === "pt" ? "Fixado pelo autor" : "Pinned by author"}</span></span>` : "", n = !!(this._currentUser && a && this._currentUser.login.toLowerCase() === a), g = this._speakingId === e.id, T = this._replyingToId === e.id, p = this._editingId === e.id, w = this._openMenuId === e.id, y = g ? this.currentLang === "pt" ? "⏸️ Pausar" : "⏸️ Pause" : this.currentLang === "pt" ? "🔊 Ouvir" : "🔊 Listen", x = this.currentLang === "pt" ? "Responder" : "Reply", $ = this.getVisitorLang(), v = e.originalLang || "pt", A = v !== $, P = this.getLanguageName(v, $), _ = (e.isShowingTranslation && e.translatedBody ? e.translatedBody : e.body).replace(/<!--\s*sl:pinned\s*-->\r?\n?/g, "").replace(/<!--\s*pinned\s*-->\r?\n?/g, ""), B = this.formatDate(e.createdAt), I = !!((Z = e.reactions) != null && Z.find((j) => j.content === "👍" && j.viewerHasReacted)), H = this.currentLang === "pt" ? "Gostei" : "Like", N = I ? this.currentLang === "pt" ? "Remover curtida" : "Remove like" : this.currentLang === "pt" ? "Curtir" : "Like", q = (e.reactions || []).filter((j) => j.count > 0);
+  renderCommentCard(e, t = !1, o) {
+    var Q, H, Y;
+    const a = this._repo ? this._repo.split("/")[0].toLowerCase() : "", i = e.author.isAuthor || a && e.author.login.toLowerCase() === a ? `<span class="sl-author-badge" part="author-badge">${this.currentLang === "pt" ? "Autor" : "Author"}</span>` : "", s = !t && !!(e.isPinned || e.body.includes("<!-- sl:pinned -->") || e.body.includes("<!-- pinned -->")), d = s ? `<span class="sl-pinned-badge" part="pinned-badge" title="${this.currentLang === "pt" ? "Comentário fixado no topo pelo autor" : "Comment pinned to top by author"}"><span>📌</span><span>${this.currentLang === "pt" ? "Fixado pelo autor" : "Pinned by author"}</span></span>` : "", l = !!(this._currentUser && a && this._currentUser.login.toLowerCase() === a), b = this._speakingId === e.id, T = this._replyingToId === e.id, g = this._editingId === e.id, k = this._openMenuId === e.id, w = b ? this.currentLang === "pt" ? "⏸️ Pausar" : "⏸️ Pause" : this.currentLang === "pt" ? "🔊 Ouvir" : "🔊 Listen", _ = this.currentLang === "pt" ? "Responder" : "Reply", L = this.getVisitorLang(), x = e.originalLang || "pt", I = x !== L, B = this.getLanguageName(x, L), $ = (e.isShowingTranslation && e.translatedBody ? e.translatedBody : e.body).replace(/<!--\s*sl:pinned\s*-->\r?\n?/g, "").replace(/<!--\s*pinned\s*-->\r?\n?/g, ""), j = this.formatDate(e.createdAt), A = !!((Q = e.reactions) != null && Q.find((z) => z.content === "👍" && z.viewerHasReacted)), F = this.currentLang === "pt" ? "Gostei" : "Like", N = A ? this.currentLang === "pt" ? "Remover curtida" : "Remove like" : this.currentLang === "pt" ? "Curtir" : "Like", W = (e.reactions || []).filter((z) => z.count > 0);
     return `
       <article class="sl-card ${t ? "sl-card-reply" : ""} ${s ? "sl-card-pinned" : ""}" id="comment-${e.id}" part="card">
         <!-- Cabeçalho do Card (Avatar ancorado no topo!) -->
@@ -5620,7 +5855,7 @@ ${i}
               </a>
               ${i}
               ${d}
-              <time class="sl-date" part="date" datetime="${e.createdAt}" title="${B.full}">${B.relative}</time>
+              <time class="sl-date" part="date" datetime="${e.createdAt}" title="${j.full}">${j.relative}</time>
               ${e.isEdited ? `<span class="sl-edited-badge">(${this.currentLang === "pt" ? "editado" : "edited"})</span>` : ""}
             </div>
           </div>
@@ -5630,9 +5865,9 @@ ${i}
             <button class="sl-menu-btn" data-menu-id="${e.id}" aria-label="${this.currentLang === "pt" ? "Opções do comentário" : "Comment options"}">
               •••
             </button>
-            ${w ? `
+            ${k ? `
               <div class="sl-dropdown-menu" part="dropdown-menu">
-                ${n && !t ? `
+                ${l && !t ? `
                   <button class="sl-dropdown-item btn-toggle-pin" data-comment-id="${e.id}">
                     <span>📌</span>
                     <span>${s ? this.currentLang === "pt" ? "Desafixar do topo" : "Unpin from top" : this.currentLang === "pt" ? "Fixar no topo" : "Pin to top"}</span>
@@ -5650,7 +5885,7 @@ ${i}
                   <span>🗑️</span>
                   <span>${this.currentLang === "pt" ? "Excluir" : "Delete"}</span>
                 </button>
-                ${this._enableModeration && n && ((U = e.author) != null && U.login) && ((W = this._currentUser) != null && W.login) && e.author.login.toLowerCase() !== this._currentUser.login.toLowerCase() ? `
+                ${this._enableModeration && l && ((H = e.author) != null && H.login) && ((Y = this._currentUser) != null && Y.login) && e.author.login.toLowerCase() !== this._currentUser.login.toLowerCase() ? `
                   <button class="sl-dropdown-item btn-mod-restrict-media" data-user="${this.escapeHtml(e.author.login)}">
                     <span>🚫</span>
                     <span>${this.currentLang === "pt" ? "Restringir Mídia" : "Restrict Media"}</span>
@@ -5666,7 +5901,7 @@ ${i}
         </div>
 
         <!-- Corpo do Comentário ou Editor In-Place -->
-        ${p ? `
+        ${g ? `
           <div class="sl-edit-mode">
             <textarea class="sl-textarea" id="edit-textarea-${e.id}">${e.body.replace(/<!--\s*sl:pinned\s*-->\r?\n?/g, "").replace(/<!--\s*pinned\s*-->\r?\n?/g, "")}</textarea>
             <div class="sl-edit-actions">
@@ -5680,7 +5915,7 @@ ${i}
           </div>
         ` : `
           <div class="sl-card-body" part="card-body">
-            ${e.isShowingTranslation ? this.parseMarkdown(_) : e.bodyHtml || this.parseMarkdown(_)}
+            ${e.isShowingTranslation ? this.parseMarkdown($) : e.bodyHtml || this.parseMarkdown($)}
           </div>
         `}
 
@@ -5692,17 +5927,17 @@ ${i}
             <div class="sl-reaction-container" data-comment-id="${e.id}">
               <button type="button" class="sl-reaction-trigger-btn" data-comment-id="${e.id}" data-emoji="👍" part="reaction-trigger-btn" title="${N}">
                 <span>👍</span>
-                <span>${H}</span>
+                <span>${F}</span>
               </button>
 
               <!-- Popover Flutuante com 6 Emojis Animados -->
               <div class="sl-reaction-popover" role="toolbar" aria-label="Reações">
-                ${Me.map((j) => {
-      var Y;
-      const J = this.currentLang === "pt" ? j.namePt : j.nameEn;
+                ${Se.map((z) => {
+      var Z;
+      const K = this.currentLang === "pt" ? z.namePt : z.nameEn;
       return `
-                    <button type="button" class="sl-reaction-picker-item ${!!((Y = e.reactions) != null && Y.find((X) => X.content === j.symbol && X.viewerHasReacted)) ? "sl-reacted" : ""}" data-comment-id="${e.id}" data-emoji="${j.symbol}" data-tooltip="${J}" title="${J}" aria-label="${J}">
-                      ${j.symbol}
+                    <button type="button" class="sl-reaction-picker-item ${!!((Z = e.reactions) != null && Z.find((ee) => ee.content === z.symbol && ee.viewerHasReacted)) ? "sl-reacted" : ""}" data-comment-id="${e.id}" data-emoji="${z.symbol}" data-tooltip="${K}" title="${K}" aria-label="${K}">
+                      ${z.symbol}
                     </button>
                   `;
     }).join("")}
@@ -5710,13 +5945,13 @@ ${i}
             </div>
 
             <!-- Resumo / Badges de Reações Recebidas -->
-            ${q.length > 0 ? `
+            ${W.length > 0 ? `
               <div class="sl-reactions-summary">
-                ${q.map(
-      (j) => `
-                  <button type="button" class="sl-reaction-badge ${j.viewerHasReacted ? "sl-reacted" : ""}" data-comment-id="${e.id}" data-emoji="${j.content}" title="${j.viewerHasReacted ? this.currentLang === "pt" ? "Remover sua reação" : "Remove your reaction" : this.currentLang === "pt" ? "Reagir com " + j.content : "React with " + j.content}">
-                    <span>${j.content}</span>
-                    <span>${j.count}</span>
+                ${W.map(
+      (z) => `
+                  <button type="button" class="sl-reaction-badge ${z.viewerHasReacted ? "sl-reacted" : ""}" data-comment-id="${e.id}" data-emoji="${z.content}" title="${z.viewerHasReacted ? this.currentLang === "pt" ? "Remover sua reação" : "Remove your reaction" : this.currentLang === "pt" ? "Reagir com " + z.content : "React with " + z.content}">
+                    <span>${z.content}</span>
+                    <span>${z.count}</span>
                   </button>
                 `
     ).join("")}
@@ -5724,22 +5959,22 @@ ${i}
             ` : ""}
             `}
 
-            <button class="sl-reply-btn" data-reply-to="${e.id}" data-parent-id="${r || e.id}" part="reply-btn">
+            <button class="sl-reply-btn" data-reply-to="${e.id}" data-parent-id="${o || e.id}" part="reply-btn">
               <span>↩️</span>
-              <span>${x}</span>
+              <span>${_}</span>
             </button>
           </div>
 
           <div class="sl-actions-right">
-            ${A ? `
+            ${I ? `
               <button class="sl-translate-btn btn-toggle-translate ${e.isShowingTranslation ? "sl-translated" : ""}" data-comment-id="${e.id}" part="translate-btn" title="${e.isShowingTranslation ? this.currentLang === "pt" ? "Ver original" : "See original" : this.currentLang === "pt" ? "Traduzir comentário" : "Translate comment"}">
                 <span>${this._isTranslatingId === e.id ? "⏳" : e.isShowingTranslation ? "✨" : "🌐"}</span>
-                <span>${this._isTranslatingId === e.id ? this.currentLang === "pt" ? "Traduzindo..." : "Translating..." : e.isShowingTranslation ? this.currentLang === "pt" ? `Traduzido do ${P} • Ver original` : `Translated from ${P} • See original` : this.currentLang === "pt" ? `Publicado em ${P} • Traduzir` : `Published in ${P} • Translate`}</span>
+                <span>${this._isTranslatingId === e.id ? this.currentLang === "pt" ? "Traduzindo..." : "Translating..." : e.isShowingTranslation ? this.currentLang === "pt" ? `Traduzido do ${B} • Ver original` : `Translated from ${B} • See original` : this.currentLang === "pt" ? `Publicado em ${B} • Traduzir` : `Published in ${B} • Translate`}</span>
               </button>
             ` : ""}
 
-            <button class="sl-audio-btn ${g ? "sl-audio-playing" : ""}" data-speak-id="${e.id}" data-text="${encodeURIComponent(_)}" data-lang="${e.isShowingTranslation ? $ : v}" part="audio-btn">
-              <span>${y}</span>
+            <button class="sl-audio-btn ${b ? "sl-audio-playing" : ""}" data-speak-id="${e.id}" data-text="${encodeURIComponent($)}" data-lang="${e.isShowingTranslation ? L : x}" part="audio-btn">
+              <span>${w}</span>
             </button>
           </div>
         </div>
@@ -5752,7 +5987,7 @@ ${i}
               <button class="sl-btn sl-btn-secondary btn-cancel-reply" data-comment-id="${e.id}">
                 ${this.currentLang === "pt" ? "Cancelar" : "Cancel"}
               </button>
-              <button class="sl-btn sl-btn-primary btn-send-reply" data-comment-id="${e.id}" data-parent-id="${r || e.id}">
+              <button class="sl-btn sl-btn-primary btn-send-reply" data-comment-id="${e.id}" data-parent-id="${o || e.id}">
                 ${this.currentLang === "pt" ? "Responder" : "Reply"}
               </button>
             </div>
@@ -5761,14 +5996,14 @@ ${i}
 
         <!-- Respostas Aninhadas (Threads Estilo LinkedIn com Linha Guia) -->
         ${!t && e.replies && e.replies.length > 0 ? (() => {
-      const j = e.replies.length, J = this._expandedThreads.has(e.id), pe = J || j <= 2 ? e.replies : e.replies.slice(0, 2), Y = j - 2;
+      const z = e.replies.length, K = this._expandedThreads.has(e.id), he = K || z <= 2 ? e.replies : e.replies.slice(0, 2), Z = z - 2;
       return `
                   <div class="sl-thread">
-                    ${pe.map((X) => this.renderCommentCard(X, !0, e.id)).join("")}
-                    ${j > 2 ? `
+                    ${he.map((ee) => this.renderCommentCard(ee, !0, e.id)).join("")}
+                    ${z > 2 ? `
                       <button class="sl-thread-toggle-btn" data-thread-id="${e.id}" part="thread-toggle-btn">
-                        <span>${J ? "▴" : "💬"}</span>
-                        <span>${J ? this.currentLang === "pt" ? "Recolher respostas" : "Collapse replies" : this.currentLang === "pt" ? `Ver mais ${Y} resposta${Y > 1 ? "s" : ""} ▾` : `View ${Y} more repl${Y > 1 ? "ies" : "y"} ▾`}</span>
+                        <span>${K ? "▴" : "💬"}</span>
+                        <span>${K ? this.currentLang === "pt" ? "Recolher respostas" : "Collapse replies" : this.currentLang === "pt" ? `Ver mais ${Z} resposta${Z > 1 ? "s" : ""} ▾` : `View ${Z} more repl${Z > 1 ? "ies" : "y"} ▾`}</span>
                       </button>
                     ` : ""}
                   </div>
@@ -5782,45 +6017,45 @@ ${i}
    */
   attachEvents() {
     if (!this.shadowRoot) return;
-    const e = this.shadowRoot.getElementById("tab-write"), t = this.shadowRoot.getElementById("tab-preview"), r = this.shadowRoot.getElementById("composer-textarea");
-    if (r) {
-      const l = () => {
+    const e = this.shadowRoot.getElementById("tab-write"), t = this.shadowRoot.getElementById("tab-preview"), o = this.shadowRoot.getElementById("composer-textarea");
+    if (o) {
+      const n = () => {
         this._savedComposerSelection = {
-          start: r.selectionStart ?? 0,
-          end: r.selectionEnd ?? 0
+          start: o.selectionStart ?? 0,
+          end: o.selectionEnd ?? 0
         };
       };
-      r.addEventListener("input", () => {
-        this._composerText = r.value, l(), r.style.height = "auto", r.style.height = `${r.scrollHeight}px`;
-      }), r.addEventListener("click", l), r.addEventListener("keyup", l), r.addEventListener("select", l);
+      o.addEventListener("input", () => {
+        this._composerText = o.value, n(), o.style.height = "auto", o.style.height = `${o.scrollHeight}px`;
+      }), o.addEventListener("click", n), o.addEventListener("keyup", n), o.addEventListener("select", n);
     }
     e && e.addEventListener("click", () => {
       this._activeTab = "write", this.render();
     }), t && t.addEventListener("click", () => {
-      r && (this._composerText = r.value), this._activeTab = "preview", this.render();
+      o && (this._composerText = o.value), this._activeTab = "preview", this.render();
     });
     const a = this.shadowRoot.getElementById("btn-sort-toggle");
     a && a.addEventListener("click", () => {
       this._order = this._order === "oldest" ? "newest" : "oldest", this._currentPage = 1, this.render();
     });
-    const o = this.shadowRoot.getElementById("btn-code-toggle");
-    o && o.addEventListener("click", (l) => {
-      var k;
-      l.stopPropagation();
-      const b = (k = this.shadowRoot) == null ? void 0 : k.getElementById("composer-textarea");
-      if (b) {
-        const c = b.selectionStart ?? this._composerText.length, m = b.selectionEnd ?? this._composerText.length;
-        if (this._savedComposerSelection = { start: c, end: m }, m > c && b.value.substring(c, m).trim().length > 0) {
+    const r = this.shadowRoot.getElementById("btn-code-toggle");
+    r && r.addEventListener("click", (n) => {
+      var y;
+      n.stopPropagation();
+      const p = (y = this.shadowRoot) == null ? void 0 : y.getElementById("composer-textarea");
+      if (p) {
+        const c = p.selectionStart ?? this._composerText.length, m = p.selectionEnd ?? this._composerText.length;
+        if (this._savedComposerSelection = { start: c, end: m }, m > c && p.value.substring(c, m).trim().length > 0) {
           this.insertCodeBlock("typescript");
           return;
         }
       }
       this._isCodePickerOpen = !this._isCodePickerOpen, this.render();
-    }), this.shadowRoot.querySelectorAll(".sl-code-lang-btn").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        b.stopPropagation();
-        const k = l.getAttribute("data-lang") || "typescript";
-        this.insertCodeBlock(k);
+    }), this.shadowRoot.querySelectorAll(".sl-code-lang-btn").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        p.stopPropagation();
+        const y = n.getAttribute("data-lang") || "typescript";
+        this.insertCodeBlock(y);
       });
     });
     const s = this.shadowRoot.getElementById("btn-font-toggle");
@@ -5828,24 +6063,24 @@ ${i}
       this._fontMode = this._fontMode === "default" ? "monospace" : "default", this.render();
     });
     const d = this.shadowRoot.getElementById("btn-emoji-toggle");
-    d && d.addEventListener("click", (l) => {
-      l.stopPropagation(), this._isEmojiPickerOpen = !this._isEmojiPickerOpen, this.render();
+    d && d.addEventListener("click", (n) => {
+      n.stopPropagation(), this._isEmojiPickerOpen = !this._isEmojiPickerOpen, this.render();
     });
-    const n = this.shadowRoot.getElementById("emoji-scroll-container"), g = this.shadowRoot.getElementById("btn-emoji-scroll-up"), T = this.shadowRoot.getElementById("btn-emoji-scroll-down"), p = this.shadowRoot.getElementById("btn-emoji-close");
-    g && n && g.addEventListener("click", (l) => {
-      l.stopPropagation(), n.scrollBy({ top: -90, behavior: "smooth" });
-    }), T && n && T.addEventListener("click", (l) => {
-      l.stopPropagation(), n.scrollBy({ top: 90, behavior: "smooth" });
-    }), p && p.addEventListener("click", (l) => {
-      l.stopPropagation(), this._isEmojiPickerOpen = !1, this.render();
+    const l = this.shadowRoot.getElementById("emoji-scroll-container"), b = this.shadowRoot.getElementById("btn-emoji-scroll-up"), T = this.shadowRoot.getElementById("btn-emoji-scroll-down"), g = this.shadowRoot.getElementById("btn-emoji-close");
+    b && l && b.addEventListener("click", (n) => {
+      n.stopPropagation(), l.scrollBy({ top: -90, behavior: "smooth" });
+    }), T && l && T.addEventListener("click", (n) => {
+      n.stopPropagation(), l.scrollBy({ top: 90, behavior: "smooth" });
+    }), g && g.addEventListener("click", (n) => {
+      n.stopPropagation(), this._isEmojiPickerOpen = !1, this.render();
     });
-    const w = this.shadowRoot.getElementById("btn-skin-tone-toggle");
-    w && w.addEventListener("click", (l) => {
-      l.stopPropagation(), this._isSkinTonePanelOpen = !this._isSkinTonePanelOpen, this._activeTonePickerEmoji = null, this.render();
-    }), this.shadowRoot.querySelectorAll(".sl-tone-btn").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        b.stopPropagation();
-        const k = l.dataset.toneMod || "default", c = k === "default" ? "default" : k;
+    const k = this.shadowRoot.getElementById("btn-skin-tone-toggle");
+    k && k.addEventListener("click", (n) => {
+      n.stopPropagation(), this._isSkinTonePanelOpen = !this._isSkinTonePanelOpen, this._activeTonePickerEmoji = null, this.render();
+    }), this.shadowRoot.querySelectorAll(".sl-tone-btn").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        p.stopPropagation();
+        const y = n.dataset.toneMod || "default", c = y === "default" ? "default" : y;
         this.saveSkinTonePreference(c);
         const m = this._activeTonePickerEmoji;
         if (this._isSkinTonePanelOpen = !1, this._activeTonePickerEmoji = null, m) {
@@ -5854,70 +6089,70 @@ ${i}
         } else
           this.render();
       });
-    }), this.shadowRoot.querySelectorAll(".sl-emoji-item").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        b.stopPropagation();
-        const k = l.dataset.toneable === "true", c = l.dataset.baseEmoji, m = l.dataset.emoji;
-        if (k && c && this._selectedSkinTone === null) {
+    }), this.shadowRoot.querySelectorAll(".sl-emoji-item").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        p.stopPropagation();
+        const y = n.dataset.toneable === "true", c = n.dataset.baseEmoji, m = n.dataset.emoji;
+        if (y && c && this._selectedSkinTone === null) {
           this._activeTonePickerEmoji = c, this._isSkinTonePanelOpen = !0, this.render();
           return;
         }
         m && this.insertTextAtCursor(m);
       });
     });
-    const $ = this.shadowRoot.getElementById("btn-insert-gif");
-    $ && $.addEventListener("click", (l) => {
-      l.stopPropagation(), this._isEmojiPickerOpen = !1, this._isMediaModalOpen = !0, this._isManagingRecentGifs = !1, this._isConfirmingClearGifs = !1, this._mediaModalUrl = "", this._mediaModalAlt = "", this._mediaModalError = null, this._mediaModalSuccess = null, this.render();
+    const L = this.shadowRoot.getElementById("btn-insert-gif");
+    L && L.addEventListener("click", (n) => {
+      n.stopPropagation(), this._isEmojiPickerOpen = !1, this._isMediaModalOpen = !0, this._isManagingRecentGifs = !1, this._isConfirmingClearGifs = !1, this._mediaModalUrl = "", this._mediaModalAlt = "", this._mediaModalError = null, this._mediaModalSuccess = null, this.render();
     });
-    const v = this.shadowRoot.getElementById("btn-insert-image");
-    if (v && v.addEventListener("click", (l) => {
-      l.stopPropagation(), this._isEmojiPickerOpen = !1, this._isImageModalOpen = !0, this._isManagingRecentImages = !1, this._isConfirmingClearImages = !1, this._imageModalUrl = "", this._imageModalAlt = "", this._imageModalError = null, this._imageModalSuccess = null, this.render();
+    const x = this.shadowRoot.getElementById("btn-insert-image");
+    if (x && x.addEventListener("click", (n) => {
+      n.stopPropagation(), this._isEmojiPickerOpen = !1, this._isImageModalOpen = !0, this._isManagingRecentImages = !1, this._isConfirmingClearImages = !1, this._imageModalUrl = "", this._imageModalAlt = "", this._imageModalError = null, this._imageModalSuccess = null, this.render();
     }), this._isMediaModalOpen) {
-      const l = this.shadowRoot.getElementById("media-modal-backdrop"), b = this.shadowRoot.getElementById("btn-close-media-modal"), k = this.shadowRoot.getElementById("btn-cancel-media-modal"), c = this.shadowRoot.getElementById("btn-confirm-media-modal"), m = this.shadowRoot.getElementById("media-url-input"), E = this.shadowRoot.getElementById("media-alt-input"), M = this.shadowRoot.getElementById("media-url-preview-card"), G = this.shadowRoot.getElementById("media-url-preview-img"), S = this.shadowRoot.getElementById("media-modal-error-box"), z = this.shadowRoot.getElementById("media-modal-error-text"), D = this.currentLang === "pt", K = (u) => {
+      const n = this.shadowRoot.getElementById("media-modal-backdrop"), p = this.shadowRoot.getElementById("btn-close-media-modal"), y = this.shadowRoot.getElementById("btn-cancel-media-modal"), c = this.shadowRoot.getElementById("btn-confirm-media-modal"), m = this.shadowRoot.getElementById("media-url-input"), E = this.shadowRoot.getElementById("media-alt-input"), v = this.shadowRoot.getElementById("media-url-preview-card"), O = this.shadowRoot.getElementById("media-url-preview-img"), C = this.shadowRoot.getElementById("media-modal-error-box"), R = this.shadowRoot.getElementById("media-modal-error-text"), U = this.currentLang === "pt", q = (u) => {
         this._mediaModalUrl = u;
-        const L = u.trim();
-        if (L.length > 0) {
-          const R = V(L);
-          R.safe ? (this._mediaModalError = null, S && (S.style.display = "none"), M && (M.style.display = "flex"), G && (G.style.display = "block", G.src = L)) : (this._mediaModalError = R.reason || (D ? "Link inválido." : "Invalid link."), M && (M.style.display = "none"), z && (z.textContent = this._mediaModalError), S && (S.style.display = "flex"));
+        const S = u.trim();
+        if (S.length > 0) {
+          const P = V(S);
+          P.safe ? (this._mediaModalError = null, C && (C.style.display = "none"), v && (v.style.display = "flex"), O && (O.style.display = "block", O.src = S)) : (this._mediaModalError = P.reason || (U ? "Link inválido." : "Invalid link."), v && (v.style.display = "none"), R && (R.textContent = this._mediaModalError), C && (C.style.display = "flex"));
         } else
-          this._mediaModalError = null, M && (M.style.display = "none"), S && (S.style.display = "none");
-      }, Q = () => {
+          this._mediaModalError = null, v && (v.style.display = "none"), C && (C.style.display = "none");
+      }, J = () => {
         this._isMediaModalOpen = !1, this._isManagingRecentGifs = !1, this._isConfirmingClearGifs = !1, this._mediaModalUrl = "", this._mediaModalAlt = "", this._mediaModalError = null, this._mediaModalSuccess = null, this.render();
       };
-      b && b.addEventListener("click", Q), k && k.addEventListener("click", Q), l && l.addEventListener("click", (u) => {
-        u.target === l && Q();
+      p && p.addEventListener("click", J), y && y.addEventListener("click", J), n && n.addEventListener("click", (u) => {
+        u.target === n && J();
       }), m && (m.addEventListener("keydown", (u) => {
         u.stopPropagation();
       }), m.addEventListener("input", () => {
-        K(m.value);
+        q(m.value);
       }), m.addEventListener("paste", () => {
-        setTimeout(() => K(m.value), 0);
+        setTimeout(() => q(m.value), 0);
       })), E && (E.addEventListener("keydown", (u) => {
         u.stopPropagation();
       }), E.addEventListener("input", () => {
         this._mediaModalAlt = E.value;
       }));
-      const ee = this.shadowRoot.getElementById("btn-save-gif-collection");
-      ee && ee.addEventListener("click", (u) => {
+      const X = this.shadowRoot.getElementById("btn-save-gif-collection");
+      X && X.addEventListener("click", (u) => {
         u.stopPropagation();
-        const L = (m ? m.value : this._mediaModalUrl).trim(), R = (E ? E.value : this._mediaModalAlt).trim() || "GIF";
-        if (!L) {
-          this._mediaModalError = D ? "Por favor, insira a URL do GIF antes de salvar." : "Please enter a GIF URL before saving.", z && (z.textContent = this._mediaModalError), S && (S.style.display = "flex");
+        const S = (m ? m.value : this._mediaModalUrl).trim(), P = (E ? E.value : this._mediaModalAlt).trim() || "GIF";
+        if (!S) {
+          this._mediaModalError = U ? "Por favor, insira a URL do GIF antes de salvar." : "Please enter a GIF URL before saving.", R && (R.textContent = this._mediaModalError), C && (C.style.display = "flex");
           return;
         }
-        const F = V(L);
-        if (!F.safe) {
-          this._mediaModalError = F.reason || (D ? "URL inválida ou não segura." : "Invalid or unsafe URL."), z && (z.textContent = this._mediaModalError), S && (S.style.display = "flex");
+        const G = V(S);
+        if (!G.safe) {
+          this._mediaModalError = G.reason || (U ? "URL inválida ou não segura." : "Invalid or unsafe URL."), R && (R.textContent = this._mediaModalError), C && (C.style.display = "flex");
           return;
         }
-        ve(L, R), this._mediaModalUrl = "", this._mediaModalAlt = "", this._mediaModalError = null, this._mediaModalSuccess = D ? "GIF salvo na sua coleção!" : "GIF saved to collection!", this.render(), setTimeout(() => {
+        ve(S, P), this._mediaModalUrl = "", this._mediaModalAlt = "", this._mediaModalError = null, this._mediaModalSuccess = U ? "GIF salvo na sua coleção!" : "GIF saved to collection!", this.render(), setTimeout(() => {
           this._isMediaModalOpen && this._mediaModalSuccess && (this._mediaModalSuccess = null, this.render());
         }, 2500);
       }), this.shadowRoot.querySelectorAll(".sl-recent-gif-item").forEach((u) => {
-        let L = null, R = !1;
+        let S = null, P = !1;
         u.addEventListener("touchstart", () => {
-          R = !1, L = setTimeout(() => {
-            if (!R) {
+          P = !1, S = setTimeout(() => {
+            if (!P) {
               if (this._isManagingRecentGifs = !0, "vibrate" in navigator)
                 try {
                   navigator.vibrate(50);
@@ -5927,99 +6162,99 @@ ${i}
             }
           }, 450);
         }, { passive: !0 }), u.addEventListener("touchmove", () => {
-          R = !0, L && clearTimeout(L);
+          P = !0, S && clearTimeout(S);
         }, { passive: !0 }), u.addEventListener("touchend", () => {
-          L && clearTimeout(L);
+          S && clearTimeout(S);
         }), u.addEventListener("click", () => {
           if (this._isManagingRecentGifs)
             return;
-          const F = u.getAttribute("data-url") || "", se = u.getAttribute("data-alt") || "";
-          m && (m.value = F), E && (E.value = se), this._mediaModalAlt = se, K(F);
+          const G = u.getAttribute("data-url") || "", se = u.getAttribute("data-alt") || "";
+          m && (m.value = G), E && (E.value = se), this._mediaModalAlt = se, q(G);
         });
       });
       const te = this.shadowRoot.getElementById("btn-manage-recent-gifs");
       te && te.addEventListener("click", (u) => {
         u.stopPropagation(), this._isManagingRecentGifs = !this._isManagingRecentGifs, this.render();
       }), this.shadowRoot.querySelectorAll(".sl-btn-delete-recent-gif").forEach((u) => {
-        u.addEventListener("click", (L) => {
-          L.stopPropagation();
-          const R = u.getAttribute("data-url") || "";
-          R && (Te(R), ne().length === 0 && (this._isManagingRecentGifs = !1), this.render());
+        u.addEventListener("click", (S) => {
+          S.stopPropagation();
+          const P = u.getAttribute("data-url") || "";
+          P && (Te(P), ne().length === 0 && (this._isManagingRecentGifs = !1), this.render());
         });
       });
-      const re = this.shadowRoot.getElementById("btn-clear-recent-gifs");
-      re && re.addEventListener("click", (u) => {
+      const oe = this.shadowRoot.getElementById("btn-clear-recent-gifs");
+      oe && oe.addEventListener("click", (u) => {
         u.stopPropagation(), this._isConfirmingClearGifs = !0, this.render();
       });
-      const oe = this.shadowRoot.getElementById("btn-confirm-clear-gifs-yes");
-      oe && oe.addEventListener("click", (u) => {
-        u.stopPropagation(), Ae(), this._isConfirmingClearGifs = !1, this._isManagingRecentGifs = !1, this.render();
+      const re = this.shadowRoot.getElementById("btn-confirm-clear-gifs-yes");
+      re && re.addEventListener("click", (u) => {
+        u.stopPropagation(), Ie(), this._isConfirmingClearGifs = !1, this._isManagingRecentGifs = !1, this.render();
       });
       const ae = this.shadowRoot.getElementById("btn-confirm-clear-gifs-no");
       ae && ae.addEventListener("click", (u) => {
         u.stopPropagation(), this._isConfirmingClearGifs = !1, this.render();
       }), c && c.addEventListener("click", () => {
-        const u = (m ? m.value : this._mediaModalUrl).trim(), L = (E ? E.value : this._mediaModalAlt).trim() || "GIF";
+        const u = (m ? m.value : this._mediaModalUrl).trim(), S = (E ? E.value : this._mediaModalAlt).trim() || "GIF";
         if (!u) {
-          this._mediaModalError = D ? "Por favor, insira a URL do GIF." : "Please enter a GIF URL.", z && (z.textContent = this._mediaModalError), S && (S.style.display = "flex"), M && (M.style.display = "none");
+          this._mediaModalError = U ? "Por favor, insira a URL do GIF." : "Please enter a GIF URL.", R && (R.textContent = this._mediaModalError), C && (C.style.display = "flex"), v && (v.style.display = "none");
           return;
         }
-        const R = V(u);
-        if (!R.safe) {
-          this._mediaModalError = R.reason || (D ? "URL inválida ou não segura." : "Invalid or unsafe URL."), z && (z.textContent = this._mediaModalError), S && (S.style.display = "flex"), M && (M.style.display = "none");
+        const P = V(u);
+        if (!P.safe) {
+          this._mediaModalError = P.reason || (U ? "URL inválida ou não segura." : "Invalid or unsafe URL."), R && (R.textContent = this._mediaModalError), C && (C.style.display = "flex"), v && (v.style.display = "none");
           return;
         }
-        ve(u, L);
-        const F = `![${L}](${u})`;
-        this._isMediaModalOpen = !1, this._isManagingRecentGifs = !1, this._isConfirmingClearGifs = !1, this._mediaModalUrl = "", this._mediaModalAlt = "", this._mediaModalError = null, this._mediaModalSuccess = null, this.insertTextAtCursor(F);
+        ve(u, S);
+        const G = `![${S}](${u})`;
+        this._isMediaModalOpen = !1, this._isManagingRecentGifs = !1, this._isConfirmingClearGifs = !1, this._mediaModalUrl = "", this._mediaModalAlt = "", this._mediaModalError = null, this._mediaModalSuccess = null, this.insertTextAtCursor(G);
       });
     }
     if (this._isImageModalOpen) {
-      const l = this.shadowRoot.getElementById("image-modal-backdrop"), b = this.shadowRoot.getElementById("btn-close-image-modal"), k = this.shadowRoot.getElementById("btn-cancel-image-modal"), c = this.shadowRoot.getElementById("btn-confirm-image-modal"), m = this.shadowRoot.getElementById("image-url-input"), E = this.shadowRoot.getElementById("image-alt-input"), M = this.shadowRoot.getElementById("image-url-preview-card"), G = this.shadowRoot.getElementById("image-url-preview-img"), S = this.shadowRoot.getElementById("image-modal-error-box"), z = this.shadowRoot.getElementById("image-modal-error-text"), D = this.currentLang === "pt", K = (u) => {
+      const n = this.shadowRoot.getElementById("image-modal-backdrop"), p = this.shadowRoot.getElementById("btn-close-image-modal"), y = this.shadowRoot.getElementById("btn-cancel-image-modal"), c = this.shadowRoot.getElementById("btn-confirm-image-modal"), m = this.shadowRoot.getElementById("image-url-input"), E = this.shadowRoot.getElementById("image-alt-input"), v = this.shadowRoot.getElementById("image-url-preview-card"), O = this.shadowRoot.getElementById("image-url-preview-img"), C = this.shadowRoot.getElementById("image-modal-error-box"), R = this.shadowRoot.getElementById("image-modal-error-text"), U = this.currentLang === "pt", q = (u) => {
         this._imageModalUrl = u;
-        const L = u.trim();
-        if (L.length > 0) {
-          const R = V(L);
-          R.safe ? (this._imageModalError = null, S && (S.style.display = "none"), M && (M.style.display = "flex"), G && (G.style.display = "block", G.src = L)) : (this._imageModalError = R.reason || (D ? "Link inválido." : "Invalid link."), M && (M.style.display = "none"), z && (z.textContent = this._imageModalError), S && (S.style.display = "flex"));
+        const S = u.trim();
+        if (S.length > 0) {
+          const P = V(S);
+          P.safe ? (this._imageModalError = null, C && (C.style.display = "none"), v && (v.style.display = "flex"), O && (O.style.display = "block", O.src = S)) : (this._imageModalError = P.reason || (U ? "Link inválido." : "Invalid link."), v && (v.style.display = "none"), R && (R.textContent = this._imageModalError), C && (C.style.display = "flex"));
         } else
-          this._imageModalError = null, M && (M.style.display = "none"), S && (S.style.display = "none");
-      }, Q = () => {
+          this._imageModalError = null, v && (v.style.display = "none"), C && (C.style.display = "none");
+      }, J = () => {
         this._isImageModalOpen = !1, this._isManagingRecentImages = !1, this._isConfirmingClearImages = !1, this._imageModalUrl = "", this._imageModalAlt = "", this._imageModalError = null, this._imageModalSuccess = null, this.render();
       };
-      b && b.addEventListener("click", Q), k && k.addEventListener("click", Q), l && l.addEventListener("click", (u) => {
-        u.target === l && Q();
+      p && p.addEventListener("click", J), y && y.addEventListener("click", J), n && n.addEventListener("click", (u) => {
+        u.target === n && J();
       }), m && (m.addEventListener("keydown", (u) => {
         u.stopPropagation();
       }), m.addEventListener("input", () => {
-        K(m.value);
+        q(m.value);
       }), m.addEventListener("paste", () => {
-        setTimeout(() => K(m.value), 0);
+        setTimeout(() => q(m.value), 0);
       })), E && (E.addEventListener("keydown", (u) => {
         u.stopPropagation();
       }), E.addEventListener("input", () => {
         this._imageModalAlt = E.value;
       }));
-      const ee = this.shadowRoot.getElementById("btn-save-image-collection");
-      ee && ee.addEventListener("click", (u) => {
+      const X = this.shadowRoot.getElementById("btn-save-image-collection");
+      X && X.addEventListener("click", (u) => {
         u.stopPropagation();
-        const L = (m ? m.value : this._imageModalUrl).trim(), R = (E ? E.value : this._imageModalAlt).trim() || (D ? "Imagem" : "Image");
-        if (!L) {
-          this._imageModalError = D ? "Por favor, insira a URL da imagem antes de salvar." : "Please enter an image URL before saving.", z && (z.textContent = this._imageModalError), S && (S.style.display = "flex");
+        const S = (m ? m.value : this._imageModalUrl).trim(), P = (E ? E.value : this._imageModalAlt).trim() || (U ? "Imagem" : "Image");
+        if (!S) {
+          this._imageModalError = U ? "Por favor, insira a URL da imagem antes de salvar." : "Please enter an image URL before saving.", R && (R.textContent = this._imageModalError), C && (C.style.display = "flex");
           return;
         }
-        const F = V(L);
-        if (!F.safe) {
-          this._imageModalError = F.reason || (D ? "URL inválida ou não segura." : "Invalid or unsafe URL."), z && (z.textContent = this._imageModalError), S && (S.style.display = "flex");
+        const G = V(S);
+        if (!G.safe) {
+          this._imageModalError = G.reason || (U ? "URL inválida ou não segura." : "Invalid or unsafe URL."), R && (R.textContent = this._imageModalError), C && (C.style.display = "flex");
           return;
         }
-        ye(L, R), this._imageModalUrl = "", this._imageModalAlt = "", this._imageModalError = null, this._imageModalSuccess = D ? "Imagem salva na sua coleção!" : "Image saved to collection!", this.render(), setTimeout(() => {
+        xe(S, P), this._imageModalUrl = "", this._imageModalAlt = "", this._imageModalError = null, this._imageModalSuccess = U ? "Imagem salva na sua coleção!" : "Image saved to collection!", this.render(), setTimeout(() => {
           this._isImageModalOpen && this._imageModalSuccess && (this._imageModalSuccess = null, this.render());
         }, 2500);
       }), this.shadowRoot.querySelectorAll(".sl-recent-image-item").forEach((u) => {
-        let L = null, R = !1;
+        let S = null, P = !1;
         u.addEventListener("touchstart", () => {
-          R = !1, L = setTimeout(() => {
-            if (!R) {
+          P = !1, S = setTimeout(() => {
+            if (!P) {
               if (this._isManagingRecentImages = !0, "vibrate" in navigator)
                 try {
                   navigator.vibrate(50);
@@ -6029,118 +6264,118 @@ ${i}
             }
           }, 450);
         }, { passive: !0 }), u.addEventListener("touchmove", () => {
-          R = !0, L && clearTimeout(L);
+          P = !0, S && clearTimeout(S);
         }, { passive: !0 }), u.addEventListener("touchend", () => {
-          L && clearTimeout(L);
+          S && clearTimeout(S);
         }), u.addEventListener("click", () => {
           if (this._isManagingRecentImages)
             return;
-          const F = u.getAttribute("data-url") || "", se = u.getAttribute("data-alt") || "";
-          m && (m.value = F), E && (E.value = se), this._imageModalAlt = se, K(F);
+          const G = u.getAttribute("data-url") || "", se = u.getAttribute("data-alt") || "";
+          m && (m.value = G), E && (E.value = se), this._imageModalAlt = se, q(G);
         });
       });
       const te = this.shadowRoot.getElementById("btn-manage-recent-images");
       te && te.addEventListener("click", (u) => {
         u.stopPropagation(), this._isManagingRecentImages = !this._isManagingRecentImages, this.render();
       }), this.shadowRoot.querySelectorAll(".sl-btn-delete-recent-image").forEach((u) => {
-        u.addEventListener("click", (L) => {
-          L.stopPropagation();
-          const R = u.getAttribute("data-url") || "";
-          R && (Ie(R), le().length === 0 && (this._isManagingRecentImages = !1), this.render());
+        u.addEventListener("click", (S) => {
+          S.stopPropagation();
+          const P = u.getAttribute("data-url") || "";
+          P && (Ae(P), le().length === 0 && (this._isManagingRecentImages = !1), this.render());
         });
       });
-      const re = this.shadowRoot.getElementById("btn-clear-recent-images");
-      re && re.addEventListener("click", (u) => {
+      const oe = this.shadowRoot.getElementById("btn-clear-recent-images");
+      oe && oe.addEventListener("click", (u) => {
         u.stopPropagation(), this._isConfirmingClearImages = !0, this.render();
       });
-      const oe = this.shadowRoot.getElementById("btn-confirm-clear-images-yes");
-      oe && oe.addEventListener("click", (u) => {
+      const re = this.shadowRoot.getElementById("btn-confirm-clear-images-yes");
+      re && re.addEventListener("click", (u) => {
         u.stopPropagation(), Re(), this._isConfirmingClearImages = !1, this._isManagingRecentImages = !1, this.render();
       });
       const ae = this.shadowRoot.getElementById("btn-confirm-clear-images-no");
       ae && ae.addEventListener("click", (u) => {
         u.stopPropagation(), this._isConfirmingClearImages = !1, this.render();
       }), c && c.addEventListener("click", () => {
-        const u = (m ? m.value : this._imageModalUrl).trim(), L = (E ? E.value : this._imageModalAlt).trim() || (D ? "Imagem" : "Image");
+        const u = (m ? m.value : this._imageModalUrl).trim(), S = (E ? E.value : this._imageModalAlt).trim() || (U ? "Imagem" : "Image");
         if (!u) {
-          this._imageModalError = D ? "Por favor, insira a URL da imagem." : "Please enter an image URL.", z && (z.textContent = this._imageModalError), S && (S.style.display = "flex"), M && (M.style.display = "none");
+          this._imageModalError = U ? "Por favor, insira a URL da imagem." : "Please enter an image URL.", R && (R.textContent = this._imageModalError), C && (C.style.display = "flex"), v && (v.style.display = "none");
           return;
         }
-        const R = V(u);
-        if (!R.safe) {
-          this._imageModalError = R.reason || (D ? "URL inválida ou não segura." : "Invalid or unsafe URL."), z && (z.textContent = this._imageModalError), S && (S.style.display = "flex"), M && (M.style.display = "none");
+        const P = V(u);
+        if (!P.safe) {
+          this._imageModalError = P.reason || (U ? "URL inválida ou não segura." : "Invalid or unsafe URL."), R && (R.textContent = this._imageModalError), C && (C.style.display = "flex"), v && (v.style.display = "none");
           return;
         }
-        ye(u, L);
-        const F = `![${L}](${u})`;
-        this._isImageModalOpen = !1, this._isManagingRecentImages = !1, this._isConfirmingClearImages = !1, this._imageModalUrl = "", this._imageModalAlt = "", this._imageModalError = null, this._imageModalSuccess = null, this.insertTextAtCursor(F);
+        xe(u, S);
+        const G = `![${S}](${u})`;
+        this._isImageModalOpen = !1, this._isManagingRecentImages = !1, this._isConfirmingClearImages = !1, this._imageModalUrl = "", this._imageModalAlt = "", this._imageModalError = null, this._imageModalSuccess = null, this.insertTextAtCursor(G);
       });
     }
     if (this._isEmojiPickerOpen) {
-      const l = (b) => {
+      const n = (p) => {
         var m;
-        const k = b.composedPath(), c = (m = this.shadowRoot) == null ? void 0 : m.getElementById("emoji-popover");
-        c && !k.includes(c) && d && !k.includes(d) && (this._isEmojiPickerOpen = !1, this.render(), document.removeEventListener("click", l));
+        const y = p.composedPath(), c = (m = this.shadowRoot) == null ? void 0 : m.getElementById("emoji-popover");
+        c && !y.includes(c) && d && !y.includes(d) && (this._isEmojiPickerOpen = !1, this.render(), document.removeEventListener("click", n));
       };
-      setTimeout(() => document.addEventListener("click", l), 0);
+      setTimeout(() => document.addEventListener("click", n), 0);
     }
-    const A = this.shadowRoot.getElementById("btn-login-submit");
-    A && A.addEventListener("click", () => {
+    const I = this.shadowRoot.getElementById("btn-login-submit");
+    I && I.addEventListener("click", () => {
       this.loginWithGitHub();
     });
-    const P = this.shadowRoot.getElementById("btn-logout");
-    P && P.addEventListener("click", () => {
+    const B = this.shadowRoot.getElementById("btn-logout");
+    B && B.addEventListener("click", () => {
       this.logout();
     });
-    const O = this.shadowRoot.getElementById("btn-submit");
-    O && O.addEventListener("click", async () => {
-      const l = this._composerText.trim();
-      if (!l) {
+    const D = this.shadowRoot.getElementById("btn-submit");
+    D && D.addEventListener("click", async () => {
+      const n = this._composerText.trim();
+      if (!n) {
         alert(
           this.currentLang === "pt" ? "Por favor, escreva uma reflexão antes de publicar." : "Please write a note before posting."
         );
         return;
       }
-      await this.handlePostComment(l);
-    }), this.shadowRoot.querySelectorAll(".sl-reaction-trigger-btn").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        if (b.stopPropagation(), !this._currentUser) {
+      await this.handlePostComment(n);
+    }), this.shadowRoot.querySelectorAll(".sl-reaction-trigger-btn").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        if (p.stopPropagation(), !this._currentUser) {
           this.loginWithGitHub();
           return;
         }
-        const k = b.currentTarget, c = k.getAttribute("data-comment-id"), m = k.getAttribute("data-emoji") || "👍";
+        const y = p.currentTarget, c = y.getAttribute("data-comment-id"), m = y.getAttribute("data-emoji") || "👍";
         c && await this.handleToggleReaction(c, m);
       });
-    }), this.shadowRoot.querySelectorAll(".sl-reaction-picker-item").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        if (b.stopPropagation(), !this._currentUser) {
+    }), this.shadowRoot.querySelectorAll(".sl-reaction-picker-item").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        if (p.stopPropagation(), !this._currentUser) {
           this.loginWithGitHub();
           return;
         }
-        const k = b.currentTarget, c = k.getAttribute("data-comment-id"), m = k.getAttribute("data-emoji"), E = k.closest(".sl-reaction-container");
+        const y = p.currentTarget, c = y.getAttribute("data-comment-id"), m = y.getAttribute("data-emoji"), E = y.closest(".sl-reaction-container");
         E == null || E.classList.remove("sl-popover-open"), c && m && await this.handleToggleReaction(c, m);
       });
-    }), this.shadowRoot.querySelectorAll(".sl-reaction-badge").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        if (b.stopPropagation(), !this._currentUser) {
+    }), this.shadowRoot.querySelectorAll(".sl-reaction-badge").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        if (p.stopPropagation(), !this._currentUser) {
           this.loginWithGitHub();
           return;
         }
-        const k = b.currentTarget, c = k.getAttribute("data-comment-id"), m = k.getAttribute("data-emoji");
+        const y = p.currentTarget, c = y.getAttribute("data-comment-id"), m = y.getAttribute("data-emoji");
         c && m && await this.handleToggleReaction(c, m);
       });
-    }), this.shadowRoot.querySelectorAll(".sl-reaction-container").forEach((l) => {
-      l.addEventListener("mouseenter", () => {
-        l.classList.add("sl-popover-open");
-      }), l.addEventListener("mouseleave", () => {
-        l.classList.remove("sl-popover-open");
-      }), l.addEventListener("contextmenu", (b) => {
-        b.preventDefault(), l.classList.toggle("sl-popover-open");
+    }), this.shadowRoot.querySelectorAll(".sl-reaction-container").forEach((n) => {
+      n.addEventListener("mouseenter", () => {
+        n.classList.add("sl-popover-open");
+      }), n.addEventListener("mouseleave", () => {
+        n.classList.remove("sl-popover-open");
+      }), n.addEventListener("contextmenu", (p) => {
+        p.preventDefault(), n.classList.toggle("sl-popover-open");
       });
-    }), this.shadowRoot.querySelectorAll(".sl-reply-btn:not(.btn-toggle-translate)").forEach((l) => {
-      l.addEventListener("click", (b) => {
+    }), this.shadowRoot.querySelectorAll(".sl-reply-btn:not(.btn-toggle-translate)").forEach((n) => {
+      n.addEventListener("click", (p) => {
         var m;
-        const c = b.currentTarget.getAttribute("data-reply-to");
+        const c = p.currentTarget.getAttribute("data-reply-to");
         if (!this._currentUser) {
           this.loginWithGitHub();
           return;
@@ -6150,14 +6385,14 @@ ${i}
         else {
           this._replyingToId = c;
           let E = "";
-          const M = this._comments.find((G) => G.id === c);
-          if (M)
-            E = M.author.login;
+          const v = this._comments.find((O) => O.id === c);
+          if (v)
+            E = v.author.login;
           else
-            for (const G of this._comments) {
-              const S = (m = G.replies) == null ? void 0 : m.find((z) => z.id === c);
-              if (S) {
-                E = S.author.login;
+            for (const O of this._comments) {
+              const C = (m = O.replies) == null ? void 0 : m.find((R) => R.id === c);
+              if (C) {
+                E = C.author.login;
                 break;
               }
             }
@@ -6165,130 +6400,186 @@ ${i}
         }
         this.render();
       });
-    }), this.shadowRoot.querySelectorAll(".sl-thread-toggle-btn").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        const c = b.currentTarget.getAttribute("data-thread-id");
+    }), this.shadowRoot.querySelectorAll(".sl-thread-toggle-btn").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        const c = p.currentTarget.getAttribute("data-thread-id");
         c && (this._expandedThreads.has(c) ? this._expandedThreads.delete(c) : this._expandedThreads.add(c), this.render());
       });
-    }), this.shadowRoot.querySelectorAll(".btn-send-reply").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        var G;
-        const k = b.currentTarget, c = k.getAttribute("data-comment-id"), m = k.getAttribute("data-parent-id") || c, E = (G = this.shadowRoot) == null ? void 0 : G.getElementById(`reply-textarea-${c}`);
+    }), this.shadowRoot.querySelectorAll(".btn-send-reply").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        var O;
+        const y = p.currentTarget, c = y.getAttribute("data-comment-id"), m = y.getAttribute("data-parent-id") || c, E = (O = this.shadowRoot) == null ? void 0 : O.getElementById(`reply-textarea-${c}`);
         if (!E) return;
-        const M = E.value.trim();
-        !M || !m || await this.handlePostReply(m, M);
+        const v = E.value.trim();
+        !v || !m || await this.handlePostReply(m, v);
       });
-    }), this.shadowRoot.querySelectorAll(".btn-cancel-reply").forEach((l) => {
-      l.addEventListener("click", () => {
+    }), this.shadowRoot.querySelectorAll(".btn-cancel-reply").forEach((n) => {
+      n.addEventListener("click", () => {
         this._replyingToId = null, this._replyText = "", this.render();
       });
-    }), this.shadowRoot.querySelectorAll(".btn-toggle-translate").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        const c = b.currentTarget.getAttribute("data-comment-id");
+    }), this.shadowRoot.querySelectorAll(".btn-toggle-translate").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        const c = p.currentTarget.getAttribute("data-comment-id");
         c && this.toggleTranslate(c);
       });
-    }), this.shadowRoot.querySelectorAll(".sl-audio-btn").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        const k = b.currentTarget, c = k.getAttribute("data-speak-id"), m = k.getAttribute("data-text"), E = k.getAttribute("data-lang") || void 0;
+    }), this.shadowRoot.querySelectorAll(".sl-audio-btn").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        const y = p.currentTarget, c = y.getAttribute("data-speak-id"), m = y.getAttribute("data-text"), E = y.getAttribute("data-lang") || void 0;
         if (c && m) {
-          const M = decodeURIComponent(m);
-          this.toggleSpeak(c, M, E);
+          const v = decodeURIComponent(m);
+          this.toggleSpeak(c, v, E);
         }
       });
-    }), this.shadowRoot.querySelectorAll(".sl-menu-btn").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-menu-id");
+    }), this.shadowRoot.querySelectorAll(".sl-menu-btn").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-menu-id");
         this._openMenuId = this._openMenuId === c ? null : c, this.render();
       });
     }), this.shadowRoot.addEventListener("click", () => {
       this._openMenuId && (this._openMenuId = null, this.render());
-    }), this.shadowRoot.querySelectorAll(".btn-toggle-pin").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-comment-id");
+    }), this.shadowRoot.querySelectorAll(".btn-toggle-pin").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-comment-id");
         c && await this.handleTogglePin(c);
       });
-    }), this.shadowRoot.querySelectorAll(".btn-edit").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-comment-id");
+    }), this.shadowRoot.querySelectorAll(".btn-edit").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-comment-id");
         this._editingId = c, this._openMenuId = null, this.render();
       });
-    }), this.shadowRoot.querySelectorAll(".btn-save-edit").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        var M;
-        const c = b.currentTarget.getAttribute("data-comment-id"), m = (M = this.shadowRoot) == null ? void 0 : M.getElementById(`edit-textarea-${c}`);
+    }), this.shadowRoot.querySelectorAll(".btn-save-edit").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        var v;
+        const c = p.currentTarget.getAttribute("data-comment-id"), m = (v = this.shadowRoot) == null ? void 0 : v.getElementById(`edit-textarea-${c}`);
         if (!m || !c) return;
         const E = m.value.trim();
         E && await this.handleSaveEdit(c, E);
       });
-    }), this.shadowRoot.querySelectorAll(".btn-cancel-edit").forEach((l) => {
-      l.addEventListener("click", () => {
+    }), this.shadowRoot.querySelectorAll(".btn-cancel-edit").forEach((n) => {
+      n.addEventListener("click", () => {
         this._editingId = null, this.render();
       });
-    }), this.shadowRoot.querySelectorAll(".btn-delete").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-comment-id");
+    }), this.shadowRoot.querySelectorAll(".btn-delete").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-comment-id");
         if (!c) return;
         const m = this.currentLang === "pt" ? "Tem certeza que deseja excluir esta nota?" : "Are you sure you want to delete this note?";
         confirm(m) && await this.handleDelete(c);
       });
-    }), this.shadowRoot.querySelectorAll(".btn-mod-restrict-media").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-user");
+    }), this.shadowRoot.querySelectorAll(".btn-mod-restrict-media").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-user");
         if (!c) return;
         const m = this.currentLang === "pt" ? `Deseja realmente remover a permissão de mídia de @${c}?` : this.currentLang === "es" ? `¿Deseas quitar el permiso de medios a @${c}?` : `Are you sure you want to restrict media for @${c}?`;
         confirm(m) && (this._openMenuId = null, this.render(), await this.handleSetModeration(c, "restrict_media"));
       });
-    }), this.shadowRoot.querySelectorAll(".btn-mod-ban").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-user");
+    }), this.shadowRoot.querySelectorAll(".btn-mod-ban").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-user");
         if (!c) return;
         const m = this.currentLang === "pt" ? `Deseja realmente banir o usuário @${c} dos comentários?` : this.currentLang === "es" ? `¿Deseas bloquear al usuario @${c} de los comentarios?` : `Are you sure you want to ban @${c} from commenting?`;
         confirm(m) && (this._openMenuId = null, this.render(), await this.handleSetModeration(c, "ban"));
       });
     });
-    const ue = this.shadowRoot.getElementById("sl-mod-refresh");
-    ue && ue.addEventListener("click", async (l) => {
-      l.stopPropagation(), await this.loadModerationList();
+    const ge = this.shadowRoot.getElementById("sl-mod-refresh");
+    ge && ge.addEventListener("click", async (n) => {
+      n.stopPropagation(), await this.loadModerationList();
     });
     const me = this.shadowRoot.getElementById("sl-mod-toggle-collapse");
-    me && me.addEventListener("click", (l) => {
-      l.stopPropagation(), this._isModerationCollapsed = !this._isModerationCollapsed;
+    me && me.addEventListener("click", (n) => {
+      n.stopPropagation(), this._isModerationCollapsed = !this._isModerationCollapsed;
       try {
         localStorage.setItem("sl_mod_collapsed", String(this._isModerationCollapsed));
       } catch {
       }
       this.render();
     });
-    const ge = this.shadowRoot.getElementById("sl-mod-pill-ban");
-    ge && ge.addEventListener("click", (l) => {
-      l.stopPropagation(), this._expandedModCategory = this._expandedModCategory === "ban" ? null : "ban", this.render();
+    const ue = this.shadowRoot.getElementById("sl-mod-pill-ban");
+    ue && ue.addEventListener("click", (n) => {
+      n.stopPropagation(), this._expandedModCategory = this._expandedModCategory === "ban" ? null : "ban", this.render();
     });
     const be = this.shadowRoot.getElementById("sl-mod-pill-media");
-    be && be.addEventListener("click", (l) => {
-      l.stopPropagation(), this._expandedModCategory = this._expandedModCategory === "media" ? null : "media", this.render();
-    }), this.shadowRoot.querySelectorAll(".sl-mod-chip-remove").forEach((l) => {
-      l.addEventListener("click", async (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-user");
+    if (be && be.addEventListener("click", (n) => {
+      n.stopPropagation(), this._expandedModCategory = this._expandedModCategory === "media" ? null : "media", this.render();
+    }), this.shadowRoot.querySelectorAll(".sl-mod-chip-remove").forEach((n) => {
+      n.addEventListener("click", async (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-user");
         c && await this.handleRemoveModeration(c);
       });
-    }), this.shadowRoot.querySelectorAll(".btn-copy-link").forEach((l) => {
-      l.addEventListener("click", (b) => {
-        b.stopPropagation();
-        const c = b.currentTarget.getAttribute("data-comment-id"), m = `${window.location.href.split("#")[0]}#comment-${c}`;
+    }), this.shadowRoot.querySelectorAll(".btn-copy-link").forEach((n) => {
+      n.addEventListener("click", (p) => {
+        p.stopPropagation();
+        const c = p.currentTarget.getAttribute("data-comment-id"), m = `${window.location.href.split("#")[0]}#comment-${c}`;
         navigator.clipboard.writeText(m).then(() => {
           alert(
             this.currentLang === "pt" ? "Link copiado para a área de transferência!" : "Link copied to clipboard!"
           );
         }), this._openMenuId = null, this.render();
       });
-    }), this.setupCodeBlocks();
+    }), this.shadowRoot.querySelectorAll(
+      ".sl-card-body img:not(.sl-emoji-inline), .sl-preview-area img:not(.sl-emoji-inline)"
+    ).forEach((n) => {
+      n.addEventListener("click", (p) => {
+        p.preventDefault(), p.stopPropagation();
+        const y = n.getAttribute("src") || "", c = n.getAttribute("alt") || "";
+        y && this.openLightbox(y, c);
+      });
+    }), this._lightboxOpen) {
+      const n = this.shadowRoot.getElementById("sl-lightbox-stage"), p = this.shadowRoot.getElementById("sl-lightbox-img"), y = this.shadowRoot.getElementById("sl-lightbox-close"), c = this.shadowRoot.getElementById("sl-lightbox-zoom-in"), m = this.shadowRoot.getElementById("sl-lightbox-zoom-out"), E = this.shadowRoot.getElementById("sl-lightbox-reset");
+      y && y.addEventListener("click", (v) => {
+        v.stopPropagation(), this.closeLightbox();
+      }), c && c.addEventListener("click", (v) => {
+        v.stopPropagation(), this.setLightboxZoom(this._lightboxScale + 0.3);
+      }), m && m.addEventListener("click", (v) => {
+        v.stopPropagation(), this.setLightboxZoom(this._lightboxScale - 0.3);
+      }), E && E.addEventListener("click", (v) => {
+        v.stopPropagation(), this.resetLightboxTransform();
+      }), n && (n.addEventListener("click", (v) => {
+        v.target === n && this.closeLightbox();
+      }), n.addEventListener(
+        "wheel",
+        (v) => {
+          v.preventDefault();
+          const O = v.deltaY < 0 ? 0.25 : -0.25;
+          this.setLightboxZoom(this._lightboxScale + O);
+        },
+        { passive: !1 }
+      )), p && (p.addEventListener("dblclick", (v) => {
+        v.stopPropagation(), this._lightboxScale > 1.2 ? this.resetLightboxTransform() : this.setLightboxZoom(2);
+      }), p.addEventListener("mousedown", (v) => {
+        if (v.button !== 0) return;
+        v.preventDefault(), this._isDraggingImage = !0, this._dragStartX = v.clientX, this._dragStartY = v.clientY, this._dragStartTx = this._lightboxTranslateX, this._dragStartTy = this._lightboxTranslateY, this.updateLightboxTransform(!0);
+        const O = (R) => {
+          if (!this._isDraggingImage) return;
+          const U = R.clientX - this._dragStartX, q = R.clientY - this._dragStartY;
+          this._lightboxTranslateX = this._dragStartTx + U, this._lightboxTranslateY = this._dragStartTy + q, this.updateLightboxTransform(!0);
+        }, C = () => {
+          this._isDraggingImage = !1, this.updateLightboxTransform(!1), window.removeEventListener("mousemove", O), window.removeEventListener("mouseup", C);
+        };
+        window.addEventListener("mousemove", O), window.addEventListener("mouseup", C);
+      }), p.addEventListener("touchstart", (v) => {
+        if (v.touches.length === 1) {
+          const O = v.touches[0];
+          this._isDraggingImage = !0, this._dragStartX = O.clientX, this._dragStartY = O.clientY, this._dragStartTx = this._lightboxTranslateX, this._dragStartTy = this._lightboxTranslateY, this.updateLightboxTransform(!0);
+          const C = (U) => {
+            if (!this._isDraggingImage || U.touches.length !== 1) return;
+            const q = U.touches[0], J = q.clientX - this._dragStartX, X = q.clientY - this._dragStartY;
+            this._lightboxTranslateX = this._dragStartTx + J, this._lightboxTranslateY = this._dragStartTy + X, this.updateLightboxTransform(!0);
+          }, R = () => {
+            this._isDraggingImage = !1, this.updateLightboxTransform(!1), window.removeEventListener("touchmove", C), window.removeEventListener("touchend", R);
+          };
+          window.addEventListener("touchmove", C, { passive: !0 }), window.addEventListener("touchend", R);
+        }
+      }, { passive: !0 }));
+    }
+    this.setupCodeBlocks();
   }
   /**
    * Configura blocos de código nos comentários e na área de prévia:
@@ -6298,112 +6589,112 @@ ${i}
     if (!this.shadowRoot) return;
     this.shadowRoot.querySelectorAll(
       ".sl-card-body pre, .sl-preview-area pre"
-    ).forEach((p) => {
-      var Z;
-      if (p.closest(".sl-code-block")) return;
-      const w = p.querySelector("code") || p, y = w.textContent || "";
-      if (!y.trim()) return;
-      let x = "code";
-      const $ = p.closest('[class*="highlight-source-"]');
-      if ($) {
-        const U = $.className.match(/highlight-source-([a-zA-Z0-9_-]+)/);
-        U && U[1] && (x = U[1]);
-      } else if (p.getAttribute("lang"))
-        x = p.getAttribute("lang") || "code";
-      else if (w.className) {
-        const U = w.className.match(/(?:language|lang)-([a-zA-Z0-9_-]+)/);
-        U && U[1] && (x = U[1]);
+    ).forEach((g) => {
+      var Q;
+      if (g.closest(".sl-code-block")) return;
+      const k = g.querySelector("code") || g, w = k.textContent || "";
+      if (!w.trim()) return;
+      let _ = "code";
+      const L = g.closest('[class*="highlight-source-"]');
+      if (L) {
+        const H = L.className.match(/highlight-source-([a-zA-Z0-9_-]+)/);
+        H && H[1] && (_ = H[1]);
+      } else if (g.getAttribute("lang"))
+        _ = g.getAttribute("lang") || "code";
+      else if (k.className) {
+        const H = k.className.match(/(?:language|lang)-([a-zA-Z0-9_-]+)/);
+        H && H[1] && (_ = H[1]);
       }
-      const v = y.split(/\r?\n/), A = v.length > 20, P = this.currentLang === "pt", O = P ? "Copiar" : "Copy", _ = P ? "Copiar código" : "Copy code", B = P ? "Rolar para cima" : "Scroll up", I = P ? "Rolar para baixo" : "Scroll down", H = A ? `${x} · ${v.length} ${P ? "linhas" : "lines"}` : x, N = document.createElement("div");
-      N.className = `sl-code-block ${A ? "sl-code-block-long sl-collapsed" : ""}`, N.setAttribute("data-lang", x);
-      const q = document.createElement("div");
-      if (q.className = "sl-code-header", q.innerHTML = `
-        <span class="sl-code-badge">${H}</span>
-        <button type="button" class="sl-code-copy-btn" title="${_}" aria-label="${_}">
+      const x = w.split(/\r?\n/), I = x.length > 20, B = this.currentLang === "pt", D = B ? "Copiar" : "Copy", $ = B ? "Copiar código" : "Copy code", j = B ? "Rolar para cima" : "Scroll up", A = B ? "Rolar para baixo" : "Scroll down", F = I ? `${_} · ${x.length} ${B ? "linhas" : "lines"}` : _, N = document.createElement("div");
+      N.className = `sl-code-block ${I ? "sl-code-block-long sl-collapsed" : ""}`, N.setAttribute("data-lang", _);
+      const W = document.createElement("div");
+      if (W.className = "sl-code-header", W.innerHTML = `
+        <span class="sl-code-badge">${F}</span>
+        <button type="button" class="sl-code-copy-btn" title="${$}" aria-label="${$}">
           <svg class="sl-copy-icon" viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
             <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
             <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
           </svg>
-          <span class="sl-copy-text">${O}</span>
+          <span class="sl-copy-text">${D}</span>
         </button>
-      `, w.querySelector(".sl-code-line") || (w.innerHTML = v.map((U, W) => {
-        const j = U.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return `<span class="sl-code-line"><span class="sl-line-num">${W + 1}</span><span class="sl-line-code">${j || " "}</span></span>`;
-      }).join("")), (Z = p.parentNode) == null || Z.insertBefore(N, p), N.appendChild(q), N.appendChild(p), p.classList.add("sl-code-pre"), w.classList.add("sl-code-body"), A && !this._hideCodeScroll) {
-        const U = document.createElement("div");
-        U.className = "sl-code-scroll-controls", U.setAttribute("aria-label", P ? "Navegação do código" : "Code navigation"), U.innerHTML = `
-          <button type="button" class="sl-code-scroll-btn sl-scroll-up" title="${B}" aria-label="${B}">
+      `, k.querySelector(".sl-code-line") || (k.innerHTML = x.map((H, Y) => {
+        const z = H.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return `<span class="sl-code-line"><span class="sl-line-num">${Y + 1}</span><span class="sl-line-code">${z || " "}</span></span>`;
+      }).join("")), (Q = g.parentNode) == null || Q.insertBefore(N, g), N.appendChild(W), N.appendChild(g), g.classList.add("sl-code-pre"), k.classList.add("sl-code-body"), I && !this._hideCodeScroll) {
+        const H = document.createElement("div");
+        H.className = "sl-code-scroll-controls", H.setAttribute("aria-label", B ? "Navegação do código" : "Code navigation"), H.innerHTML = `
+          <button type="button" class="sl-code-scroll-btn sl-scroll-up" title="${j}" aria-label="${j}">
             <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
               <path d="M8 3.5a.75.75 0 0 1 .53.22l4.5 4.5a.75.75 0 0 1-1.06 1.06L8 5.31 4.03 9.28a.75.75 0 0 1-1.06-1.06l4.5-4.5A.75.75 0 0 1 8 3.5Z"/>
             </svg>
           </button>
-          <button type="button" class="sl-code-scroll-btn sl-scroll-down" title="${I}" aria-label="${I}">
+          <button type="button" class="sl-code-scroll-btn sl-scroll-down" title="${A}" aria-label="${A}">
             <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
               <path d="M8 12.5a.75.75 0 0 1-.53-.22l-4.5-4.5a.75.75 0 0 1 1.06-1.06L8 10.69l3.97-3.97a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-.53.22Z"/>
             </svg>
           </button>
-        `, N.appendChild(U);
-        const W = document.createElement("div");
-        W.className = "sl-code-expand-bar", W.innerHTML = `
-          <button type="button" class="sl-code-expand-btn" data-lines="${v.length}">
+        `, N.appendChild(H);
+        const Y = document.createElement("div");
+        Y.className = "sl-code-expand-bar", Y.innerHTML = `
+          <button type="button" class="sl-code-expand-btn" data-lines="${x.length}">
             <span>↕</span>
-            <span class="sl-expand-text">${P ? `Mostrar todas as ${v.length} linhas` : `Show all ${v.length} lines`}</span>
+            <span class="sl-expand-text">${B ? `Mostrar todas as ${x.length} linhas` : `Show all ${x.length} lines`}</span>
           </button>
-        `, N.appendChild(W);
+        `, N.appendChild(Y);
       }
-    }), this.shadowRoot.querySelectorAll(".sl-code-copy-btn").forEach((p) => {
-      p.addEventListener("click", async (w) => {
-        w.stopPropagation();
-        const y = p.closest(".sl-code-block");
-        if (!y) return;
-        const x = y.querySelectorAll(".sl-line-code");
-        let $ = "";
-        if (x.length > 0)
-          $ = Array.from(x).map((v) => v.textContent || "").join(`
+    }), this.shadowRoot.querySelectorAll(".sl-code-copy-btn").forEach((g) => {
+      g.addEventListener("click", async (k) => {
+        k.stopPropagation();
+        const w = g.closest(".sl-code-block");
+        if (!w) return;
+        const _ = w.querySelectorAll(".sl-line-code");
+        let L = "";
+        if (_.length > 0)
+          L = Array.from(_).map((x) => x.textContent || "").join(`
 `);
         else {
-          const v = y.querySelector("pre");
-          $ = (v == null ? void 0 : v.textContent) || "";
+          const x = w.querySelector("pre");
+          L = (x == null ? void 0 : x.textContent) || "";
         }
         try {
-          await navigator.clipboard.writeText($);
-          const v = p.querySelector(".sl-copy-text"), A = v ? v.textContent : "";
-          p.classList.add("sl-copied"), v && (v.textContent = this.currentLang === "pt" ? "Copiado!" : "Copied!"), setTimeout(() => {
-            p.classList.remove("sl-copied"), v && A && (v.textContent = A);
+          await navigator.clipboard.writeText(L);
+          const x = g.querySelector(".sl-copy-text"), I = x ? x.textContent : "";
+          g.classList.add("sl-copied"), x && (x.textContent = this.currentLang === "pt" ? "Copiado!" : "Copied!"), setTimeout(() => {
+            g.classList.remove("sl-copied"), x && I && (x.textContent = I);
           }, 2e3);
         } catch {
         }
       });
-    }), this.shadowRoot.querySelectorAll(".sl-code-scroll-btn").forEach((p) => {
-      p.addEventListener("click", (w) => {
-        w.stopPropagation();
-        const y = p.closest(".sl-code-block"), x = y == null ? void 0 : y.querySelector(".sl-code-pre");
-        if (!x) return;
-        const $ = p.classList.contains("sl-scroll-down");
-        x.scrollBy({ top: $ ? 160 : -160, behavior: "smooth" });
+    }), this.shadowRoot.querySelectorAll(".sl-code-scroll-btn").forEach((g) => {
+      g.addEventListener("click", (k) => {
+        k.stopPropagation();
+        const w = g.closest(".sl-code-block"), _ = w == null ? void 0 : w.querySelector(".sl-code-pre");
+        if (!_) return;
+        const L = g.classList.contains("sl-scroll-down");
+        _.scrollBy({ top: L ? 160 : -160, behavior: "smooth" });
       });
-    }), this.shadowRoot.querySelectorAll(".sl-code-block-long").forEach((p) => {
-      const w = p.querySelector(".sl-code-pre"), y = p.querySelector(".sl-scroll-up"), x = p.querySelector(".sl-scroll-down");
-      if (!w || !y || !x) return;
-      const $ = () => {
-        const v = w.scrollTop <= 2, A = w.scrollTop + w.clientHeight >= w.scrollHeight - 4;
-        y.classList.toggle("sl-disabled", v), x.classList.toggle("sl-disabled", A);
+    }), this.shadowRoot.querySelectorAll(".sl-code-block-long").forEach((g) => {
+      const k = g.querySelector(".sl-code-pre"), w = g.querySelector(".sl-scroll-up"), _ = g.querySelector(".sl-scroll-down");
+      if (!k || !w || !_) return;
+      const L = () => {
+        const x = k.scrollTop <= 2, I = k.scrollTop + k.clientHeight >= k.scrollHeight - 4;
+        w.classList.toggle("sl-disabled", x), _.classList.toggle("sl-disabled", I);
       };
-      w.addEventListener("scroll", $, { passive: !0 }), $();
-    }), this.shadowRoot.querySelectorAll(".sl-code-expand-btn").forEach((p) => {
-      p.addEventListener("click", (w) => {
-        w.stopPropagation();
-        const y = p.closest(".sl-code-block-long");
-        if (!y) return;
-        const x = y.classList.contains("sl-collapsed"), $ = p.getAttribute("data-lines") || "", v = p.querySelector(".sl-expand-text"), A = this.currentLang === "pt";
-        x ? (y.classList.remove("sl-collapsed"), y.classList.add("sl-expanded"), v && (v.textContent = A ? "Minimizar código" : "Collapse code")) : (y.classList.remove("sl-expanded"), y.classList.add("sl-collapsed"), v && (v.textContent = A ? `Mostrar todas as ${$} linhas` : `Show all ${$} lines`), y.scrollIntoView({ behavior: "smooth", block: "nearest" }));
+      k.addEventListener("scroll", L, { passive: !0 }), L();
+    }), this.shadowRoot.querySelectorAll(".sl-code-expand-btn").forEach((g) => {
+      g.addEventListener("click", (k) => {
+        k.stopPropagation();
+        const w = g.closest(".sl-code-block-long");
+        if (!w) return;
+        const _ = w.classList.contains("sl-collapsed"), L = g.getAttribute("data-lines") || "", x = g.querySelector(".sl-expand-text"), I = this.currentLang === "pt";
+        _ ? (w.classList.remove("sl-collapsed"), w.classList.add("sl-expanded"), x && (x.textContent = I ? "Minimizar código" : "Collapse code")) : (w.classList.remove("sl-expanded"), w.classList.add("sl-collapsed"), x && (x.textContent = I ? `Mostrar todas as ${L} linhas` : `Show all ${L} lines`), w.scrollIntoView({ behavior: "smooth", block: "nearest" }));
       });
-    }), this.shadowRoot.querySelectorAll(".sl-page-btn[data-page]").forEach((p) => {
-      p.addEventListener("click", (w) => {
-        const x = w.currentTarget.getAttribute("data-page");
-        if (!x) return;
-        const $ = parseInt(x, 10);
-        $ !== this._currentPage && (this._currentPage = $, this.render(), this.scrollListToTop());
+    }), this.shadowRoot.querySelectorAll(".sl-page-btn[data-page]").forEach((g) => {
+      g.addEventListener("click", (k) => {
+        const _ = k.currentTarget.getAttribute("data-page");
+        if (!_) return;
+        const L = parseInt(_, 10);
+        L !== this._currentPage && (this._currentPage = L, this.render(), this.scrollListToTop());
       });
     });
     const s = this.shadowRoot.querySelector(".btn-prev-page");
@@ -6412,25 +6703,25 @@ ${i}
     });
     const d = this.shadowRoot.querySelector(".btn-next-page");
     d && d.addEventListener("click", () => {
-      const p = Math.ceil(this._comments.length / this._pageSize);
-      this._currentPage < p && (this._currentPage++, this.render(), this.scrollListToTop());
+      const g = Math.ceil(this._comments.length / this._pageSize);
+      this._currentPage < g && (this._currentPage++, this.render(), this.scrollListToTop());
     });
-    const n = this.shadowRoot.getElementById("sl-search-input");
-    n && (n.addEventListener("input", (p) => {
-      var x;
-      const w = p.target.value;
-      this._searchQuery = w, this._currentPage = 1, this.render();
-      const y = (x = this.shadowRoot) == null ? void 0 : x.getElementById("sl-search-input");
-      if (y) {
-        y.focus();
-        const $ = y.value.length;
-        y.setSelectionRange($, $);
+    const l = this.shadowRoot.getElementById("sl-search-input");
+    l && (l.addEventListener("input", (g) => {
+      var _;
+      const k = g.target.value;
+      this._searchQuery = k, this._currentPage = 1, this.render();
+      const w = (_ = this.shadowRoot) == null ? void 0 : _.getElementById("sl-search-input");
+      if (w) {
+        w.focus();
+        const L = w.value.length;
+        w.setSelectionRange(L, L);
       }
-    }), n.addEventListener("keydown", (p) => {
-      p.key === "Escape" && (this._searchQuery = "", this._currentPage = 1, this.render());
+    }), l.addEventListener("keydown", (g) => {
+      g.key === "Escape" && (this._searchQuery = "", this._currentPage = 1, this.render());
     }));
-    const g = this.shadowRoot.getElementById("sl-search-clear");
-    g && g.addEventListener("click", () => {
+    const b = this.shadowRoot.getElementById("sl-search-clear");
+    b && b.addEventListener("click", () => {
       this._searchQuery = "", this._currentPage = 1, this.render();
     });
     const T = this.shadowRoot.querySelector(".sl-search-banner-clear");
@@ -6455,7 +6746,7 @@ ${i}
     if (this._brokerClient && this._authToken)
       try {
         if (!this._discussionId && this._repositoryId && this._categoryId) {
-          const a = this._title.trim() || (typeof document < "u" ? document.title.replace(/\s*[-|·].*$/, "").trim() : "") || this.getCurrentTerm(), o = typeof window < "u" ? window.location.href : "", i = o ? `Discussão para o artigo: **[${a}](${o})**
+          const a = this._title.trim() || (typeof document < "u" ? document.title.replace(/\s*[-|·].*$/, "").trim() : "") || this.getCurrentTerm(), r = typeof window < "u" ? window.location.href : "", i = r ? `Discussão para o artigo: **[${a}](${r})**
 
 _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-rez/scatterleaf)._` : void 0, s = await this._brokerClient.createDiscussion(
             this._repositoryId,
@@ -6471,7 +6762,7 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
             e,
             void 0,
             this._repo
-          ), o = {
+          ), r = {
             id: a.id,
             author: {
               login: a.author.login,
@@ -6486,8 +6777,8 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
             reactions: [],
             replies: []
           };
-          this._comments.unshift(o), this._currentPage = 1, this._composerText = "", this._activeTab = "write", this.render(), setTimeout(() => {
-            const i = this._comments.findIndex((s) => s.id === o.id);
+          this._comments.unshift(r), this._currentPage = 1, this._composerText = "", this._activeTab = "write", this.render(), setTimeout(() => {
+            const i = this._comments.findIndex((s) => s.id === r.id);
             if (i !== -1) {
               const [s] = this._comments.splice(i, 1);
               this._comments.push(s), this.render();
@@ -6505,7 +6796,7 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
         );
         return;
       }
-    const r = {
+    const o = {
       id: String(Date.now()),
       author: {
         login: t.login,
@@ -6519,29 +6810,29 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
       reactions: [],
       replies: []
     };
-    this._comments.unshift(r), this._currentPage = 1, this._composerText = "", this._activeTab = "write", this.render(), setTimeout(() => {
-      const a = this._comments.findIndex((o) => o.id === r.id);
+    this._comments.unshift(o), this._currentPage = 1, this._composerText = "", this._activeTab = "write", this.render(), setTimeout(() => {
+      const a = this._comments.findIndex((r) => r.id === o.id);
       if (a !== -1) {
-        const [o] = this._comments.splice(a, 1);
-        this._comments.push(o), this.render();
+        const [r] = this._comments.splice(a, 1);
+        this._comments.push(r), this.render();
       }
     }, 5e3), this.dispatchEvent(
       new CustomEvent("comment-added", {
-        detail: r,
+        detail: o,
         bubbles: !0,
         composed: !0
       })
     );
   }
   async handlePostReply(e, t) {
-    const r = this._currentUser || {
+    const o = this._currentUser || {
       login: "demo-reader",
       avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4",
       url: "https://github.com"
     };
     if (this._brokerClient && this._authToken && this._discussionId)
       try {
-        const o = await this._brokerClient.addComment(
+        const r = await this._brokerClient.addComment(
           this._discussionId,
           t,
           e,
@@ -6549,15 +6840,15 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
         ), i = this._comments.find((s) => s.id === e);
         if (i) {
           i.replies || (i.replies = []), i.replies.push({
-            id: o.id,
+            id: r.id,
             author: {
-              login: o.author.login,
-              avatarUrl: o.author.avatarUrl,
-              url: o.author.url,
+              login: r.author.login,
+              avatarUrl: r.author.avatarUrl,
+              url: r.author.url,
               isAuthor: !1
             },
-            body: o.body,
-            bodyHtml: o.bodyHTML,
+            body: r.body,
+            bodyHtml: r.bodyHTML,
             createdAt: this.currentLang === "pt" ? "agora mesmo" : "just now",
             originalLang: this.detectTextLanguage(t),
             reactions: [],
@@ -6565,25 +6856,25 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
           }), this._expandedThreads.add(e), this._replyingToId = null, this._replyText = "", this.render();
           return;
         }
-      } catch (o) {
-        if (console.error("Falha ao enviar réplica via broker:", o), this.isAuthError(o)) {
+      } catch (r) {
+        if (console.error("Falha ao enviar réplica via broker:", r), this.isAuthError(r)) {
           this.handleExpiredSession(!1);
           return;
         }
         alert(
-          (o == null ? void 0 : o.message) || (this._lang === "pt" ? "Erro ao enviar réplica." : "Failed to post reply.")
+          (r == null ? void 0 : r.message) || (this._lang === "pt" ? "Erro ao enviar réplica." : "Failed to post reply.")
         );
         return;
       }
-    const a = this._comments.find((o) => o.id === e);
+    const a = this._comments.find((r) => r.id === e);
     if (a) {
       a.replies || (a.replies = []);
-      const o = {
+      const r = {
         id: `${e}-${Date.now()}`,
         author: {
-          login: r.login,
-          avatarUrl: r.avatarUrl,
-          url: r.url || `https://github.com/${r.login}`,
+          login: o.login,
+          avatarUrl: o.avatarUrl,
+          url: o.url || `https://github.com/${o.login}`,
           isAuthor: !1
         },
         body: t,
@@ -6592,9 +6883,9 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
         reactions: [],
         parentId: e
       };
-      a.replies.push(o), this._expandedThreads.add(e), this._replyingToId = null, this._replyText = "", this.render(), this.dispatchEvent(
+      a.replies.push(r), this._expandedThreads.add(e), this._replyingToId = null, this._replyText = "", this.render(), this.dispatchEvent(
         new CustomEvent("reply-added", {
-          detail: o,
+          detail: r,
           bubbles: !0,
           composed: !0
         })
@@ -6602,32 +6893,32 @@ _Comentários gerenciados nativamente pelo [ScatterLeaf](https://github.com/rnt-
     }
   }
   async handleSaveEdit(e, t) {
-    let r = null;
+    let o = null;
     if (this._brokerClient && this._authToken)
       try {
-        r = await this._brokerClient.updateComment(e, t, this._repo);
-      } catch (o) {
-        if (console.error("Falha ao editar comentário via broker:", o), this.isAuthError(o)) {
+        o = await this._brokerClient.updateComment(e, t, this._repo);
+      } catch (r) {
+        if (console.error("Falha ao editar comentário via broker:", r), this.isAuthError(r)) {
           this.handleExpiredSession(!1);
           return;
         }
         alert(
-          (o == null ? void 0 : o.message) || (this._lang === "pt" ? "Não foi possível salvar a edição no GitHub. Verifique sua conexão ou permissões." : "Failed to save edit on GitHub. Please check your connection or permissions.")
+          (r == null ? void 0 : r.message) || (this._lang === "pt" ? "Não foi possível salvar a edição no GitHub. Verifique sua conexão ou permissões." : "Failed to save edit on GitHub. Please check your connection or permissions.")
         );
         return;
       }
-    const a = (o) => {
-      const i = !!(o.isPinned || o.body.includes("<!-- sl:pinned -->") || o.body.includes("<!-- pinned -->")), s = t.replace(/<!--\s*sl:pinned\s*-->\r?\n?/g, "").replace(/<!--\s*pinned\s*-->\r?\n?/g, "");
-      o.body = i ? `<!-- sl:pinned -->
-${s}` : s, o.isEdited = !0, o.bodyHtml = (r == null ? void 0 : r.bodyHTML) || void 0, o.translatedBody = void 0, o.isShowingTranslation = !1;
+    const a = (r) => {
+      const i = !!(r.isPinned || r.body.includes("<!-- sl:pinned -->") || r.body.includes("<!-- pinned -->")), s = t.replace(/<!--\s*sl:pinned\s*-->\r?\n?/g, "").replace(/<!--\s*pinned\s*-->\r?\n?/g, "");
+      r.body = i ? `<!-- sl:pinned -->
+${s}` : s, r.isEdited = !0, r.bodyHtml = (o == null ? void 0 : o.bodyHTML) || void 0, r.translatedBody = void 0, r.isShowingTranslation = !1;
     };
-    for (const o of this._comments) {
-      if (o.id === e) {
-        a(o);
+    for (const r of this._comments) {
+      if (r.id === e) {
+        a(r);
         break;
       }
-      if (o.replies) {
-        const i = o.replies.find((s) => s.id === e);
+      if (r.replies) {
+        const i = r.replies.find((s) => s.id === e);
         if (i) {
           a(i);
           break;
@@ -6646,13 +6937,13 @@ ${s}` : s, o.isEdited = !0, o.bodyHtml = (r == null ? void 0 : r.bodyHTML) || vo
           return;
         }
       }
-    this._comments = this._comments.filter((t) => t.id === e ? !1 : (t.replies && (t.replies = t.replies.filter((r) => r.id !== e)), !0)), this._openMenuId = null, this.render();
+    this._comments = this._comments.filter((t) => t.id === e ? !1 : (t.replies && (t.replies = t.replies.filter((o) => o.id !== e)), !0)), this._openMenuId = null, this.render();
   }
   async handleTogglePin(e) {
     const t = this._comments.find((s) => s.id === e);
     if (!t) return;
-    const a = !(!t.parentId && !!(t.isPinned || t.body.includes("<!-- sl:pinned -->") || t.body.includes("<!-- pinned -->"))), o = t.body.replace(/<!--\s*sl:pinned\s*-->\r?\n?/g, "").replace(/<!--\s*pinned\s*-->\r?\n?/g, ""), i = a ? `<!-- sl:pinned -->
-${o}` : o;
+    const a = !(!t.parentId && !!(t.isPinned || t.body.includes("<!-- sl:pinned -->") || t.body.includes("<!-- pinned -->"))), r = t.body.replace(/<!--\s*sl:pinned\s*-->\r?\n?/g, "").replace(/<!--\s*pinned\s*-->\r?\n?/g, ""), i = a ? `<!-- sl:pinned -->
+${r}` : r;
     if (t.isPinned = a, t.body = i, this._openMenuId = null, this.render(), this._brokerClient && this._authToken)
       try {
         const s = await this._brokerClient.updateComment(e, i);
@@ -6665,24 +6956,24 @@ ${o}` : o;
       }
   }
   async handleToggleReaction(e, t) {
-    let r;
+    let o;
     for (const s of this._comments) {
       if (s.id === e) {
-        r = s;
+        o = s;
         break;
       }
       if (s.replies) {
-        const d = s.replies.find((n) => n.id === e);
+        const d = s.replies.find((l) => l.id === e);
         if (d) {
-          r = d;
+          o = d;
           break;
         }
       }
     }
-    if (!r) return;
-    r.reactions || (r.reactions = []);
-    const a = r.reactions.find((s) => s.content === t), i = !!(a != null && a.viewerHasReacted) ? "remove" : "add";
-    if (i === "remove" ? a && (a.count = Math.max(0, a.count - 1), a.viewerHasReacted = !1, a.count === 0 && (r.reactions = r.reactions.filter((s) => s.content !== t))) : a ? (a.count += 1, a.viewerHasReacted = !0) : r.reactions.push({
+    if (!o) return;
+    o.reactions || (o.reactions = []);
+    const a = o.reactions.find((s) => s.content === t), i = !!(a != null && a.viewerHasReacted) ? "remove" : "add";
+    if (i === "remove" ? a && (a.count = Math.max(0, a.count - 1), a.viewerHasReacted = !1, a.count === 0 && (o.reactions = o.reactions.filter((s) => s.content !== t))) : a ? (a.count += 1, a.viewerHasReacted = !0) : o.reactions.push({
       content: t,
       count: 1,
       viewerHasReacted: !0
@@ -6691,11 +6982,11 @@ ${o}` : o;
         await this._brokerClient.toggleReaction(e, t, i);
       } catch (s) {
         if (console.error(`Falha ao processar reação (${i}) via broker:`, s), i === "add") {
-          const d = r.reactions.find((n) => n.content === t);
-          d && (d.count = Math.max(0, d.count - 1), d.viewerHasReacted = !1, d.count === 0 && (r.reactions = r.reactions.filter((n) => n.content !== t)));
+          const d = o.reactions.find((l) => l.content === t);
+          d && (d.count = Math.max(0, d.count - 1), d.viewerHasReacted = !1, d.count === 0 && (o.reactions = o.reactions.filter((l) => l.content !== t)));
         } else {
-          const d = r.reactions.find((n) => n.content === t);
-          d ? (d.count += 1, d.viewerHasReacted = !0) : r.reactions.push({ content: t, count: 1, viewerHasReacted: !0 });
+          const d = o.reactions.find((l) => l.content === t);
+          d ? (d.count += 1, d.viewerHasReacted = !0) : o.reactions.push({ content: t, count: 1, viewerHasReacted: !0 });
         }
         if (this.isAuthError(s)) {
           this.handleExpiredSession(!1);

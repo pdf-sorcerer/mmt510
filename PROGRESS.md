@@ -51,6 +51,11 @@
   - Barra de URL canônica com botão `[ 🔗 Copy URL ]` e transição de feedback visual instantâneo para `[ ✓ Copied! ]` em verde esmeralda (`#10b981`).
   - Fileira de 6 botões de compartilhamento social calibrados no design system do Minrock (quadrados com `border-radius: 6px`, sem circularidade excessiva): LinkedIn, X, WhatsApp, Telegram (posicionado cirurgicamente entre WhatsApp e Facebook), Facebook e Email.
   - Acessibilidade aprimorada (`role="dialog"`, `aria-modal="true"`, foco automático no input, fechamento via ESC ou clique no backdrop e resiliência a View Transitions com `astro:after-swap`).
+- [x] Homologação ScatterLeaf v0.5.9 — Mini-Lightbox Nativo com Zoom & Pan (24/09/2026):
+  - Propagação do bundle compilado `public/scatterleaf.js` v0.5.9 no Minrock.
+  - Eliminação de saltos externos para abas do `camo.githubusercontent.com` em imagens postadas nos comentários.
+  - Lightbox 100% nativo no Shadow DOM com zoom progressivo (0.5x a 4.0x), navegação livre arrastável (pan com mouse e touch), duplo-clique, roda do mouse e fechamento intuitivo (ESC, clique no backdrop ou botão X).
+  - Validação completa no `npm run qa` do Minrock (0 erros, 55 rotas estáticas compiladas com sucesso em 1.01s).
 
 ### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
