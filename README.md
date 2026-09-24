@@ -79,8 +79,8 @@ minrock/
 
 ## 🛠️ Configuration & Content
 
-### 1. Site Metadata (`src/config/site.ts`)
-Easily customize your blog settings in a single configuration file:
+### 1. Site Metadata & Feature Flags (`src/config/site.ts`)
+Easily customize your blog settings and toggle components in a single configuration file:
 
 ```typescript
 export const siteConfig = {
@@ -89,6 +89,20 @@ export const siteConfig = {
   author: 'Renato Rezende',
   siteUrl: 'https://minrock.vercel.app', // Or via env: SITE_URL=https://yourdomain.com
   defaultTheme: 'cream', // Default theme: 'white' | 'cream' | 'slate' | 'midnight'
+  // Granular Feature Flags — "Rich by default, minimalist on demand"
+  // Toggle any flag to false to completely eliminate markup, styles, and scripts during SSG build.
+  features: {
+    search: true,          // Lunr full-text search modal & shortcuts (Ctrl/Cmd+K)
+    tableOfContents: true, // Sticky sidebar TOC in posts (auto-centers to 780px when disabled)
+    readingTime: true,     // "X min read" badge in post headers
+    audioPlayer: true,     // Accessible text-to-speech audio reader in posts and projects
+    tags: true,            // Tag badges in headers, article cards, and tag clouds
+    socialShare: true,     // Notion-style share modal and trigger bar in blog posts
+    themeSwitcher: true,   // Palette dropdown switcher in header
+    backToTop: true,       // Floating smooth-scroll back-to-top button
+    imageZoom: true,       // Medium-style smooth image zoom modal
+    comments: true         // Interactive blog comments powered by ScatterLeaf
+  },
   comments: {
     enabled: true,
     provider: 'scatterleaf',
@@ -97,10 +111,21 @@ export const siteConfig = {
     theme: 'auto',        // Chameleon mode: dynamic contrast detection
     lang: 'auto',
     clientId: 'Iv23liZHApvnx6e6wtMJ',
-    broker: ''           // Leave empty ('') for zero-setup mode, or provide your Cloudflare Worker URL
+    broker: '',           // Leave empty ('') for zero-setup mode, or provide your Cloudflare Worker URL
+    features: {
+      images: true        // Toggle image insertion modal in comment composer
+    }
   }
 };
 ```
+
+### 2. Granular Feature Flags ("Rich by Default, Minimalist on Demand")
+
+Minrock is built to impress out of the box with rich, modern features, while giving purist technical writers the freedom to strip down the experience to an ultra-minimalist, Obsidian-like reading environment.
+
+Because flags are evaluated at Astro build time (**Pure SSG**), turning any feature to `false` guarantees **zero bundle overhead**: no HTML markup, CSS rules, or client-side JavaScript for that component will be included in the final static output.
+
+* **Adaptive TOC Layout:** When `tableOfContents` is set to `false`, the article grid automatically adapts from a split sidebar layout to a centered, single-column reading column (`max-width: 780px; margin: 0 auto;`).
 
 ### 2. Publishing from Obsidian
 Drop your Obsidian Markdown notes directly into `src/content/blog/` using the frontmatter format:
