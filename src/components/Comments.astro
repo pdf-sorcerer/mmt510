@@ -49,10 +49,12 @@ const isEnabled = Boolean(comments?.enabled);
             hide-code-scroll={comments.features?.codeScroll === false ? '' : undefined}
             hide-preview={comments.features?.preview === false ? '' : undefined}
             hide-search={comments.features?.search === false ? '' : undefined}
+            enable-images={comments.features?.images ? '' : undefined}
+            enable-moderation=""
           ></scatter-leaf>
         </div>
 
-        <script is:inline type="module" src="/scatterleaf.js?v=0.5.2"></script>
+        <script is:inline type="module" src="/scatterleaf.js?v=0.5.4"></script>
       </div>
     )}
 

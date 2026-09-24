@@ -34,6 +34,8 @@
 - [x] Exclusão integral da pasta `.git` local para subida do repositório do zero limpo e desvinculado.
 - [x] Conexão OSINT-Proof do Broker via Variável de Ambiente: Leitura dinâmica de `PUBLIC_SCATTERLEAF_BROKER` no `src/config/site.ts`, permitindo deploy em produção na Vercel com comentários ao vivo sem expor subdomínios pessoais no GitHub.
 - [x] Resolução de Título & Persistência de Discussões: Passagem explícita de `term={title}` em `Comments.astro` e atualização do bundle, garantindo que discussões reais no GitHub persistam e recarreguem perfeitamente no F5 e entre navegadores.
+- [x] Homologação ScatterLeaf v0.5.3: Atualização do bundle compilado para v0.5.3 com ativação de teste da flag `enable-moderation` e cache buster `v=0.5.3` para validação da barra de moderação e ações de moderação KV.
+- [x] Homologação ScatterLeaf v0.5.4 & Suporte a Imagens URL (24/09/2026): Propagação do bundle compilado v0.5.4 (`public/scatterleaf.js`), adição de `images?: boolean` em `comments.features` no `src/config/site.ts`, passagem de `enable-images` no `Comments.astro` e cache buster `v=0.5.4`.
 
 ### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.

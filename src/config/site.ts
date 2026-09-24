@@ -32,6 +32,7 @@ export interface SiteConfig {
       codeScroll?: boolean;
       preview?: boolean;
       search?: boolean;
+      images?: boolean;
     };
   };
 }
