@@ -41,7 +41,7 @@
 - [x] Sincronização ScatterLeaf v0.5.5 — Toolbar Despoluída & Botão Primário Reforçado (24/09/2026):
   - Atualização do bundle `public/scatterleaf.js` com a barra do composer minimalista (mantendo unicamente o seletor `[ 😀 ]`, com as ações de GIF e Imagem encapsuladas no menu de emojis).
   - Botão de envio primário (`.sl-btn-primary` / `[ 🍃 Post note ]`) recalibrado em Azul Royal profundo (`#1f6feb` / hover `#388bfd`) com sutil sombra projetada no logo `🍃`, garantindo alta legibilidade e contraste WCAG AA no dark mode.
-- [x] Modal Rico de Compartilhamento Estilo Notion (24/09/2026):
+- [x] Modal Completo de Compartilhamento Estilo Notion (24/09/2026):
   - Substituição do botão estático 'Copy link' no `ShareBar.astro` pelo modal interativo acionado por `[ ⎋ Share ]`.
   - Mini Preview Card estilo Notion contendo brand badge (`🪨 Minrock`), título do artigo e resumo da postagem.
   - Barra de URL canônica com botão `[ 🔗 Copy URL ]` e transição de feedback visual instantâneo para `[ ✓ Copied! ]` em verde esmeralda (`#10b981`).
@@ -52,9 +52,9 @@
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
 - [ ] Submissão ao diretório oficial `astro.build/themes`.
 
-### 🟢 Etapa 4: Sistema de Feature Flags ("Rico por padrão, minimalista sob demanda") (Concluída — 24/09/2026)
+### 🟢 Etapa 4: Sistema de Feature Flags ("Completo por padrão, minimalista sob demanda") (Concluída — 24/09/2026)
 - [x] Criar interface `SiteFeatures` e objeto `features` no `siteConfig` (`src/config/site.ts`) para controle granular de componentes.
-- [x] Habilitar todos os 10 recursos por padrão (Experiência Rica / Efeito UAU imediato).
+- [x] Habilitar todos os 10 recursos por padrão (Experiência Completa / Efeito UAU imediato).
 - [x] Permitir desativação seletiva para puristas do minimalismo (Obsidian style) com zero overhead de bundle no SSG:
   - [x] `search`: Modal e atalhos de busca Lunr (desktop e mobile no `Header.astro` e `SearchModal.astro`).
   - [x] `tableOfContents`: Sumário lateral com scroll-spy e layout adaptativo no blog post (quando desativado, o grid expande para coluna única centrada de 780px via `.no-sidebar`).

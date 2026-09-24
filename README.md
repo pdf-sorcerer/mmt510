@@ -89,7 +89,7 @@ export const siteConfig = {
   author: 'Renato Rezende',
   siteUrl: 'https://minrock.vercel.app', // Or via env: SITE_URL=https://yourdomain.com
   defaultTheme: 'cream', // Default theme: 'white' | 'cream' | 'slate' | 'midnight'
-  // Granular Feature Flags — "Rich by default, minimalist on demand"
+  // Granular Feature Flags — "Complete by default, minimalist on demand"
   // Toggle any flag to false to completely eliminate markup, styles, and scripts during SSG build.
   features: {
     search: true,          // Lunr full-text search modal & shortcuts (Ctrl/Cmd+K)
@@ -119,9 +119,9 @@ export const siteConfig = {
 };
 ```
 
-### 2. Granular Feature Flags ("Rich by Default, Minimalist on Demand")
+### 2. Granular Feature Flags ("Complete by Default, Minimalist on Demand")
 
-Minrock is built to impress out of the box with rich, modern features, while giving purist technical writers the freedom to strip down the experience to an ultra-minimalist, Obsidian-like reading environment.
+Minrock is built to impress out of the box with a complete suite of modern features, while giving purist technical writers the freedom to strip down the experience to an ultra-minimalist, Obsidian-like reading environment.
 
 Because flags are evaluated at Astro build time (**Pure SSG**), turning any feature to `false` guarantees **zero bundle overhead**: no HTML markup, CSS rules, or client-side JavaScript for that component will be included in the final static output.
 

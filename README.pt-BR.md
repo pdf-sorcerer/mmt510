@@ -89,7 +89,7 @@ export const siteConfig = {
   author: 'Renato Rezende',
   siteUrl: 'https://minrock.vercel.app', // Ou via env: SITE_URL=https://seusite.com
   defaultTheme: 'cream', // Tema padrão inicial: 'white' | 'cream' | 'slate' | 'midnight'
-  // Feature Flags Granulares — "Rico por padrão, minimalista sob demanda"
+  // Feature Flags Granulares — "Completo por padrão, minimalista sob demanda"
   // Defina qualquer flag como false para eliminar 100% de markup, CSS e JS durante o build SSG.
   features: {
     search: true,          // Modal de busca Lunr em tempo real & atalhos (Ctrl/Cmd+K)
@@ -97,7 +97,7 @@ export const siteConfig = {
     readingTime: true,     // Badge "X min read" nos metadados do artigo
     audioPlayer: true,     // Voice reader TTS de áudio acessível em posts e projetos
     tags: true,            // Chips de tags nos cards, artigos e nuvem de tópicos
-    socialShare: true,     // Barra e modal rico de compartilhamento social estilo Notion
+    socialShare: true,     // Barra e modal completo de compartilhamento social estilo Notion
     themeSwitcher: true,   // Alternador de paletas no cabeçalho
     backToTop: true,       // Botão flutuante de rolagem para o topo
     imageZoom: true,       // Zoom suave de imagens estilo Medium / PhotoSwipe
@@ -119,7 +119,7 @@ export const siteConfig = {
 };
 ```
 
-### 2. Feature Flags Granulares ("Rico por padrão, minimalista sob demanda")
+### 2. Feature Flags Granulares ("Completo por padrão, minimalista sob demanda")
 
 O Minrock vem pronto para impressionar desde o primeiro instante com uma experiência completa e moderna, garantindo ao mesmo tempo liberdade absoluta para puristas do minimalismo (estilo Obsidian ou texto puro).
 

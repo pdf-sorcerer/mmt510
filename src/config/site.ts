@@ -1,5 +1,5 @@
 /**
- * Granular Feature Flags ("Rich by default, minimalist on demand")
+ * Granular Feature Flags ("Complete by default, minimalist on demand")
  *
  * All flags default to `true` when omitted.
  * Minimalist or purist technical writers can set any flag to `false`
@@ -78,7 +78,7 @@ export const siteConfig: SiteConfig = {
   // Can be overridden via environment variable (e.g. Vercel: SITE_URL=https://yourdomain.com)
   siteUrl: (typeof process !== 'undefined' && process.env?.SITE_URL) || (import.meta as any).env?.SITE_URL || 'https://minrock.vercel.app',
   defaultTheme: 'cream',
-  // Granular Feature Flags — "Rich by default, minimalist on demand"
+  // Granular Feature Flags — "Complete by default, minimalist on demand"
   // Toggle any feature to false to completely omit markup & scripts in static build
   features: {
     search: true,
