@@ -38,6 +38,9 @@
   - Propagação do bundle compilado v0.5.4 (`public/scatterleaf.js`), adição de `images?: boolean` em `comments.features` no `src/config/site.ts`, passagem de `enable-images` no `Comments.astro` e cache buster `v=0.5.4`.
   - Suporte completo aos novos modais dedicados de GIF e Imagem via HTTPS, botão "Salvar na coleção", confirmação inline ao limpar histórico e atalhos diretos na toolbar do composer.
   - Correção cirúrgica de isolamento de atalhos globais de teclado no `SearchModal.astro` inspecionando `e.composedPath()` para prevenir abertura acidental da busca ao digitar `/` em inputs do Shadow DOM do ScatterLeaf.
+- [x] Sincronização ScatterLeaf v0.5.5 — Toolbar Despoluída & Botão Primário Reforçado (24/09/2026):
+  - Atualização do bundle `public/scatterleaf.js` com a barra do composer minimalista (mantendo unicamente o seletor `[ 😀 ]`, com as ações de GIF e Imagem encapsuladas no menu de emojis).
+  - Botão de envio primário (`.sl-btn-primary` / `[ 🍃 Post note ]`) recalibrado em Azul Royal profundo (`#1f6feb` / hover `#388bfd`) com sutil sombra projetada no logo `🍃`, garantindo alta legibilidade e contraste WCAG AA no dark mode.
 
 ### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
