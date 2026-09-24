@@ -41,6 +41,10 @@
 - [x] Sincronização ScatterLeaf v0.5.5 — Toolbar Despoluída & Botão Primário Reforçado (24/09/2026):
   - Atualização do bundle `public/scatterleaf.js` com a barra do composer minimalista (mantendo unicamente o seletor `[ 😀 ]`, com as ações de GIF e Imagem encapsuladas no menu de emojis).
   - Botão de envio primário (`.sl-btn-primary` / `[ 🍃 Post note ]`) recalibrado em Azul Royal profundo (`#1f6feb` / hover `#388bfd`) com sutil sombra projetada no logo `🍃`, garantindo alta legibilidade e contraste WCAG AA no dark mode.
+- [x] Sincronização ScatterLeaf v0.5.8 — Painel de Moderação Recolhível & Bordas Suaves 6px (24/09/2026):
+  - Propagação do bundle compilado `public/scatterleaf.js` v0.5.8 no Minrock.
+  - Painel de moderação de autor KV retrátil com subcards compactos, botões com cantos suavizados (`border-radius: 6px`) alinhados ao visual dos botões do Minrock, e cabeçalho recolhível com chevron animado `▼`/`▲` (espelhando a ergonomia do `AudioPlayer.astro`) com persistência em `localStorage`.
+  - Homologação visual e funcional do cardápio preventivo de ergonomia (onboarding de gaveta vazia, auto-fechamento inteligente ao desbanir e confirmação defensiva prévia no menu de moderação).
 - [x] Modal Completo de Compartilhamento Estilo Notion (24/09/2026):
   - Substituição do botão estático 'Copy link' no `ShareBar.astro` pelo modal interativo acionado por `[ ⎋ Share ]`.
   - Mini Preview Card estilo Notion contendo brand badge (`🪨 Minrock`), título do artigo e resumo da postagem.
