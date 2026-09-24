@@ -52,19 +52,21 @@
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
 - [ ] Submissão ao diretório oficial `astro.build/themes`.
 
-### ⚪ Etapa 4: Sistema de Feature Flags ("Rico por padrão, minimalista sob demanda")
-- [ ] Criar objeto `features` no `siteConfig` (`src/config/site.ts`) para controle granular de componentes.
-- [ ] Habilitar todos os recursos por padrão (Experiência Rica / Efeito UAU imediato).
-- [ ] Permitir desativação seletiva para puristas do minimalismo (Obsidian style):
-  - [ ] `search`: Modal e barra de busca Lunr.
-  - [ ] `tableOfContents`: Sumário lateral com scroll-spy no post.
-  - [ ] `readingTime`: Tempo estimado de leitura ("5 min read").
-  - [ ] `themeSwitcher`: Alternador de paletas (Cream, Midnight, Slate, White).
-  - [ ] `tags`: Exibição de chips e nuvem de tags.
-  - [ ] `authorBio`: Card de biografia e avatar do autor no rodapé.
-  - [ ] `socialShare`: Botões de compartilhamento social.
-  - [ ] `comments`: Integração nativa com ScatterLeaf.
-- [ ] Garantir zero overhead de bundle no SSG (componentes desativados não são compilados no HTML final).
+### 🟢 Etapa 4: Sistema de Feature Flags ("Rico por padrão, minimalista sob demanda") (Concluída — 24/09/2026)
+- [x] Criar interface `SiteFeatures` e objeto `features` no `siteConfig` (`src/config/site.ts`) para controle granular de componentes.
+- [x] Habilitar todos os 10 recursos por padrão (Experiência Rica / Efeito UAU imediato).
+- [x] Permitir desativação seletiva para puristas do minimalismo (Obsidian style) com zero overhead de bundle no SSG:
+  - [x] `search`: Modal e atalhos de busca Lunr (desktop e mobile no `Header.astro` e `SearchModal.astro`).
+  - [x] `tableOfContents`: Sumário lateral com scroll-spy e layout adaptativo no blog post (quando desativado, o grid expande para coluna única centrada de 780px via `.no-sidebar`).
+  - [x] `readingTime`: Badge de tempo estimado de leitura ("X min read") no meta do artigo.
+  - [x] `audioPlayer`: Voice reader TTS acessível (`AudioPlayer.astro`) em posts e projetos.
+  - [x] `tags`: Exibição de chips e nuvem de tópicos em artigos (`ArticleCard.astro`), índice do blog e home.
+  - [x] `socialShare`: Barra e modal estilo Notion de compartilhamento social (`ShareBar.astro`).
+  - [x] `themeSwitcher`: Alternador de paletas (`ThemeToggle.astro`) no header.
+  - [x] `backToTop`: Botão flutuante de retorno ao topo (`BackToTop.astro`).
+  - [x] `imageZoom`: Visualizador Medium-style / PhotoSwipe com zoom em imagens (`ImageZoom.astro`).
+  - [x] `comments`: Discussões nativas sem iframe via ScatterLeaf (`Comments.astro`).
+- [x] Garantir zero overhead de bundle no SSG: componentes desativados não são compilados no HTML final pelo Astro.
 
 ---
 

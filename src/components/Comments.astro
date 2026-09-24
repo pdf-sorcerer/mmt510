@@ -8,8 +8,8 @@ interface Props {
 const { title } = Astro.props;
 const comments = siteConfig.comments;
 
-// Se os comentários estiverem globalmente desativados no siteConfig, nada é renderizado
-const isEnabled = Boolean(comments?.enabled);
+// Se os comentários estiverem desativados no siteConfig ou nas feature flags, nada é renderizado
+const isEnabled = siteConfig.features?.comments !== false && Boolean(comments?.enabled);
 ---
 
 {isEnabled && comments && (

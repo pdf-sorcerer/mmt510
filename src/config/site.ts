@@ -1,3 +1,33 @@
+/**
+ * Granular Feature Flags ("Rich by default, minimalist on demand")
+ *
+ * All flags default to `true` when omitted.
+ * Minimalist or purist technical writers can set any flag to `false`
+ * to completely eliminate markup, styles, and scripts during SSG build.
+ */
+export interface SiteFeatures {
+  /** Full-text search modal + Ctrl/Cmd+K shortcuts + header triggers */
+  search?: boolean;
+  /** Sticky sidebar table of contents in blog posts */
+  tableOfContents?: boolean;
+  /** "X min read" badge in post headers */
+  readingTime?: boolean;
+  /** Accessible text-to-speech audio reader in blog posts and project details */
+  audioPlayer?: boolean;
+  /** Tag badges in post headers, article cards, and tag clouds */
+  tags?: boolean;
+  /** Notion-style share modal and trigger bar in blog posts */
+  socialShare?: boolean;
+  /** Theme toggle dropdown (White, Cream, Slate, Midnight) */
+  themeSwitcher?: boolean;
+  /** Floating smooth-scroll back-to-top button */
+  backToTop?: boolean;
+  /** Medium-style smooth image zoom modal on click */
+  imageZoom?: boolean;
+  /** Interactive blog comments powered by ScatterLeaf */
+  comments?: boolean;
+}
+
 export interface SiteConfig {
   title: string;
   tagline: string;
@@ -5,6 +35,7 @@ export interface SiteConfig {
   author: string;
   siteUrl: string;
   defaultTheme: 'white' | 'cream' | 'slate' | 'midnight';
+  features?: SiteFeatures;
   socialLinks: {
     github?: string;
     twitter?: string;
@@ -47,6 +78,20 @@ export const siteConfig: SiteConfig = {
   // Can be overridden via environment variable (e.g. Vercel: SITE_URL=https://yourdomain.com)
   siteUrl: (typeof process !== 'undefined' && process.env?.SITE_URL) || (import.meta as any).env?.SITE_URL || 'https://minrock.vercel.app',
   defaultTheme: 'cream',
+  // Granular Feature Flags — "Rich by default, minimalist on demand"
+  // Toggle any feature to false to completely omit markup & scripts in static build
+  features: {
+    search: true,
+    tableOfContents: true,
+    readingTime: true,
+    audioPlayer: true,
+    tags: true,
+    socialShare: true,
+    themeSwitcher: true,
+    backToTop: true,
+    imageZoom: true,
+    comments: true
+  },
   socialLinks: {
     github: 'https://github.com/rnt-rez/minrock',
     linkedin: 'https://example.com/',

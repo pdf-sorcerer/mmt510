@@ -72,7 +72,9 @@ const currentUrl = new URL(Astro.url.pathname, siteConfig.siteUrl).href;
     </header>
 
     <!-- 🔊 Accessible Audio Player (Text-to-Speech) -->
-    <AudioPlayer selector=".post-content" title={project.data.title} label="Listen to Project" />
+    {siteConfig.features?.audioPlayer !== false && (
+      <AudioPlayer selector=".post-content" title={project.data.title} label="Listen to Project" />
+    )}
 
     <div class="post-content">
       <Content />

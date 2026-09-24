@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { siteConfig } from '../config/site';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -11,12 +12,13 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   month: 'short',
   day: 'numeric'
 });
+const showTags = siteConfig.features?.tags !== false;
 ---
 
 <article class="article-card">
   <div class="card-meta">
     <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
-    {post.data.tags && post.data.tags.length > 0 && (
+    {showTags && post.data.tags && post.data.tags.length > 0 && (
       <span class="tags">
         {post.data.tags.map((tag) => (
           <a href={`/tags/${tag}`} class="tag">

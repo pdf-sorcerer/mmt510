@@ -83,7 +83,7 @@ const topTags = [...tagsMap.entries()]
   )}
 
   <!-- Explore by Topics / Tags Cloud -->
-  {topTags.length > 0 && (
+  {siteConfig.features?.tags !== false && topTags.length > 0 && (
     <section class="home-tags-section">
       <div class="section-header">
         <h2 class="section-title">Explore by Topics</h2>
