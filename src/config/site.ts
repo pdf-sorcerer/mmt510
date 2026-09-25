@@ -112,14 +112,9 @@ export const siteConfig: SiteConfig = {
     theme: 'auto',
     lang: 'auto',
     clientId: 'Iv23liZHApvnx6e6wtMJ',
-    // Leave broker empty ('') to use ScatterLeaf's instant zero-setup fallback mode,
-    // or provide your own Cloudflare Edge Broker Worker URL via PUBLIC_SCATTERLEAF_BROKER.
-    broker:
-      (typeof process !== 'undefined' &&
-        (process.env?.PUBLIC_SCATTERLEAF_BROKER || process.env?.SCATTERLEAF_BROKER)) ||
-      (import.meta as any).env?.PUBLIC_SCATTERLEAF_BROKER ||
-      (import.meta as any).env?.SCATTERLEAF_BROKER ||
-      '',
+    // Default to empty string ('') for Astro Themes showcase (enables built-in mock demo comments).
+    // Users can connect their own Cloudflare Edge Broker Worker URL via PUBLIC_SCATTERLEAF_BROKER.
+    broker: '',
     features: {
       images: true
     }

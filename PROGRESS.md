@@ -59,6 +59,7 @@
 
 ### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
+- [x] Modo Demonstração Zero-Setup para Comentários (ScatterLeaf Mock): `broker: ''` configurado no `siteConfig`, permitindo navegação rica com 3 comentários de exemplo sem necessidade de criar repositório ou broker externo para quem testa o tema.
 - [ ] Submissão ao diretório oficial `astro.build/themes`.
 
 ### 🟢 Etapa 4: Sistema de Feature Flags ("Completo por padrão, minimalista sob demanda") (Concluída — 24/09/2026)
