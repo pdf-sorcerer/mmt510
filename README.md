@@ -4,7 +4,8 @@
 > *"Minrock is the solid bedrock where knowledge rests; ScatterLeaf is the gentle breeze where ideas and conversations drift."*
 
 [![Astro](https://img.shields.io/badge/Astro-7.x-BC52EE?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
-[![Version: v0.2.1](https://img.shields.io/badge/Version-v0.2.1-brightgreen.svg?style=flat-square)](https://github.com/rnt-rez/minrock/releases)
+[![Version: v0.2.2](https://img.shields.io/badge/Version-v0.2.2-brightgreen.svg?style=flat-square)](https://github.com/rnt-rez/minrock/releases)
+[![Demo](https://img.shields.io/badge/Demo-minrock.vercel.app-blue?style=flat-square&logo=vercel&logoColor=white)](https://minrock.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Obsidian](https://img.shields.io/badge/Obsidian-Ready-7C3AED?style=flat-square&logo=obsidian&logoColor=white)](https://obsidian.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/rnt-rez/minrock/pulls)
@@ -15,7 +16,7 @@
 > *"The project exists to foster and democratize access and personal positioning on the open web, guaranteeing a sovereign space to call your own: free from interference, without steep hurdles, and at zero cost."*  
 > — **Renato Rezende**, Creator of Minrock
 
-[🇧🇷 Leia esta documentação em Português](README.pt-BR.md)
+[🌐 View Live Demo](https://minrock.vercel.app) • [🇧🇷 Leia esta documentação em Português](README.pt-BR.md)
 
 ---
 
@@ -127,7 +128,7 @@ Because flags are evaluated at Astro build time (**Pure SSG**), turning any feat
 
 * **Adaptive TOC Layout:** When `tableOfContents` is set to `false`, the article grid automatically adapts from a split sidebar layout to a centered, single-column reading column (`max-width: 780px; margin: 0 auto;`).
 
-### 2. Publishing from Obsidian
+### 3. Publishing from Obsidian
 Drop your Obsidian Markdown notes directly into `src/content/blog/` using the frontmatter format:
 
 ```markdown
@@ -141,16 +142,17 @@ tags: ["engineering", "architecture", "devops"]
 Your content goes here...
 ```
 
-### 3. Comments System (Modular & Optional)
+### 4. Comments System (Modular & Optional)
 
 Minrock respects your digital sovereignty: comments are 100% optional, zero-bloat, and cleanly encapsulated inside [`src/components/Comments.astro`](src/components/Comments.astro).
 
-* **To Disable Comments:** Set `comments.enabled = false` in `src/config/site.ts`. When disabled, Astro completely eliminates all comment HTML and script tags at build time (0 bytes of JS, 0 network requests).
-* **To Enable ScatterLeaf:** 
+* **Zero-Setup Showcase Mode (Default):** Leaving `broker: ''` enables the instant interactive demo mode with realistic mock notes, sound TTS, and reactions. Ideal for evaluating the theme without creating external infrastructure.
+* **To Enable Live Discussions via ScatterLeaf:** 
   1. Enable GitHub Discussions on your public repository.
   2. Update `comments.repo` with your own repository name (`your-username/your-repo`).
   3. *(Optional)* For live in-page reader comments, provide your Cloudflare Edge Broker URL and GitHub OAuth Client ID (see the [ScatterLeaf Guide](https://github.com/rnt-rez/scatterleaf)).
-* **To Use Another Solution (Giscus, Utterances, Disqus, etc.):** You have complete freedom! Simply open [`src/components/Comments.astro`](src/components/Comments.astro) and paste your preferred widget or script. Zero vendor lock-in.
+* **To Use Any Other Solution:** You have complete freedom! Simply open [`src/components/Comments.astro`](src/components/Comments.astro) and paste your preferred widget or script. Zero vendor lock-in.
+* **To Disable Comments Completely:** Set `comments.enabled = false` in `src/config/site.ts`. When disabled, Astro completely eliminates all comment HTML and script tags at build time (0 bytes of JS, 0 network requests).
 
 ---
 

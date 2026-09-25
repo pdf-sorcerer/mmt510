@@ -60,6 +60,10 @@
 ### ⚪ Etapa 3: Homologação no Catálogo Astro Themes
 - [x] Auditoria WCAG 2.1/2.2 AA e performance máxima em produção.
 - [x] Modo Demonstração Zero-Setup para Comentários (ScatterLeaf Mock): `broker: ''` configurado no `siteConfig`, permitindo navegação rica com 3 comentários de exemplo sem necessidade de criar repositório ou broker externo para quem testa o tema.
+- [x] Revisão e Sanitização Editorial de Documentação e Postagens (25/09/2026):
+  - Atualização do badge de versão para `v0.2.2` e inclusão do botão de CTA em destaque para o Live Demo (`minrock.vercel.app`).
+  - Correção sequencial de numeração das seções (`1`, `2`, `3`, `4`) e documentação explícita do modo zero-setup mock.
+  - Expulsa de nomes de serviços de terceiros/concorrentes no `README.md`, `README.pt-BR.md`, `src/components/Comments.astro` e no artigo `understanding-comments-and-scatterleaf/index.md`.
 - [ ] Submissão ao diretório oficial `astro.build/themes`.
 
 ### 🟢 Etapa 4: Sistema de Feature Flags ("Completo por padrão, minimalista sob demanda") (Concluída — 24/09/2026)

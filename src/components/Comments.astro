@@ -58,7 +58,7 @@ const isEnabled = siteConfig.features?.comments !== false && Boolean(comments?.e
       </div>
     )}
 
-    {/* Extension slot: If users want to use Giscus, Utterances, or custom solutions */}
+    {/* Extension slot: If users want to use alternative comment providers or custom solutions */}
     {comments.provider !== 'scatterleaf' && (
       <div class="custom-comments-slot">
         <slot />

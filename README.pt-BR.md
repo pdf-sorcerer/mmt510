@@ -4,7 +4,8 @@
 > *"O Minrock é a rocha sólida onde o conhecimento descansa; o ScatterLeaf é a brisa suave onde as ideias e conversas flutuam."*
 
 [![Astro](https://img.shields.io/badge/Astro-7.x-BC52EE?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
-[![Versão: v0.2.1](https://img.shields.io/badge/Vers%C3%A3o-v0.2.1-brightgreen.svg?style=flat-square)](https://github.com/rnt-rez/minrock/releases)
+[![Versão: v0.2.2](https://img.shields.io/badge/Vers%C3%A3o-v0.2.2-brightgreen.svg?style=flat-square)](https://github.com/rnt-rez/minrock/releases)
+[![Demo](https://img.shields.io/badge/Demo-minrock.vercel.app-blue?style=flat-square&logo=vercel&logoColor=white)](https://minrock.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Obsidian](https://img.shields.io/badge/Obsidian-Pronto-7C3AED?style=flat-square&logo=obsidian&logoColor=white)](https://obsidian.md)
 [![PRs Bem-vindos](https://img.shields.io/badge/PRs-bem--vindos-brightgreen.svg?style=flat-square)](https://github.com/rnt-rez/minrock/pulls)
@@ -15,7 +16,7 @@
 > *"A ideia do projeto é propiciar e democratizar o acesso e o posicionamento das pessoas na web, garantindo um espaço soberano para chamar de seu: sem interferências, sem grandes dificuldades e com custo zero."*  
 > — **Renato Rezende**, Criador do Minrock
 
-[🇺🇸 Read this documentation in English](README.md)
+[🌐 Demonstração ao Vivo](https://minrock.vercel.app) • [🇺🇸 Read this documentation in English](README.md)
 
 ---
 
@@ -127,7 +128,7 @@ Como as flags são avaliadas pelo Astro em tempo de compilação (**Pure SSG**),
 
 * **Layout Inteligente de Artigo:** Ao desativar `tableOfContents: false`, o layout do artigo expande e se centraliza automaticamente em uma elegante coluna única de leitura (`max-width: 780px; margin: 0 auto;`).
 
-### 2. Publicando Diretamente do Obsidian
+### 3. Publicando Diretamente do Obsidian
 Basta salvar suas notas Markdown dentro de `src/content/blog/` com os metadados no topo (*frontmatter*):
 
 ```markdown
@@ -141,16 +142,17 @@ tags: ["engenharia", "arquitetura", "devops"]
 Seu conteúdo em Markdown aqui...
 ```
 
-### 3. Sistema de Comentários (Modular & Opcional)
+### 4. Sistema de Comentários (Modular & Opcional)
 
 O Minrock respeita integralmente a sua soberania digital: o sistema de comentários é 100% opcional, sem dependências forçadas e isolado no componente [`src/components/Comments.astro`](src/components/Comments.astro).
 
-* **Para Desativar:** Mude para `comments.enabled = false` em `src/config/site.ts`. Quando desativado, o Astro remove completamente qualquer HTML ou script de comentários do seu build estático (0 bytes de JS, 0 requisições de rede).
-* **Para Ativar o ScatterLeaf:**
+* **Modo Demonstrativo Zero-Setup (Padrão):** Manter `broker: ''` ativa instantaneamente o modo playground interativo de demonstração, com notas simuladas realistas, síntese de voz TTS e reações com emojis. Perfeito para avaliar o tema sem necessidade de infraestrutura externa imediata.
+* **Para Ativar Discussões Reais via ScatterLeaf:**
   1. Habilite o **GitHub Discussions** no seu repositório público do GitHub.
   2. Ajuste `comments.repo` para o seu próprio repositório (`seu-usuario/seu-repositorio`).
   3. *(Opcional)* Para permitir que leitores publiquem notas diretamente pelo blog, conecte seu Edge Broker na Cloudflare e seu GitHub OAuth Client ID (consulte o [Guia do ScatterLeaf](https://github.com/rnt-rez/scatterleaf)).
-* **Para Usar Outro Provedor (Giscus, Utterances, Disqus, etc.):** Você tem soberania e liberdade total! Basta abrir [`src/components/Comments.astro`](src/components/Comments.astro) e colar o script ou widget do seu provedor favorito dentro do componente. Sem nenhum aprisionamento (*vendor lock-in*).
+* **Para Usar Outro Provedor:** Você tem soberania e liberdade total! Basta abrir [`src/components/Comments.astro`](src/components/Comments.astro) e colar o script ou widget da sua preferência dentro do componente. Sem aprisionamento (*vendor lock-in*).
+* **Para Desativar Completamente:** Mude para `comments.enabled = false` em `src/config/site.ts`. Quando desativado, o Astro remove completamente qualquer HTML ou script de comentários do seu build estático (0 bytes de JS, 0 requisições de rede).
 
 ---
 

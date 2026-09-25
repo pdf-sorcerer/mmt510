@@ -114,8 +114,8 @@ At the core of Minrock's design is our commitment to **digital sovereignty**. Yo
 
 All comment logic is cleanly isolated inside a single component: [`src/components/Comments.astro`](src/components/Comments.astro).
 
-* **Want to use Giscus?** Paste your Giscus script tag into `Comments.astro`.
-* **Prefer Utterances, Disqus, or Commento?** Drop it in.
+* **Want to use any other comment provider?** Paste your script or custom widget into `Comments.astro`.
+* **Prefer a minimalist guestbook or custom form?** Drop it in without friction.
 * **Want zero comments forever?** Set `comments.enabled = false`.
 
 No complex refactoring required. Your notes remain plain, portable Markdown; your architecture remains cleanly decoupled; and your digital space remains truly sovereign.
