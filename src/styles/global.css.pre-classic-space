@@ -17,26 +17,6 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-[data-theme="classic-space"] {
-  /* Classic Space / Lunar Blue */
-  --bg: #F4F6F8;
-  --bg-surface: #FFFFFF;
-  --bg-subtle: #E9EDF2;
-  --text: #0B1526;
-  --text-muted: #5B6B7D;
-  --border: #D5DCE5;
-
-  --accent: #0055BF;
-  --accent-hover: #003F8F;
-
-  --accent2: #F6C515;
-  --danger: #D91E18;
-
-  --code-bg: #0B1526;
-  --code-text: #F4F6F8;
-  --selection: #DCE9F8;
-}
-
 [data-theme="cream"] {
   /* Warm Paper (Long Reading Comfort) */
   --bg: #f7f4ea;
