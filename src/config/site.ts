@@ -1,30 +1,13 @@
-/**
- * Granular Feature Flags ("Complete by default, minimalist on demand")
- *
- * All flags default to `true` when omitted.
- * Minimalist or purist technical writers can set any flag to `false`
- * to completely eliminate markup, styles, and scripts during SSG build.
- */
 export interface SiteFeatures {
-  /** Full-text search modal + Ctrl/Cmd+K shortcuts + header triggers */
   search?: boolean;
-  /** Sticky sidebar table of contents in blog posts */
   tableOfContents?: boolean;
-  /** "X min read" badge in post headers */
   readingTime?: boolean;
-  /** Accessible text-to-speech audio reader in blog posts and project details */
   audioPlayer?: boolean;
-  /** Tag badges in post headers, article cards, and tag clouds */
   tags?: boolean;
-  /** Notion-style share modal and trigger bar in blog posts */
   socialShare?: boolean;
-  /** Theme toggle dropdown (White, Cream, Slate, Midnight) */
   themeSwitcher?: boolean;
-  /** Floating smooth-scroll back-to-top button */
   backToTop?: boolean;
-  /** Medium-style smooth image zoom modal on click */
   imageZoom?: boolean;
-  /** Interactive blog comments powered by ScatterLeaf */
   comments?: boolean;
 }
 
@@ -46,77 +29,44 @@ export interface SiteConfig {
     title: string;
     href: string;
   }[];
-  comments?: {
-    enabled: boolean;
-    provider: 'scatterleaf';
-    repo: string;
-    category?: string;
-    theme?: 'auto' | 'light' | 'dark' | 'cream' | 'midnight' | 'slate';
-    lang?: string;
-    broker?: string;
-    clientId?: string;
-    order?: 'oldest' | 'newest';
-    features?: {
-      reactions?: boolean;
-      skinTone?: boolean;
-      sorting?: boolean;
-      codeScroll?: boolean;
-      preview?: boolean;
-      search?: boolean;
-      images?: boolean;
-    };
-  };
 }
 
 export const siteConfig: SiteConfig = {
-  title: 'Minrock',
-  tagline: 'Raw ideas from your personal vault, finely polished into an ultra-fast static blog.',
-  description: 'Minimalist, typography-first Astro 7 theme crafted for technical writers and Obsidian vaults. Pure SSG, zero bloat.',
-  author: 'Renato Rezende',
-  // Substitua pelo seu domínio de produção (usado para SEO Canônico, OpenGraph e RSS)
-  // Replace with your production domain (used for Canonical SEO, OpenGraph and RSS feeds)
-  // Can be overridden via environment variable (e.g. Vercel: SITE_URL=https://yourdomain.com)
-  siteUrl: (typeof process !== 'undefined' && process.env?.SITE_URL) || (import.meta as any).env?.SITE_URL || 'https://minrock.vercel.app',
+  title: 'Mason Thompson',
+  tagline: 'Product Manager & AI Systems Builder',
+  description:
+    'Product systems spanning local AI, workflow automation, multimodal interfaces, and applied AI infrastructure.',
+  author: 'Mason Thompson',
+
+  siteUrl:
+    (typeof process !== 'undefined' && process.env?.SITE_URL) ||
+    (import.meta as any).env?.SITE_URL ||
+    'http://localhost:4321',
+
   defaultTheme: 'cream',
-  // Granular Feature Flags — "Complete by default, minimalist on demand"
-  // Toggle any feature to false to completely omit markup & scripts in static build
+
   features: {
-    search: true,
-    tableOfContents: true,
-    readingTime: true,
-    audioPlayer: true,
-    tags: true,
-    socialShare: true,
+    search: false,
+    tableOfContents: false,
+    readingTime: false,
+    audioPlayer: false,
+    tags: false,
+    socialShare: false,
     themeSwitcher: true,
     backToTop: true,
     imageZoom: true,
-    comments: true
+    comments: false
   },
+
   socialLinks: {
-    github: 'https://github.com/rnt-rez/minrock',
-    linkedin: 'https://example.com/',
-    email: 'https://example.com/'
+    github: 'https://github.com/YOUR_GITHUB_USERNAME',
+    linkedin: 'https://www.linkedin.com/in/YOUR_LINKEDIN_HANDLE',
+    email: 'mailto:YOUR_EMAIL'
   },
+
   navLinks: [
     { title: 'Home', href: '/' },
-    { title: 'Blog', href: '/blog' },
     { title: 'Projects', href: '/projects' },
-    { title: 'Tags', href: '/tags' },
     { title: 'About', href: '/about' }
-  ],
-  comments: {
-    enabled: true,
-    provider: 'scatterleaf',
-    repo: 'rnt-rez/minrock',
-    category: 'General',
-    theme: 'auto',
-    lang: 'auto',
-    clientId: 'Iv23liZHApvnx6e6wtMJ',
-    // Default to empty string ('') for Astro Themes showcase (enables built-in mock demo comments).
-    // Users can connect their own Cloudflare Edge Broker Worker URL via PUBLIC_SCATTERLEAF_BROKER.
-    broker: '',
-    features: {
-      images: true
-    }
-  }
+  ]
 };
