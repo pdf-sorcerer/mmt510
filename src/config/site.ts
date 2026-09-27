@@ -17,7 +17,7 @@ export interface SiteConfig {
   description: string;
   author: string;
   siteUrl: string;
-  defaultTheme: 'white' | 'cream' | 'slate' | 'midnight';
+  defaultTheme: 'midnight' | 'cream' | 'slate' | 'midnight';
   features?: SiteFeatures;
   socialLinks: {
     github?: string;
@@ -43,7 +43,7 @@ export const siteConfig: SiteConfig = {
     (import.meta as any).env?.SITE_URL ||
     'http://localhost:4321',
 
-  defaultTheme: 'cream',
+  defaultTheme: 'midnight',
 
   features: {
     search: false,
@@ -59,14 +59,12 @@ export const siteConfig: SiteConfig = {
   },
 
   socialLinks: {
-    github: 'https://github.com/YOUR_GITHUB_USERNAME',
-    linkedin: 'https://www.linkedin.com/in/YOUR_LINKEDIN_HANDLE',
+    github: 'https://github.com/pdf-sorcerer',
+    linkedin: 'https://www.linkedin.com/in/mmt510',
     email: 'mailto:YOUR_EMAIL'
   },
 
   navLinks: [
-    { title: 'Home', href: '/' },
-    { title: 'Projects', href: '/projects' },
-    { title: 'About', href: '/about' }
+    { title: 'Projects', href: '/projects' }
   ]
 };

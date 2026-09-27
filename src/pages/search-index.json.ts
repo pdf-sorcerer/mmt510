@@ -54,7 +54,7 @@ export async function GET() {
       }),
       tags: p.data.tags || [],
       category: p.data.category || 'General',
-      emoji: p.data.emoji || '📦',
+      icon: p.data.icon || '📦',
     })),
     tags,
   };

@@ -1,11 +1,11 @@
 ---
 title: "ALL-LLLM Pod"
-description: "An interactive AI podcast and voice-agent experiment focused on multimodal conversation, persona systems, and local speech infrastructure."
+description: "A parody of the All-In Podcast, with each host recreated as an individual AI chatbot persona trained on 75,000 transcript pairs generated from more than 500 episodes through an AI speech-processing pipeline."
 date: 2026-01-01
 category: "Multimodal AI"
-tags: ["Voice", "ASR", "TTS", "Diarization", "LLM"]
+tags: ["Voice", "WhisperX", "NvidiaNeMo", "Streamlit", "TTS", "LLM"]
 stars: 0
-emoji: "◉"
+icon: /project-icons/all-lllm.png
 featured: false
 ---
 

@@ -1,11 +1,11 @@
 ---
-title: "Attribution"
-description: "Signed attribution links and real-time push notifications for observing interaction with application materials."
+title: "Resume Engagement via Attribution"
+description: "Signed HMAC links are created for each job application and résumé. Clicking them sends me a push notification on my iPhone."
 date: 2026-07-04
 category: "Product Systems"
-tags: ["HMAC", "Vercel", "Supabase", "APNs", "Observability"]
+tags: ["HMAC", "Vercel", "Supabase", "Apple Push Notifications", "Observability"]
 stars: 0
-emoji: "↗"
+icon: /project-icons/attribution.png
 featured: false
 ---
 

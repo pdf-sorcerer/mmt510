@@ -27,7 +27,7 @@ const projects = defineCollection({
     stars: z.number().default(0),
     repoUrl: z.string().optional(),
     demoUrl: z.string().optional(),
-    emoji: z.string().default('📦'),
+    icon: z.string().optional(),
     featured: z.boolean().default(false),
   })
 });
