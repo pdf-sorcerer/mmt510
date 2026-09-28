@@ -24,17 +24,31 @@ Meat Head is a work in progress aimed at building a serviceable replacement for 
 
 ## 01 UX
 
-Meat Head presents the underlying inference stack as one consistent interface, regardless of which machine or model is serving the request.
-
-- General-purpose AI chat
-- Code generation and editing
-- Conversation history and personas
-- Voice input and speech output
-- Multimodal workflows
-- macOS and iPhone access
+<div class="feature-split">
+<div class="feature-copy">
+<p>Meat Head presents the underlying inference stack as one consistent interface, regardless of which machine or model is serving the request.</p>
+<ul>
+<li>General-purpose AI chat</li>
+<li>Code generation and editing</li>
+<li>Conversation history and personas</li>
+<li>Voice input and speech output</li>
+<li>Multimodal workflows</li>
+<li>macOS and iPhone access</li>
+</ul>
+</div>
+<div class="feature-image-button meat-head-ux-video-button" role="button" tabindex="0" aria-label="Play Meat Head UX video" onclick="const v=this.querySelector('video');if(v.paused){v.play();this.classList.add('is-playing')}else{v.pause();this.classList.remove('is-playing')}"><video class="meat-head-ux-video" src="/zuck.mp4" preload="metadata" playsinline></video><span class="meat-head-video-play" aria-hidden="true">▶</span></div>
+</div>
 
 ## 02 NVIDIA GPU vs. Apple Silicon
 
-Running Qwen3.8-27B EXL3 at 2.00 bpw on the RTX 4070 Super uses roughly 11.3–11.5 GiB of its 11.99 GiB of VRAM — about 94–96% utilization. To preserve headroom, I use a Q4 KV cache and cap context at 8,192 tokens. Performance, however, is fast: roughly 25–45 tokens per second.
+| | RTX 4070 Super | M4 |
+|---|---|---|
+| **Model** | Qwen3.8-27B EXL3 | Qwen3.8-27B MLX |
+| **Quantization** | 2.00 bpw | 3-bit |
+| **Generation** | 37.21 tok/s avg. | 7.55 tok/s |
+| **Memory** | 11.3–11.5 GiB VRAM | ~12.4 GB peak physical footprint |
+| **Context** | 8,192 tokens | 262,144 max |
+| **KV cache** | Q4 | — |
+| **Benchmark** | 5 runs · 942 output tokens avg. · 25.43 s avg. | 1,000 output tokens · 132.5 s |
 
-The Mac serves as a fallback at approximately 6–8 tokens per second. Ironically, Qwen3.8-27B has a smaller memory footprint than Qwen3.6-35B on the M4, but the generation-speed tradeoff makes it a less attractive primary runtime.
+The RTX 4070 Super is the high-throughput inference path, while the M4 provides a slower, more flexible local fallback.
