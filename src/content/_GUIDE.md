@@ -1,4 +1,4 @@
-# 🪨 Minrock — Obsidian Vault Quickstart Guide
+# 🧱 Minrock — Obsidian Vault Quickstart Guide
 
 Welcome to your local content management vault! Minrock is designed to provide an ultra-clean, frictionless writing environment in **Obsidian** that directly powers your public Astro blog.
 
