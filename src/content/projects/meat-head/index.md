@@ -2,6 +2,7 @@
 title: "Meat Head — Local-First AI"
 description: ""
 date: 2026-09-01
+span: "Sep 2026–Present"
 category: "Local AI"
 tags: ["Swift", "LLM", "Codegen", "ASR", "TTS"]
 stars: 0

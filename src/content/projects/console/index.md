@@ -2,6 +2,7 @@
 title: "Console — Job Search Automation"
 description: ""
 date: 2026-09-27
+span: "Apr 2026–Present"
 category: "Product Systems"
 tags: ["Electron", "React", "Node", "Supabase", "ATS", "AI"]
 stars: 0

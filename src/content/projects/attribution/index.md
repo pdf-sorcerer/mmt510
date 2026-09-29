@@ -2,6 +2,7 @@
 title: "Résumé Engagement and Observability"
 description: ""
 date: 2026-07-04
+span: "Jul 2026"
 category: "Product Systems"
 tags: ["HMAC", "Vercel", "Supabase", "Apple Push Notifications", "Observability"]
 stars: 0

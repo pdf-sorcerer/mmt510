@@ -54,6 +54,7 @@ const allProjects = (await getCollection('projects')).sort(
               title={proj.data.title}
               description={proj.data.description}
               date={proj.data.date}
+              span={proj.data.span}
               slug={proj.id}
               index={index + 1}
               tags={proj.data.tags}

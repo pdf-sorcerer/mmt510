@@ -2,6 +2,7 @@
 title: "Hibi — macOS Supervisor"
 description: ""
 date: 2026-09-01
+span: "Jul 2026–Present"
 category: "Local AI Infrastructure"
 tags: ["SwiftUI", "macOS", "Local AI"]
 stars: 0

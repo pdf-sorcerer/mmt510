@@ -3,6 +3,7 @@ export interface Props {
   title: string;
   description: string;
   date: Date;
+  span?: string;
   slug: string;
   index?: number;
   tags?: string[];
@@ -15,6 +16,7 @@ export interface Props {
 const {
   title,
   description,
+  span,
   slug,
   index = 1,
   tags = [],
@@ -43,6 +45,7 @@ const number = String(index).padStart(2, '0');
     <div class="project-body">
       <div class="project-heading">
         <span class="project-title">{title}</span>
+        {span && <span class="project-span">{span}</span>}
       </div>
 
       <p class="project-desc">{description}</p>
@@ -117,7 +120,9 @@ const number = String(index).padStart(2, '0');
 
   .project-heading {
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
     gap: 0.8rem;
     flex-wrap: wrap;
     min-height: 34px;
@@ -132,6 +137,16 @@ const number = String(index).padStart(2, '0');
 
   .project-row-link:hover .project-title {
     color: var(--accent);
+  }
+
+
+  .project-span {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
   }
 
   .project-desc {

@@ -1,7 +1,8 @@
 ---
 title: "ALL-LLLM Pod"
-description: ""
+description: "Persona-based chatbots. AI transcription, diarization, HITL tools, and TTS."
 date: 2026-01-01
+span: "Jun 2025–Jun 2026"
 category: "Multimodal AI"
 tags: ["Voice", "WhisperX", "NvidiaNeMo", "Streamlit", "TTS", "LLM"]
 stars: 0
