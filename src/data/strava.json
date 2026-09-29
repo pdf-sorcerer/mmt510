@@ -13,6 +13,7 @@
       "moving_time" : 2223,
       "name" : "Afternoon Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "eecfF|jfiVHMJEQgB?g@Ea@Ay@GUK}AMu@Ci@Iy@?_@Co@Gc@@KIS?g@IcA@m@Cm@@UMiBAGIaABCXCNId@I|AGp@Mt@E~@Kl@KrA]jAKBUDEXAh@Kb@@d@MBB@JHJHAJB@JBJPDR?NE`@EXAdAGx@?f@GfACNCx@AfBMr@AhBKRALGAATBRCl@?`AEzBOL@JEN@ZERBtAKP?~@GpACXEd@?JCHMPGXF^A`BU\\AbAQE@p@IZKNKf@g@TMdAOvBObACh@Eh@ALDPAVKh@@ZC@MGe@I_ADONGDOLKPAj@O|@MN?XML?vAOXClASdBSGcAM{@@KPG|@G^Mf@CHACCBOXQL]CZI?AC",
       "url" : "https://www.strava.com/activities/20357714111"
     },
     {
@@ -30,6 +31,7 @@
       "name" : "Afternoon Swim",
       "pace100yd_seconds" : 94,
       "sport_type" : "Swim",
+      "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20357236300"
     },
     {
@@ -45,6 +47,7 @@
       "moving_time" : 1597,
       "name" : "Lunch Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "_s_fFjpdiVDM@XOt@F`@DhALfA?~@wALY?UDM?EGc@BcANQEO?kATo@Fu@Li@DaANgAJQESIOWOCo@DQFg@DeAFk@?_@F{CNg@FWJu@t@g@Ls@Lo@D}@PyAP{@CQIiBJmBDm@F{CAg@NS?UDe@B[?kBN_A@_CLs@@_@Fq@?yAJm@?q@Hs@@g@H[Bk@Cw@JSACCG_@M@e@Ag@DSCs@PSJu@Hc@JiC\\QF_@?_@J[DGAUBa@H[@k@Jg@DKHCLDn@Pb@HZBz@MlBXrENfDJnAPfA?`AHh@DnA",
       "url" : "https://www.strava.com/activities/20356902163"
     },
     {
@@ -60,6 +63,7 @@
       "moving_time" : 2125,
       "name" : "Afternoon Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "}dcfFbjfiVHFLGBIWwAGg@@YCC@MKaA?QGcAYyBEiBES@c@GSOsB?YEs@@a@Aq@Cc@Oe@Cu@@OBAfAUr@CPGj@Cr@Sn@?h@IZAfAUL?^OZEd@?JABU`A?d@Ib@FPAJBFPJPD@zBSfBEzAKt@@PBr@G`@?`@Ob@Ad@InBEPEP]HCp@?h@Eb@?pDUxAEVEXC~AA~AKJEL@p@N^A|AQpAIj@M`@GNGJIh@k@TILAn@Qr@Cl@EP@dAM`AEt@?NCJFR@ZALCNGJOCSDMAIGs@B_@`Ca@VC^?n@IvB[^AdAOh@KNKBIUmBEM?SDOx@ILMHBACBIHILEXAB@ECbBI}@n@D_@BAAN@XFRD?BBAABI?GFG@?EAAD?CF??C@DCAAB@CA??G@FBF",
       "url" : "https://www.strava.com/activities/20345265586"
     },
     {
@@ -77,6 +81,7 @@
       "name" : "Afternoon Swim",
       "pace100yd_seconds" : 95,
       "sport_type" : "Swim",
+      "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20344133456"
     },
     {
@@ -92,6 +97,7 @@
       "moving_time" : 1641,
       "name" : "Afternoon Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "ms_fFxodiVDD@FCr@?NRzBHdB?NGBu@J{AFAG@@GA}@Fu@Li@DQEO@q@Ls@HiBZU?i@Hc@IU@MQMEgAJ_A?UDOA{BPwA@{@LYHUJ_@b@MHq@P@C@BAAGDFCC@[FU?m@HqC^i@?]OK@y@HeCFkAFQAW@{@Fq@@qDTm@?QDUVG@a@B_ALoEPk@Cy@Jo@?c@QUAm@F_ABQBaAFGCC_@eCBa@H_@TeBRU?aATo@DaAR]@qARwAJQDKJ\\dBDfACz@G`@CXNpADlAHTBZ@bANxABfAFVFJD\\B\\?pAHrAJl@EFm@RSRFG",
       "url" : "https://www.strava.com/activities/20344129863"
     },
     {
@@ -107,6 +113,7 @@
       "moving_time" : 1616,
       "name" : "Night Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "ydcfFnjfiVFADI?WO_ACc@G]BOJGDKI_@@QKq@IiBIi@Gw@Cq@E[@YhAQLG^E`@KJEAC@OHCSeEEQEa@?U@KEq@CAMo@B_@JK@@NAp@KjAKJELKJWTGhAGREj@@LIn@M`AENINA\\`@JVFD^?xAQz@AzAMhAAf@F\\E`@KpCMj@GR@v@EHKBU`AI`AAb@Ex@AhBOnACPEnBGPCbBIF?THv@DbAOrAKtAQLAXMRMNSh@]p@ObDOt@GjEQRG@QMqAAY@AxEo@h@KrAKPW`@SPEx@GPGCi@Ra@M}@BKHEf@Gx@Ql@@FI@UBG",
       "url" : "https://www.strava.com/activities/20344126313"
     },
     {
@@ -122,6 +129,7 @@
       "moving_time" : 1714,
       "name" : "Evening Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "as_fFzodiV?@OH?FBR?`@LbAPxCCXg@HkAHYFIEAEeAFsB^OGSCMIkALy@Ni@ByATS@KC[WKAYDKH{@DEA_@DQ?sAJcA?eAFu@L_@PKFMP[XODe@J@C?@GBc@BwBXu@R]DUEQ@SKc@Cs@H{BFeAH]@g@Eu@JuFTYDCAD@EHQHm@Li@Fo@BQA_@Da@EK?u@L}ADq@Ba@Hi@@[BYAe@BUAOKe@Ge@FOAG[GEi@?UEc@DQ?QHSDSLQ?[JaBP}@Pk@@OBUASBe@JMHW@SFi@HW@w@LAr@Hf@ATABACGLANH|AE\\?RX`DNz@BdBNbABn@Jv@HpACZ@\\TlBEVSFAABF",
       "url" : "https://www.strava.com/activities/20344129762"
     },
     {
@@ -137,6 +145,7 @@
       "moving_time" : 2370,
       "name" : "Night Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "aecfFnjfiVNOQsBA]@k@SqBAe@Gk@Ea@Ki@U{DBDN`AFp@?~@Nr@NxAHdBBfBRbBAZQJQ@IBA@OCILOHPY`@?VGJK?UUkBBWE_AKq@IiBQcAEsAKk@Ee@?q@QcAAa@Di@?q@Go@De@Ee@IQCW?QL]xAQR@`@GNBt@WZCREhBIJGn@Kf@Od@CFMXQz@Kj@An@OF?HHFTH`@NANGrAAf@GP@jAGd@Gx@@ZIP@REhACf@V`@?BC`ACzAMTGLQLEnCOrBG`BMPBlAE\\GxACx@INELKPANDb@AtCa@b@ALEn@IRGn@o@TOdASjBKb@?dAIxDOPDNf@L@d@KhCW`@Ir@I|@IHGPChAG^Ib@ERPBJNFbAKt@ENE@CAm@WeCOaC",
       "url" : "https://www.strava.com/activities/20320037506"
     },
     {
@@ -152,6 +161,7 @@
       "moving_time" : 1755,
       "name" : "Afternoon Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "wr_fFhodiVGNJfABt@Od@FVBBDd@GLDTBr@CJmBLWFUE?C@?_ABSFi@F]HU@e@?S@UHe@@MDQ?[Hg@BqARk@B_@c@e@?OD}AJ}ENqANSHiAz@QH]F@@kAJaDf@o@?SMQG}CNUDO?QIG?mBNq@?i@D}@@_@LyBJQDWRk@D]LY@k@DQ?{@Dk@@[Do@?cBHc@Fa@SSEm@Bg@Ag@DOBk@@ECGWGCq@BICc@HmANe@LiAPIAa@DQFe@Hm@HqAJQDo@HGBeBTMJFZAh@Zv@Jt@GXc@dAB|@Jz@AH@j@BVDR@`ALn@HfAJf@Fh@DlADNAn@DVHjBENULK?BA",
       "url" : "https://www.strava.com/activities/20318474445"
     },
     {
@@ -167,6 +177,7 @@
       "moving_time" : 2007,
       "name" : "Evening Walk",
       "sport_type" : "Walk",
+      "summary_polyline" : "aecfF~jfiVZa@?EUgAGq@?QCGDa@E]Eq@COEG?qAE]Ou@?SEM@g@QuAMkB@o@FKDMGSAm@Q}@@c@M]?]BWDCv@OTOfAQBE\\KV?~B_@JALBt@ON@x@E^I^@r@Qp@INBLFV?FBHJDLHFV?\\Kv@EdBGn@GfBI~@?\\EzAChAKT@ZIt@APE`CGpAInAQlA@~@GPEjAAdAEd@IP@VMJAb@D~@Q|AGr@ONIr@CXSTY`@Y\\K\\EPD`ACpCQ\\@`AK`@?t@GDEAIDKBO@SIi@?SBQNGt@I|@ON?TC~@Q`BSj@ErAW\\CBCCMMiB@GL]BS^GL?|@Uh@CH??BAOBI",
       "url" : "https://www.strava.com/activities/20305634103"
     },
     {
@@ -184,6 +195,7 @@
       "name" : "Evening Swim",
       "pace100yd_seconds" : 94,
       "sport_type" : "Swim",
+      "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20305302699"
     }
   ],
@@ -193,5 +205,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-09-29T22:18:54Z"
+  "generated_at" : "2026-09-29T22:24:18Z"
 }
