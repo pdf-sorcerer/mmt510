@@ -1312,3 +1312,39 @@ while (calendarCells.length % 7 !== 0) {
   window.addEventListener('load', initStravaMaps);
 })();
 </script>
+
+<script is:inline>
+(() => {
+  if (window.__leafletLocalLoader) return;
+  window.__leafletLocalLoader = true;
+
+  // Load Leaflet CSS.
+  if (!document.querySelector('link[data-leaflet-local]')) {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = '/vendor/leaflet/leaflet.css';
+    css.dataset.leafletLocal = 'true';
+    document.head.appendChild(css);
+  }
+
+  // Load Leaflet JS.
+  if (!window.L && !document.querySelector('script[data-leaflet-local]')) {
+    const script = document.createElement('script');
+    script.src = '/vendor/leaflet/leaflet.js';
+    script.dataset.leafletLocal = 'true';
+
+    script.onload = () => {
+      console.log('[Strava maps] Leaflet loaded locally', window.L?.version);
+
+      // Existing map initializer is already polling for window.L.
+      window.dispatchEvent(new Event('load'));
+    };
+
+    script.onerror = (error) => {
+      console.error('[Strava maps] Failed to load local Leaflet', error);
+    };
+
+    document.head.appendChild(script);
+  }
+})();
+</script>
