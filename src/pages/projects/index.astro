@@ -23,12 +23,20 @@ const allProjects = (await getCollection('projects')).sort(
   <div class="projects-container">
 
     <section class="profile-intro">
-      <p>
+      <p class="profile-intro-lead">
         Hello there. I'm Mason Thompson. Thanks for stopping by my portfolio!
       </p>
 
       <p>
-        These projects are self-directed work exploring applications of generative AI and learning how these systems work. I generate most code in the browser with ChatGPT, delegate some tasks to local LLMs, build and iterate in VS Code and Xcode, and use the terminal for logging and debugging.
+        My career in tech has largely been in SaaS startups like Zenefits and Ease, which specialized in HRIS platforms and employee benefits. I worked on ways to automate tedious paperwork and operational workflows used by millions of people.
+      </p>
+
+      <p>
+        The projects below are self-directed explorations of generative AI, spanning local LLM infrastructure, speech recognition and diarization, cryptography, and human-in-the-loop tools.
+      </p>
+
+      <p>
+        I generate most code in the browser with ChatGPT, delegate some tasks to local LLMs, and build, debug, and iterate in VS Code, Xcode, and the terminal.
       </p>
     </section>
 
@@ -87,6 +95,11 @@ const allProjects = (await getCollection('projects')).sort(
     margin: 0 0 1rem;
     font-size: 2.25rem;
     letter-spacing: -0.035em;
+  }
+
+  .profile-intro-lead {
+    font-weight: 700;
+    color: var(--text);
   }
 
   .profile-intro p:not(.profile-meta) {
