@@ -1,0 +1,258 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const surfaces = [
+  {
+    number: '01',
+    title: 'Persona Roster',
+    copy: 'No launch screen required. On load, users land directly in the Contacts view.',
+    images: [
+      ['/all-lllm-pod/ux/main.PNG', 'Persona roster']
+    ]
+  },
+  {
+    number: '02',
+    title: 'Text Message & 1:1 Video Chat',
+    copy: '1:1 text messaging and FaceTime-style inference.',
+    images: [
+      ['/all-lllm-pod/ux/IMG_4854.png', 'Text message interface'],
+      ['/all-lllm-pod/ux/jensen.PNG', '1:1 video chat']
+    ]
+  },
+  {
+    number: '03',
+    title: 'Group Chat',
+    copy: 'Group calls, episode re-enactment, and Black Mirror episode generation.',
+    images: [
+      ['/all-lllm-pod/ux/IMG_4860.png', 'Live call'],
+      ['/all-lllm-pod/ux/IMG_4861.png', 'Episode reenactment'],
+      ['/all-lllm-pod/ux/mirror_episode.png', 'Mirror episode setup'],
+      ['/all-lllm-pod/ux/mirror_episode_run.PNG', 'Mirror episode run']
+    ]
+  },
+  {
+    number: '04',
+    title: 'Persona Builder',
+    copy: 'A lightweight workflow for standing up a new persona and getting it ready for video chat.',
+    images: []
+  },
+  {
+    number: '05',
+    title: 'Runtime Controls',
+    copy: 'Inference logs with per-request latency, token counts, and time-to-first-audio.',
+    images: [
+      ['/all-lllm-pod/ux/IMG_4855.png', 'Inference logs']
+    ]
+  },
+  {
+    number: '06',
+    title: 'Motion Controls',
+    copy: 'Motion tuning, later superseded by rules-based Motion RNA using body movement and facial cues from source video.',
+    images: [
+      ['/all-lllm-pod/ux/IMG_4856.png', 'Motion controls']
+    ]
+  },
+  {
+    number: '07',
+    title: 'Model Parameters',
+    copy: 'Model selection, temperature, token limits, and platform configuration exposed as runtime controls.',
+    images: [
+      ['/all-lllm-pod/ux/settings.PNG', 'Model parameters'],
+      ['/all-lllm-pod/ux/advanced.PNG', 'Advanced settings'],
+      ['/all-lllm-pod/ux/IMG_4858.png', 'Platform settings']
+    ]
+  }
+];
+---
+
+<BaseLayout title="ALL-LLLM Pod — UX">
+  <main class="ux-page">
+    <a class="back" href="/projects/all-lllm-pod/">← ALL-LLLM Pod</a>
+
+    <header class="hero">
+      <p class="eyebrow">ALL-LLLM POD</p>
+      <h1>UX</h1>
+      <p>
+        A thin SwiftUI iOS client with an iMessage / FaceTime-style interface.
+        The phone handles interaction and observability; inference, speech
+        recognition, diarization, and voice generation run elsewhere.
+      </p>
+    </header>
+
+    {surfaces.map((surface) => (
+      <section class="surface">
+        <div class="surface-heading">
+          <span>{surface.number}</span>
+          <h2>{surface.title}</h2>
+        </div>
+
+        <p class="surface-copy">{surface.copy}</p>
+
+        {surface.images.length > 0 && (
+          <div class:list={['image-grid', surface.images.length === 1 && 'single']}>
+            {surface.images.map(([src, alt]) => (
+              <button
+                class="shot"
+                type="button"
+                aria-label={`Enlarge ${alt}`}
+                onclick={`document.getElementById('${surface.number}-${alt.replace(/\W+/g, '-').toLowerCase()}').showModal()`}
+              >
+                <img src={src} alt={alt} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {surface.images.map(([src, alt]) => {
+          const id = `${surface.number}-${alt.replace(/\W+/g, '-').toLowerCase()}`;
+          return (
+            <dialog id={id} class="image-modal">
+              <button
+                class="image-modal-close"
+                type="button"
+                aria-label="Close"
+                onclick={`document.getElementById('${id}').close()`}
+              >
+                ×
+              </button>
+              <img src={src} alt={alt} />
+            </dialog>
+          );
+        })}
+      </section>
+    ))}
+  </main>
+</BaseLayout>
+
+<style>
+  .ux-page {
+    width: min(100% - 32px, 920px);
+    margin: 0 auto;
+    padding: 48px 0 96px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 48px;
+    font-size: 0.9rem;
+  }
+
+  .hero {
+    margin-bottom: 72px;
+    max-width: 760px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+  }
+
+  .hero h1 {
+    margin: 0 0 18px;
+    font-size: clamp(3rem, 9vw, 6rem);
+    line-height: 0.9;
+  }
+
+  .hero p,
+  .surface-copy {
+    line-height: 1.65;
+  }
+
+  .surface {
+    padding: 48px 0 64px;
+    border-top: 1px solid var(--border-color, #d8cdb8);
+  }
+
+  .surface-heading {
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+  }
+
+  .surface-heading span {
+    font-family: monospace;
+    opacity: 0.45;
+  }
+
+  .surface-heading h2 {
+    margin: 0;
+  }
+
+  .surface-copy {
+    max-width: 680px;
+    margin: 12px 0 28px;
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .image-grid.single {
+    grid-template-columns: minmax(0, 560px);
+  }
+
+  .shot {
+    display: block;
+    padding: 0;
+    overflow: hidden;
+    cursor: zoom-in;
+    background: var(--background, #fff);
+    border: 1px solid var(--border-color, #d8cdb8);
+    box-shadow: 0 10px 28px rgba(45, 36, 24, 0.10);
+  }
+
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .image-modal {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .image-modal::backdrop {
+    background: rgba(0, 0, 0, 0.76);
+  }
+
+  .image-modal img {
+    display: block;
+    max-width: 92vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    margin: auto;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  }
+
+  .image-modal-close {
+    position: fixed;
+    top: 22px;
+    right: 28px;
+    z-index: 2;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 680px) {
+    .ux-page {
+      width: min(100% - 24px, 920px);
+      padding-top: 32px;
+    }
+
+    .image-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+title: "ALL-LLLM Pod"
+description: "A parody of the All-In Podcast, with each host recreated as an individual AI chatbot persona trained on 75,000 transcript pairs generated from more than 500 episodes through an AI speech-processing pipeline."
+date: 2026-01-01
+category: "Multimodal AI"
+tags: ["Voice", "WhisperX", "NvidiaNeMo", "Streamlit", "TTS", "LLM"]
+stars: 0
+icon: /project-icons/all-lllm.png
+featured: false
+---
+
+## TL;DR
+
+The chatbot is the visible product. Underneath it is a speech-processing, transcript-forensics, persona-training, local-inference, and voice-synthesis pipeline built from more than 500 episodes of source material.
+
+<div class="feature-split">
+
+<div class="feature-copy">
+
+| **Source material** | **Scale** |
+| :-- | :-- |
+| Episodes, clips, and shorts | 563 |
+| Transcript segments | 75k+ |
+| Bestie audio | 400+ hours |
+
+</div>
+
+<div class="feature-image" style="align-self:stretch;">
+
+<button type="button" class="feature-image-button trailer-card" aria-label="Play ALL-LLLM POD trailer" onclick="document.getElementById(&quot;all-lllm-trailer-modal&quot;).showModal()" style="display:block;width:100%;padding:0;cursor:pointer;position:relative;overflow:hidden;">
+  <video src="/final_final_besties.mp4#t=0.1" muted playsinline preload="metadata" style="display:block;width:100%;height:auto;"></video>
+  <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;color:white;text-shadow:0 1px 6px rgba(0,0,0,.8);">▶</span>
+</button>
+
+</div>
+
+</div>
+
+<dialog id="all-lllm-trailer-modal" class="image-modal">
+  <button type="button" class="image-modal-close" aria-label="Close" onclick="const d=document.getElementById(&quot;all-lllm-trailer-modal&quot;);d.querySelector(&quot;video&quot;).pause();d.close()">×</button>
+  <video src="/final_final_besties.mp4" controls playsinline preload="metadata" style="display:block;max-width:95vw;max-height:90vh;width:auto;height:auto;margin:auto;"></video>
+</dialog>
+
+
+## UX
+
+<div class="feature-split">
+
+<div class="feature-copy">
+
+<p style="margin:0 0 1.25rem;">A thin SwiftUI client presents the personas as FaceTime-style conversational agents.</p>
+
+<p style="margin:0 0 1.25rem;">The phone handles interaction rather than inference: capturing speech, displaying transcripts, streaming synthesized voice, and animating each persona — poorly.</p>
+
+- 1:1 text and streaming voice conversations
+- Group conversations
+- Persona-specific voices and behavior
+- Runtime telemetry including latency, tokens, and time-to-first-audio
+
+</div>
+
+<div class="feature-image">
+
+<a href="/projects/all-lllm-pod/ux/" class="feature-image-button" aria-label="Open ALL-LLLM Pod UX" style="display:flex;height:100%;">
+  <img src="/all-lllm-pod/ux/main.PNG" alt="ALL-LLLM Pod UX" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top;" />
+</a>
+
+</div>
+
+</div>
+
+## Runtime
+
+The system runs entirely on consumer hardware and has gone through three major architectures.
+
+- **v1 — Mistral 7B:** early local-inference prototype
+- **v2 — Qwen3 30B:** Windows handled speech/orchestration while an M4 MacBook Pro handled LLM inference through oMLX
+- **v3 — Qwen3.8 27B:** inference moved to the PC GPU; the Mac now handles Pocket-TTS and shared runtime services
+
+The diagram shows the **v2 architecture**.
+
+The runtime work eventually became its own project: `Hibi`, a supervisor for starting, stopping, and monitoring the local services underneath ALL-LLLM Pod and other applications.
+
+## Transcript Intelligence
+
+The source transcripts became a substantial project of their own.
+
+WhisperX provides canonical words and timestamps. NeMo performs speaker attribution inside those boundaries, while human-in-the-loop tooling is used to inspect ambiguous segments and repair errors.
+
+That pipeline ultimately produced more than 75,000 usable transcript segments for persona modeling.
+
+## Ghost Audio
+
+While auditing Episode 136, I found speech that was clearly audible but absent from every generated transcript.
+
+That led to a decoder-level investigation into what I called **Ghost Audio**: short utterances that disappear depending on decoding configuration.
+
+I built BERD-1 to compare alternate Whisper decoding paths and surface likely missing segments for review. Most of the recovered candidates were short interjections and disfluencies — exactly the kind of speech that matters when trying to reproduce how a person actually talks.
+
+## Why build it
+
+ALL-LLLM Pod started as a parody.
+
+It became a practical way to explore a harder question: how much engineering sits underneath a conversational AI persona that feels coherent across speech recognition, language generation, voice, timing, memory, and interaction?

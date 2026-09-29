@@ -9,7 +9,9 @@ icon: /project-icons/meathead.png
 featured: false
 ---
 
-A local-first replacement for everyday AI chat and code generation, inspired by Meta Muse. Meat Head runs Qwen3.8-27B on a remote RTX 4070 Super, with an M4 local-LLM fallback and macOS and iPhone clients.
+## Core idea
+
+Meat Head is a work in progress aimed at building a serviceable replacement for cloud chat and code-generation tools using local models and user-owned infrastructure under tight hardware constraints. It builds on what I learned from ALL-LLLM, Hibi, and Console.
 
 <button type="button" class="meat-head-hero-image" onclick="document.getElementById('meat-head-image-modal').showModal()" aria-label="Enlarge Meat Head image"></button>
 
@@ -18,9 +20,6 @@ A local-first replacement for everyday AI chat and code generation, inspired by 
 <div class="image-modal-image meat-head-modal-image" role="img" aria-label="Muse versus Meat Head"></div>
 </dialog>
 
-## Core idea
-
-Meat Head is a work in progress aimed at building a serviceable replacement for cloud chat and code-generation tools using local models and user-owned infrastructure under tight hardware constraints. It builds on what I learned from ALL-LLLM, Hibi, and Console.
 
 ## 01 UX
 
@@ -36,19 +35,15 @@ Meat Head is a work in progress aimed at building a serviceable replacement for 
 <li>macOS and iPhone access</li>
 </ul>
 </div>
-<div class="feature-image-button meat-head-ux-video-button" role="button" tabindex="0" aria-label="Play Meat Head UX video" onclick="const v=this.querySelector('video');if(v.paused){v.play();this.classList.add('is-playing')}else{v.pause();this.classList.remove('is-playing')}"><video class="meat-head-ux-video" src="/zuck.mp4" preload="metadata" playsinline></video><span class="meat-head-video-play" aria-hidden="true">▶</span></div>
+<div class="feature-image-button meat-head-ux-video-button" role="button" tabindex="0" aria-label="Play Meat Head UX video" onclick="const v=this.querySelector('video');if(v.paused){v.play();this.classList.add('is-playing')}else{v.pause();this.classList.remove('is-playing')}"><video class="meat-head-ux-video" src="/zuck.mp4" preload="metadata" playsinline controls></video><span class="meat-head-video-play" aria-hidden="true">▶</span></div>
 </div>
 
-## 02 NVIDIA GPU vs. Apple Silicon
+## 02 NVIDIA RTX 4070S vs. Mac M4 32GB
 
-| | RTX 4070 Super | M4 |
-|---|---|---|
-| **Model** | Qwen3.8-27B EXL3 | Qwen3.8-27B MLX |
-| **Quantization** | 2.00 bpw | 3-bit |
-| **Generation** | 37.21 tok/s avg. | 7.55 tok/s |
-| **Memory** | 11.3–11.5 GiB VRAM | ~12.4 GB peak physical footprint |
-| **Context** | 8,192 tokens | 262,144 max |
-| **KV cache** | Q4 | — |
-| **Benchmark** | 5 runs · 942 output tokens avg. · 25.43 s avg. | 1,000 output tokens · 132.5 s |
+| Platform | Model | Quant | Generation | Memory |
+| :-- | :-- | :-- | :-- | :-- |
+| **4070S** | Qwen3.8-27B EXL3 | 2.00 bpw | **37.21 token/s** | 11.5 GB |
+| **Mac M4** | Qwen3.8-27B MLX | 2-bit | **11.95 token/s** | 8.85 GB |
+| **Mac M4** | Qwen3.8-27B MLX | 3-bit | **7.55 token/s** | 12.4 GB |
+| **Mac M4** | Qwen3.8-27B MLX | 4-bit | **6.17 token/s** | 14.33 GB |
 
-The RTX 4070 Super is the high-throughput inference path, while the M4 provides a slower, more flexible local fallback.

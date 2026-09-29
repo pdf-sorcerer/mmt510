@@ -1,0 +1,37 @@
+---
+title: "Résumé Engagement and Observability"
+description: ""
+date: 2026-07-04
+category: "Product Systems"
+tags: ["HMAC", "Vercel", "Supabase", "Apple Push Notifications", "Observability"]
+stars: 0
+icon: /project-icons/attribution.png
+featured: false
+---
+
+## TL;DR
+
+I built application-specific résumé links that tell me when someone actually engages with a submitted application.
+
+## The goal
+
+Job applications normally disappear into a black box after submission.
+
+Attribution adds a narrow observability layer to résumé links so I can detect interaction with application materials without changing the destination or slowing down the person clicking.
+
+## How it works
+
+Each application gets unique links for resources such as my portfolio and LinkedIn profile. A click first passes through `mmt510.com`, where the attribution token is verified and the event is logged, before the visitor is immediately redirected to the intended asset.
+
+```text
+Resume link
+    ↓
+mmt510.com
+    ↓
+Signed HMAC token
+    ↓
+Verify + log event
+    ↓
+Immediate redirect
+    ↓
+Intended asset

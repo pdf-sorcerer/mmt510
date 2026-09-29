@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="ALL-LLLM Pod — Performance">
+  <main class="performance-page">
+    <a class="back" href="/projects/all-lllm-pod/">← ALL-LLLM Pod</a>
+
+    <header class="hero">
+      <p class="eyebrow">ALL-LLLM POD</p>
+      <h1>Performance</h1>
+      <p>
+        Realtime voice exposed a different constraint than context-window size:
+        latency.
+      </p>
+    </header>
+
+    <section>
+      <h2>Realtime Metrics</h2>
+
+      <p>
+        For realtime voice, I optimized for responsiveness rather than maximum
+        model quality: less prompt orchestration, fewer blocking operations, and
+        TTS starting as early as possible during streaming generation.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Current Range</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>ASR Runtime</td><td>0.16–0.29s</td><td>Whisper large-v3-turbo transcription</td></tr>
+          <tr><td>MLX TTFT</td><td>0.40–0.78s</td><td>Time-to-first-token on lighter prompts</td></tr>
+          <tr><td>TTFA</td><td>3.8–4.5s</td><td>Time-to-first-audio during simple conversations</td></tr>
+          <tr><td>Prompt Size</td><td>1.4k–4.3k chars</td><td>Final prompt after memory and retrieval</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Memory Benchmarks</h2>
+
+      <p>
+        I replaced toy prompts with benchmarks built from the actual transcript
+        corpus: roughly 75,000 speaker-labeled segments from 563 episodes, with
+        controlled memory facts injected into realistic conversation history.
+      </p>
+
+      <p>
+        The goal was to measure the practical cost of conversational memory:
+        how much prior context could be retained before latency became
+        unacceptable, and whether buried facts remained retrievable.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Context</th>
+            <th># Tokens</th>
+            <th>p50 TTFT</th>
+            <th>Equivalent</th>
+            <th>Finding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>No memory</td><td>0</td><td>0.52s</td><td>0 words</td><td>Baseline</td></tr>
+          <tr><td>Short memory</td><td>~390</td><td>1.32s</td><td>~271 words / ~1.2 min</td><td>Cheap enough for realtime voice</td></tr>
+          <tr><td>Moderate memory</td><td>~680</td><td>1.84s</td><td>~481 words / ~2.5 min</td><td>Still responsive</td></tr>
+          <tr><td>Heavy memory</td><td>~1,940</td><td>4.50s</td><td>~1,425 words / ~6.5 min</td><td>Starts to feel heavy for voice</td></tr>
+          <tr><td>Long conversation</td><td>~3,983</td><td>9.81s</td><td>~2,870 words / ~14.5 min</td><td>Latency becomes the dominant constraint</td></tr>
+          <tr><td>Stress window</td><td>~7,794</td><td>22.38s</td><td>~5,670 words / ~30 min</td><td>Too slow for interactive voice</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Retrieval</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Retrieval Test</th>
+            <th>Observed Result</th>
+            <th>Finding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Explicit user memory</td><td>~100%</td><td>Clearly marked user facts were recovered reliably</td></tr>
+          <tr><td>Targeted fact bank</td><td>~100%</td><td>Names, numbers, preferences, and identifiers were recovered when directly queried</td></tr>
+          <tr><td>Embedded sentence</td><td>20–60%</td><td>Facts hidden inside ordinary transcript text were substantially harder to recover</td></tr>
+          <tr><td>Anomaly prompt</td><td>Unstable</td><td>Measured salience more than memory</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        The practical limit was not context-window capacity. It was latency and
+        attention. For realtime voice, smaller sliding memory windows worked
+        better; larger context was better reserved for slower text or analysis
+        modes.
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .performance-page {
+    width: min(100% - 32px, 980px);
+    margin: 0 auto;
+    padding: 48px 0 96px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 48px;
+  }
+
+  .hero {
+    max-width: 760px;
+    margin-bottom: 64px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+  }
+
+  .hero h1 {
+    margin: 0 0 18px;
+    font-size: clamp(3rem, 9vw, 6rem);
+    line-height: 0.9;
+  }
+
+  section {
+    padding: 42px 0 54px;
+    border-top: 1px solid var(--border-color, #d8cdb8);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 0.92rem;
+  }
+
+  th,
+  td {
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border-color, #d8cdb8);
+  }
+
+  th {
+    font-weight: 700;
+  }
+
+  @media (max-width: 700px) {
+    .performance-page {
+      width: min(100% - 24px, 980px);
+    }
+
+    table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>
