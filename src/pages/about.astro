@@ -1185,3 +1185,130 @@ while (calendarCells.length % 7 !== 0) {
   });
 })();
 </script>
+
+<script is:inline>
+(() => {
+  if (window.__stravaMapFallbackInstalled) return;
+  window.__stravaMapFallbackInstalled = true;
+
+  function decodePolyline(encoded) {
+    const points = [];
+    let index = 0;
+    let lat = 0;
+    let lng = 0;
+
+    while (index < encoded.length) {
+      let b, shift = 0, result = 0;
+
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+
+      lat += (result & 1) ? ~(result >> 1) : (result >> 1);
+
+      shift = 0;
+      result = 0;
+
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+
+      lng += (result & 1) ? ~(result >> 1) : (result >> 1);
+
+      points.push([lat / 1e5, lng / 1e5]);
+    }
+
+    return points;
+  }
+
+  let attempts = 0;
+
+  function initStravaMaps() {
+    attempts += 1;
+
+    if (!window.L) {
+      if (attempts < 50) {
+        setTimeout(initStravaMaps, 100);
+      } else {
+        console.error('[Strava maps] Leaflet failed to load');
+      }
+      return;
+    }
+
+    document.querySelectorAll('.strava-map').forEach((el) => {
+      if (el.dataset.mapInitialized === 'true') return;
+
+      const encoded = el.dataset.polyline;
+      if (!encoded) return;
+
+      const points = decodePolyline(encoded);
+      if (points.length < 2) return;
+
+      el.dataset.mapInitialized = 'true';
+
+      const map = L.map(el, {
+        zoomControl: true,
+        attributionControl: true,
+        scrollWheelZoom: false
+      });
+
+      L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap'
+        }
+      ).addTo(map);
+
+      map.createPane('routePane');
+      map.getPane('routePane').style.zIndex = '650';
+      map.getPane('routePane').style.pointerEvents = 'none';
+
+      L.polyline(points, {
+        pane: 'routePane',
+        color: '#fc4c02',
+        weight: 6,
+        opacity: 1,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(map);
+
+      L.circleMarker(points[0], {
+        pane: 'routePane',
+        radius: 5,
+        weight: 2,
+        color: '#fc4c02',
+        fillColor: '#ffffff',
+        fillOpacity: 1
+      }).addTo(map);
+
+      L.circleMarker(points[points.length - 1], {
+        pane: 'routePane',
+        radius: 5,
+        weight: 2,
+        color: '#fc4c02',
+        fillColor: '#fc4c02',
+        fillOpacity: 1
+      }).addTo(map);
+
+      map.fitBounds(points, {
+        padding: [24, 24]
+      });
+
+      requestAnimationFrame(() => map.invalidateSize());
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStravaMaps);
+  } else {
+    initStravaMaps();
+  }
+
+  window.addEventListener('load', initStravaMaps);
+})();
+</script>
