@@ -119,10 +119,10 @@ const number = String(index).padStart(2, '0');
   }
 
   .project-heading {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
     gap: 1rem;
+    align-items: baseline;
     gap: 0.8rem;
     flex-wrap: wrap;
     min-height: 34px;
@@ -141,12 +141,14 @@ const number = String(index).padStart(2, '0');
 
 
   .project-span {
-    flex: 0 0 auto;
+    width: 150px;
     font-family: var(--font-mono);
     font-size: 0.68rem;
     font-weight: 600;
     color: var(--text-muted);
     white-space: nowrap;
+    text-align: left;
+    justify-self: end;
   }
 
   .project-desc {
