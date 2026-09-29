@@ -2,79 +2,46 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="About — Minrock Philosophy">
+<BaseLayout
+  title="About"
+  description="About Mason Thompson — product manager, builder, and lifelong tinkerer."
+>
   <article class="about-page">
     <header class="about-header">
-      <h1 class="page-title">About Minrock</h1>
-      <p class="page-subtitle">The story and philosophy behind the rock.</p>
+      <h1 class="page-title">About</h1>
     </header>
 
     <div class="about-content">
-      <h2>The Concept: Raw Ideas, Polished Rock</h2>
       <p>
-        <strong>Minrock</strong> was born from a simple belief: personal notes in an Obsidian vault represent the raw, unshaped volcanic rock of your thoughts. When published to the web, they deserve an architecture that feels as permanent and solid as stone, yet as fast and frictionless as light.
+        I've been building and tinkering with computers and electronics for most of my life.
+        As a kid, that mostly meant computer gaming—but even then, I was in terminals testing
+        settings and trying to squeeze out more performance. Outside of tech, my interests
+        include aviation, biology, astronomy, and spending time outdoors cycling, swimming,
+        and hiking.
       </p>
 
-      <blockquote>
-        "Minrock is the solid bedrock where knowledge rests; ScatterLeaf is the gentle breeze where ideas and conversations drift."
-      </blockquote>
+      <h2>How I work</h2>
 
-      <h2>The Mission: Democratizing Digital Sovereignty</h2>
       <p>
-        At its core, Minrock exists to <strong>democratize access and empower personal positioning on the open web</strong>. In an era where digital presence is increasingly corralled into corporate walled gardens and algorithmic feeds, this project provides everyone with a sovereign space to truly call their own—without outside interference, steep technical hurdles, and at zero financial cost.
+        I'm a bottom-up thinker and fairly technical for a product manager. My career has
+        largely been in SaaS startups like Zenefits and Ease, working on HRIS platforms,
+        employee benefits, and ways to automate tedious paperwork and operational workflows.
       </p>
 
-      <blockquote class="manifesto-quote">
-        <em>"A ideia do projeto é propiciar e democratizar o acesso e o posicionamento das pessoas na web, garantindo um espaço soberano para chamar de seu: sem interferências, sem grandes dificuldades e com custo zero."</em>
-        <br />
-        <span class="manifesto-author">— Renato Rezende, Creator of Minrock</span>
-      </blockquote>
-
-      <h2>Core Principles</h2>
-      <ul>
-        <li><strong>Pure SSG (Zero Bloat):</strong> Every page is pre-rendered at build time. No database calls, no client-side runtime bloat, and instant CDN delivery worldwide.</li>
-        <li><strong>Typography-First:</strong> Words are the interface. We optimize measure, line height, and font contrast so readers can stay immersed for hours.</li>
-        <li><strong>Four Handcrafted Palettes:</strong> Whether you prefer the warmth of aged paper (<em>Cream</em>), the focus of <em>Slate Navy</em>, clean editorial <em>White</em>, or battery-saving <em>Midnight OLED</em>, the design adapts effortlessly.</li>
-        <li><strong>Obsidian Native:</strong> Drop your Markdown files directly into <code>src/content/blog/</code> and watch them publish without custom plugin dependencies.</li>
-      </ul>
-
-      <h2>Craftsmanship & Origins</h2>
       <p>
-        Minrock was conceptualized, designed, and engineered with pride in Brazil 🇧🇷 by <strong><a href="https://github.com/rnt-rez" target="_blank" rel="noopener noreferrer">Renato Rezende</a></strong>. It represents a commitment to high-standard software craftsmanship tailored for the global open-source ecosystem.
+        After my last company was acquired in early 2022, I spent time retooling around
+        generative AI and learning the technology by building with it directly. That work
+        now spans local LLM infrastructure, speech recognition and diarization, multimodal
+        interfaces, cryptography, observability, and human-in-the-loop systems.
       </p>
 
-      <h2>Tech Stack</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Layer</th>
-            <th>Technology</th>
-            <th>Purpose</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Framework</td>
-            <td>Astro 7</td>
-            <td>Zero-JS static site generation</td>
-          </tr>
-          <tr>
-            <td>Styling</td>
-            <td>Vanilla Modern CSS</td>
-            <td>4 theme palettes with custom properties</td>
-          </tr>
-          <tr>
-            <td>Content</td>
-            <td>Obsidian Vault (Markdown)</td>
-            <td>Content collections with Zod schema</td>
-          </tr>
-          <tr>
-            <td>Discussions</td>
-            <td>ScatterLeaf</td>
-            <td>Iframe-free native comments Web Component</td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>Where I'm based</h2>
+
+      <p>
+        A surprising number of interviews in 2026 have asked where I'm based. I've also
+        linked my Strava profile as a simple way to show that I live and exercise in
+        Oakland, Berkeley, and the surrounding areas.
+      </p>
     </div>
   </article>
 </BaseLayout>
@@ -82,45 +49,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style>
   .about-page {
     padding-top: 1rem;
+    max-width: 780px;
   }
 
   .about-header {
     margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--border);
   }
 
   .page-title {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-size: 2.25rem;
-  }
-
-  .page-subtitle {
-    color: var(--text-muted);
-    font-size: 1.1rem;
     margin: 0;
+    font-size: 1.65rem;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.025em;
   }
 
   .about-content {
     font-size: 1.05rem;
-    line-height: 1.8;
-  }
-
-  .manifesto-quote {
-    margin: 1.75rem 0;
-    padding: 1.25rem 1.5rem;
-    border-left: 3px solid var(--accent);
-    background: var(--bg-surface);
-    border-radius: 0 8px 8px 0;
-    font-style: normal;
-  }
-
-  .manifesto-author {
-    display: inline-block;
-    margin-top: 0.6rem;
-    font-size: 0.85rem;
-    font-family: var(--font-mono);
+    line-height: 1.7;
     color: var(--text-muted);
+  }
+
+  .about-content p {
+    margin: 0 0 1.4rem;
+  }
+
+  .about-content h2 {
+    margin: 2.4rem 0 0.8rem;
+    font-size: 1.25rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  @media (max-width: 700px) {
+    .about-page {
+      padding-top: 0.5rem;
+    }
+
+    .about-content {
+      font-size: 1rem;
+      line-height: 1.65;
+    }
   }
 </style>
