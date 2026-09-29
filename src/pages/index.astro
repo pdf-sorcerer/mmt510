@@ -1,3 +1,186 @@
 ---
-return Astro.redirect('/projects');
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projectOrder = [
+  'console',
+  'hibi',
+  'meat-head',
+  'attribution',
+  'all-lllm-pod',
+];
+
+const allProjects = (await getCollection('projects')).sort(
+  (a, b) => projectOrder.indexOf(a.id) - projectOrder.indexOf(b.id)
+);
 ---
+
+<BaseLayout
+  title="Projects"
+  description="Product systems, local AI infrastructure, and multimodal experiments."
+>
+  <div class="projects-container">
+
+    <section class="profile-intro">
+      <p>
+        <strong>Hi there, I'm Mason</strong>. Thanks for taking a look at my portfolio.
+      </p>
+
+      <p>
+        The projects below are self-led efforts to understand applications of
+        generative AI without abstracting the work away behind tools like Claude Code,
+        Cursor, or OpenAI Codex.
+      </p>
+
+      <p>
+        Most code generation happens in-browser with ChatGPT, with some work delegated
+        to my local LLMs. I build and iterate in VS Code and Xcode, and use the terminal
+        for logging and debugging.
+      </p>
+    </section>
+
+    <section class="projects-panel">
+      <header class="panel-header">
+        <div class="panel-title-row">
+          <h1>Projects</h1>
+        </div>
+      </header>
+
+      <div class="projects-list" id="projects-list">
+        {allProjects.map((proj, index) => (
+          <div class="project-item">
+            <ProjectCard
+              title={proj.data.title}
+              description={proj.data.description}
+              date={proj.data.date}
+              slug={proj.id}
+              index={index + 1}
+              tags={proj.data.tags}
+              stars={proj.data.stars}
+              repoUrl={proj.data.repoUrl}
+              demoUrl={proj.data.demoUrl}
+              icon={proj.data.icon}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+
+<style>
+  .projects-container {
+    padding: 2rem 0 3rem;
+  }
+
+  .profile-intro {
+    max-width: 780px;
+    margin-bottom: 2.5rem;
+  }
+
+  .profile-meta {
+    margin: 0 0 0.8rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .profile-meta a {
+    color: inherit;
+  }
+
+  .profile-intro h1 {
+    margin: 0 0 1rem;
+    font-size: 2.25rem;
+    letter-spacing: -0.035em;
+  }
+
+  .profile-intro p:not(.profile-meta) {
+    max-width: 720px;
+    margin: 0.75rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .projects-panel {
+    border: 3px solid var(--text);
+    background: var(--bg-surface);
+    box-shadow: 10px 10px 0 var(--text);
+  }
+
+  .panel-header {
+    border-bottom: 3px solid var(--text);
+  }
+
+  .panel-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.2rem 1.4rem 0.95rem;
+  }
+
+  .panel-title-row h1 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 1.65rem;
+    text-transform: uppercase;
+    letter-spacing: -0.025em;
+  }
+
+  .filter-btn.active::after {
+    content: '';
+    position: absolute;
+    left: 0.45rem;
+    right: 0.45rem;
+    bottom: -3px;
+    height: 5px;
+    background: var(--accent);
+  }
+
+  :global([data-theme="classic-space"]) .filter-btn.active::after {
+    background: var(--accent2);
+  }
+
+  .projects-list {
+    display: block;
+  }
+
+  .project-item {
+    margin: 0;
+  }
+
+  .project-item + .project-item {
+    border-top: 3px solid var(--text);
+  }
+
+  @media (max-width: 700px) {
+    .projects-container {
+      padding-top: 1rem;
+    }
+
+    .projects-panel {
+      box-shadow: 6px 6px 0 var(--text);
+    }
+
+    .panel-title-row {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  :global([data-theme="classic-space"]) .filter-btn.active {
+    color: var(--accent);
+  }
+
+  :global([data-theme="classic-space"]) .projects-panel {
+    border-color: #0B1526;
+    box-shadow: 10px 10px 0 #0B1526;
+  }
+
+</style>
