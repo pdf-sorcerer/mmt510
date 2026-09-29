@@ -1,10 +1,12 @@
 {
-  "generated_at": null,
-  "athlete": {
-    "id": null,
-    "firstname": "Mason",
-    "lastname": "Thompson",
-    "profile_url": "https://www.strava.com"
+  "activities" : [
+
+  ],
+  "athlete" : {
+    "firstname" : "first",
+    "id" : 148396304,
+    "lastname" : "last",
+    "profile_url" : "https://www.strava.com/athletes/148396304"
   },
-  "activities": []
+  "generated_at" : "2026-09-29T22:14:51Z"
 }
