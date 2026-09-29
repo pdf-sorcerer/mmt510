@@ -4,7 +4,7 @@ description: "Persona-based chatbots. AI transcription, diarization, HITL tools,
 date: 2026-01-01
 span: "Jun 2025–Jun 2026"
 category: "Multimodal AI"
-tags: ["Voice", "WhisperX", "NvidiaNeMo", "Streamlit", "TTS", "LLM"]
+tags: ["WhisperX", "NeMo", "TTS", "LLM"]
 stars: 0
 icon: /project-icons/all-lllm.png
 featured: false

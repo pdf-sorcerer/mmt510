@@ -1,10 +1,10 @@
 ---
 title: "Console — Job Search Automation"
-description: ""
+description: "Finds jobs, assists applications, and tracks employer engagement."
 date: 2026-09-27
 span: "Apr 2026–Present"
 category: "Product Systems"
-tags: ["Electron", "React", "Node", "Supabase", "ATS", "AI"]
+tags: ["ATS", "React", "Supabase", "AI"]
 stars: 0
 icon: /project-icons/console.png
 featured: true

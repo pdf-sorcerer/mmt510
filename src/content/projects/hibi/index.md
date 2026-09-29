@@ -1,6 +1,6 @@
 ---
 title: "Hibi — macOS Supervisor"
-description: ""
+description: "Runs and monitors local AI services across Mac and PC."
 date: 2026-09-01
 span: "Jul 2026–Present"
 category: "Local AI Infrastructure"

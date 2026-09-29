@@ -1,10 +1,10 @@
 ---
 title: "Meat Head — Local-First AI"
-description: ""
+description: "Native chat client for local LLM, voice, and code inference."
 date: 2026-09-01
 span: "Sep 2026–Present"
 category: "Local AI"
-tags: ["Swift", "LLM", "Codegen", "ASR", "TTS"]
+tags: ["Swift", "LLM", "ASR", "TTS"]
 stars: 0
 icon: /project-icons/meathead.png
 featured: false

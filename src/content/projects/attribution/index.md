@@ -1,10 +1,10 @@
 ---
 title: "Résumé Engagement and Observability"
-description: ""
+description: "Tracks résumé-link activity and sends real-time notifications."
 date: 2026-07-04
 span: "Jul 2026"
 category: "Product Systems"
-tags: ["HMAC", "Vercel", "Supabase", "Apple Push Notifications", "Observability"]
+tags: ["HMAC", "Supabase", "APNs"]
 stars: 0
 icon: /project-icons/attribution.png
 featured: false
