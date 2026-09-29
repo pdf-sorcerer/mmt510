@@ -65,6 +65,7 @@ export const siteConfig: SiteConfig = {
   },
 
   navLinks: [
-    { title: 'Projects', href: '/projects' }
+    { title: 'Projects', href: '/projects' },
+    { title: 'About', href: '/about' }
   ]
 };
