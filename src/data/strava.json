@@ -1,6 +1,40 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 130.2,
+      "date" : "2026-09-29T19:15:55Z",
+      "distance_meters" : 914.4,
+      "distance_miles" : 0.5681816424,
+      "distance_yards" : 1000,
+      "elapsed_time" : 2003,
+      "elevation_gain_meters" : 0,
+      "id" : 20387440783,
+      "laps" : 20,
+      "max_heartrate" : 156,
+      "moving_time" : 949,
+      "name" : "Evening Swim",
+      "pace100yd_seconds" : 95,
+      "sport_type" : "Swim",
+      "summary_polyline" : "",
+      "url" : "https://www.strava.com/activities/20387440783"
+    },
+    {
+      "average_heartrate" : 121.6,
+      "date" : "2026-09-29T18:42:24Z",
+      "distance_meters" : 2820.8,
+      "distance_miles" : 1.7527633168,
+      "distance_yards" : 3085,
+      "elapsed_time" : 1564,
+      "elevation_gain_meters" : 36,
+      "id" : 20387443521,
+      "max_heartrate" : 151,
+      "moving_time" : 1534,
+      "name" : "Evening Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "{r_fFppdiVIRA\\\\bFAVC@cCTMAMMM@UAoHbAw@G}@Hu@NKEKQECi@AoAFYHOBU?kBLc@?gAFeATWJk@j@q@R}@JUB[?GAg@Ja@Bs@LWCY@i@EaBFo@DOGuAB]DWHg@FO?eEToADi@XWDcBDkAH}@@m@FSJU@OIaAHaA@[DOMOCU?MB{BFACKe@g@DWAs@Bm@Fg@T_@Bu@NU@e@NmCZq@NmABwATULAT@^Nz@DjBC\\FbB@TFR?^LfA?d@J|AH`@Bt@Nr@H|A?`APdBCPEH_@H?DB@A?",
+      "url" : "https://www.strava.com/activities/20387443521"
+    },
+    {
       "average_heartrate" : 93.7,
       "date" : "2026-09-27T14:31:02Z",
       "distance_meters" : 2843,
@@ -795,38 +829,6 @@
       "sport_type" : "Swim",
       "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20125106765"
-    },
-    {
-      "average_heartrate" : 113.8,
-      "date" : "2026-09-10T18:05:41Z",
-      "distance_meters" : 2836,
-      "distance_miles" : 1.762208156,
-      "distance_yards" : 3101,
-      "elapsed_time" : 1771,
-      "elevation_gain_meters" : 28,
-      "id" : 20125106774,
-      "max_heartrate" : 127,
-      "moving_time" : 1755,
-      "name" : "Evening Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "cs_fFfodiVFJBZIV@NHr@Br@JbAEP@TIRBNGNSFeADGD_@Bu@Ec@D[H_@@YF[BoDf@KCc@BoARSIOASUICQByBLc@@MG[?eAHi@?s@FYLw@LmAv@w@VQBOAaBNcBTUCY@m@E{@FkBD_AJOASBmA@UCWAi@Jq@@e@Fa@AB?mAHa@NuAJyA@i@FkAFIBmCBe@FU?e@Dq@BQDm@?g@FOAe@a@QAUB]Cm@@e@JOLAD}@Ho@NU?WDa@J}@Lw@DqARi@DODk@AYDWHIP@TPnABZ?jADP@XEf@Jz@?n@BZFTAb@Jv@A^BTH^HpARvA@VD^A~@Bl@J`AEV]HCD@@]BDDEC",
-      "url" : "https://www.strava.com/activities/20125106774"
-    },
-    {
-      "average_heartrate" : 106.4,
-      "date" : "2026-09-09T22:07:49Z",
-      "distance_meters" : 2846.2,
-      "distance_miles" : 1.7685461402,
-      "distance_yards" : 3113,
-      "elapsed_time" : 1925,
-      "elevation_gain_meters" : 20,
-      "id" : 20112181534,
-      "max_heartrate" : 124,
-      "moving_time" : 1925,
-      "name" : "Night Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "idcfFhjfiVM[?MCE?g@EIAk@AkACCCe@SwA@IEa@QaAAWBJASB[Ck@WwAA_@ImAD_AGaA?a@Ce@GWEu@HQRCLGN?n@S`AIJHPKXI~BQh@KPAhAY^AAMFKDAN?d@Il@E\\Dn@ENHT\\f@Fd@ERGj@@bAGvBE^Eb@AxBM|AEp@Gb@AZIHQPIJCxGW\\I^Ed@?t@M|@AjAKbAANFp@Hn@Gd@KP?n@Iz@EHEAAz@MZMHALO`@IP?t@S|@If@ANEbAALCt@CpBMb@?NJJNN@fAMN?PEjEi@\\Mb@An@Ih@Lb@ELFp@Cx@GV?TESaDMmA@UG_A?SF[AE",
-      "url" : "https://www.strava.com/activities/20112181534"
     }
   ],
   "athlete" : {
@@ -835,5 +837,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-09-30T02:41:56Z"
+  "generated_at" : "2026-09-30T03:42:41Z"
 }
