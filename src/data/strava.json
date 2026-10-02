@@ -1,6 +1,22 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 111.4,
+      "date" : "2026-10-01T18:29:21Z",
+      "distance_meters" : 2844.2,
+      "distance_miles" : 1.7673033982,
+      "distance_yards" : 3110,
+      "elapsed_time" : 1578,
+      "elevation_gain_meters" : 29,
+      "id" : 20414668522,
+      "max_heartrate" : 128,
+      "moving_time" : 1578,
+      "name" : "Evening Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "{r_fFlodiVAHLfA@h@Hp@LjBOt@C@q@FY?_ALMAEIE?uBZs@Fi@LWBm@Yy@LIBWVMDmBTWGS_@eAJk@?UGWBMHk@@a@DkCLi@HS@SNYLONKDOPe@LWDe@AQHOCe@R}BVk@ASQKAm@Hm@BOIQ@SHaCNaA@_@DiABk@FcADKB}@?[Fk@@OJQVmEPmBLOEOOOEe@DQHY@_AC[Bo@?w@H[EISEIEAOBw@A[Fe@GQDKN?Ja@Hm@@uAZaBLmARs@DWHqBRCNDf@Cr@FdCC|@D~@PlBDP@v@B^CV?VPj@LlAJp@HlAE\\@n@LnAAPMJ[HQTFI",
+      "url" : "https://www.strava.com/activities/20414668522"
+    },
+    {
       "average_heartrate" : 113.3,
       "date" : "2026-09-29T23:13:55Z",
       "distance_meters" : 2151.4,
@@ -811,22 +827,6 @@
       "sport_type" : "Swim",
       "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20134754855"
-    },
-    {
-      "average_heartrate" : 114.7,
-      "date" : "2026-09-11T11:51:01Z",
-      "distance_meters" : 1880.1,
-      "distance_miles" : 1.1682396171,
-      "distance_yards" : 2056,
-      "elapsed_time" : 1122,
-      "elevation_gain_meters" : 18,
-      "id" : 20134754845,
-      "max_heartrate" : 126,
-      "moving_time" : 1122,
-      "name" : "Lunch Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "g}`fFx`eiVUFmANw@N}@@_@QsAFc@Ge@@e@DWHSB{@FQAq@Hk@AiBNc@?_ADuALyCHqAJSCe@D{@DUAcBLk@Hi@B[AeBFQKIUMCo@@MFw@Fc@JIH]?wB\\WFmANO?WJM@Y?MBIH_@AkALc@H]L@j@R|AFdBFT@h@P`BCTQXCRNpA@p@PnB@d@BTDj@DN?ZATBz@Hf@Dp@IXWL_@HO?",
-      "url" : "https://www.strava.com/activities/20134754845"
     }
   ],
   "athlete" : {
@@ -835,5 +835,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-02T01:02:38Z"
+  "generated_at" : "2026-10-02T02:37:43Z"
 }
