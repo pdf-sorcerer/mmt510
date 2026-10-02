@@ -1,6 +1,40 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 108.7,
+      "date" : "2026-10-01T20:00:02Z",
+      "distance_meters" : 2888.9,
+      "distance_miles" : 1.7950786819000002,
+      "distance_yards" : 3159,
+      "elapsed_time" : 1899,
+      "elevation_gain_meters" : 25,
+      "id" : 20415138667,
+      "max_heartrate" : 129,
+      "moving_time" : 1825,
+      "name" : "Evening Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "qdcfFjjfiVD?DE?EEa@CEKo@Gy@Cs@Kk@GcBAg@U_AAi@B_@A[]}A@YIqA@KAEFs@Eq@J_@Km@?SQ_@Gc@DODCfASH?XG\\?JI?GFGb@Kf@C`BWV?p@Sj@ErAE?CZIr@IN@bAS@@B`@AADCCDHEJDNNNBTAd@@h@GxAGR@n@Iz@?TER?REX@r@ET?fAKf@@NET?nAMLMLGdAQ|CI|@IT?~@GR@LCz@IdACx@Gt@?TFP@NDTAv@I`@IxAKNGbAKXMNOLSLI^QZIPAVD\\Ed@Cf@@t@Q`@CVCZ?`AExAMHMG_@IoABE|AWR?XOZETGR?JENQNIh@E`AQbBQVGOsCJ?nASpAQ@INYAAv@d@Tk@]SID",
+      "url" : "https://www.strava.com/activities/20415138667"
+    },
+    {
+      "average_heartrate" : 123.7,
+      "date" : "2026-10-01T19:03:24Z",
+      "distance_meters" : 914.4,
+      "distance_miles" : 0.5681816424,
+      "distance_yards" : 1000,
+      "elapsed_time" : 2071,
+      "elevation_gain_meters" : 0,
+      "id" : 20414909666,
+      "laps" : 22,
+      "max_heartrate" : 150,
+      "moving_time" : 939,
+      "name" : "Evening Swim",
+      "pace100yd_seconds" : 94,
+      "sport_type" : "Swim",
+      "summary_polyline" : "",
+      "url" : "https://www.strava.com/activities/20414909666"
+    },
+    {
       "average_heartrate" : 111.4,
       "date" : "2026-10-01T18:29:21Z",
       "distance_meters" : 2844.2,
@@ -793,40 +827,6 @@
       "sport_type" : "Walk",
       "summary_polyline" : "ks_fFlodiVGN@TLvAHzANpAB^EFgBLk@FYWW@}@LQDa@TyANcDf@QEOA}@LUA[a@{DNiBNm@?q@DeALYL{@v@QFm@LW?{@Jo@LyARk@Ag@QWBgFPYDS?}ADq@Ho@BeCNaDJc@FqBDiBLaBDu@Hq@B_@JU@[Cg@@YFSI?c@KBe@?W@WF}@FQDKJoBPUH_AJm@LS@MD_@DK?SDiANu@B{@NOJ?FNhANt@@~@BZEpADt@PbBR~DH`@TdCBtBP`BCFMH",
       "url" : "https://www.strava.com/activities/20150967168"
-    },
-    {
-      "average_heartrate" : 105.5,
-      "date" : "2026-09-11T13:42:05Z",
-      "distance_meters" : 2839.8,
-      "distance_miles" : 1.7645693658000001,
-      "distance_yards" : 3106,
-      "elapsed_time" : 2096,
-      "elevation_gain_meters" : 27,
-      "id" : 20135085643,
-      "max_heartrate" : 119,
-      "moving_time" : 2096,
-      "name" : "Afternoon Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "udcfFvjfiVFCHK?MY_BGyBKu@?YIq@Cw@OcA?g@Ew@EIEa@?YIi@GgA@k@CeAD_@Gk@K_@A@ACEw@BMTAn@SvAMBADY@?NAb@B|A]h@ETGZGf@Ez@?`AWv@M\\@h@QXH?f@JNB@hAINEnACnBK~@Av@Gd@AJCt@CLC|ACr@IlACPEtBExBQn@C`@ER@dBKP@TCjACvAK\\N`@@zAMlASdBU^MXQl@i@NGL?ZGlAIlDMb@EP@pAI^APRXDPETAZG^Ep@OdBUVAbBSD@PPJE`@GzA?PCp@E^ALCHECQ?OSwCQyA?y@DSCW",
-      "url" : "https://www.strava.com/activities/20135085643"
-    },
-    {
-      "average_heartrate" : 127.1,
-      "date" : "2026-09-11T12:32:15Z",
-      "distance_meters" : 1188.7,
-      "distance_miles" : 0.7386237077000001,
-      "distance_yards" : 1300,
-      "elapsed_time" : 2541,
-      "elevation_gain_meters" : 0,
-      "id" : 20134754855,
-      "laps" : 26,
-      "max_heartrate" : 162,
-      "moving_time" : 1307,
-      "name" : "Lunch Swim",
-      "pace100yd_seconds" : 101,
-      "sport_type" : "Swim",
-      "summary_polyline" : "",
-      "url" : "https://www.strava.com/activities/20134754855"
     }
   ],
   "athlete" : {
@@ -835,5 +835,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-02T02:37:43Z"
+  "generated_at" : "2026-10-02T03:37:49Z"
 }
