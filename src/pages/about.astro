@@ -254,11 +254,11 @@ while (calendarCells.length % 7 !== 0) {
           aria-label="Open résumé preview"
           onclick="document.getElementById('resume-modal').showModal()"
         >
-          <iframe
-            src="/mason_thompson_mmt510_resume.pdf#page=1&view=FitH"
-            title="Résumé preview"
-            tabindex="-1"
-          ></iframe>
+          <img
+            src="/mason_thompson_mmt510_resume_preview.png"
+            alt="Preview of Mason Thompson's résumé"
+            class="resume-preview-image"
+          />
           <span class="resume-preview-overlay">View résumé</span>
         </button>
       </section>
@@ -590,19 +590,24 @@ while (calendarCells.length % 7 !== 0) {
     aspect-ratio: 8.5 / 11;
     padding: 0;
     overflow: hidden;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    outline: 3px solid rgba(0, 0, 0, 0.48);
+    outline-offset: 0;
     border-radius: 10px;
     background: white;
     cursor: pointer;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+      0 5px 16px rgba(0, 0, 0, 0.18);
   }
 
-  .resume-preview iframe {
+  .resume-preview-image {
+    display: block;
     width: 100%;
     height: 100%;
-    border: 0;
-    pointer-events: none;
+    object-fit: contain;
     background: white;
+    pointer-events: none;
   }
 
   .resume-preview-overlay {
