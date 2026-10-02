@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/p/:path*",
+      "destination": "https://www.microslop.tools/p/:path*"
+    }
+  ]
+}
