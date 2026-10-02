@@ -1,4 +1,4 @@
-# 🪨 Minrock — Tema Minimalista para Astro & Obsidian
+# 🧱 Minrock — Tema Minimalista para Astro & Obsidian
 
 > **"Ideias brutas do seu cofre pessoal, lapidadas com precisão em um blog estático ultrarrápido."**  
 > *"O Minrock é a rocha sólida onde o conhecimento descansa; o ScatterLeaf é a brisa suave onde as ideias e conversas flutuam."*

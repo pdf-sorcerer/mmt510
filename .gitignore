@@ -32,3 +32,5 @@ src.backup-*/
 *.before-*
 *.pre-project-cleanup
 *.pre-classic-space
+.vercel
+.env*.local

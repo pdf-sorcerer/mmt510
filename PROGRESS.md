@@ -1,4 +1,4 @@
-# 🪨 PROGRESS — Minrock (Doca de Desenvolvimento)
+# 🧱 PROGRESS — Minrock (Doca de Desenvolvimento)
 
 > **Versão:** v0.2.2 | **Status:** 🟢 Produção & Homologação | **Lighthouse:** 100/100  
 > **Autor:** Renato Rezende ([@rnt-rez](https://github.com/rnt-rez)) | **Harness:** `..\estaleiro`
@@ -47,7 +47,7 @@
   - Homologação visual e funcional do cardápio preventivo de ergonomia (onboarding de gaveta vazia, auto-fechamento inteligente ao desbanir e confirmação defensiva prévia no menu de moderação).
 - [x] Modal Completo de Compartilhamento Estilo Notion (24/09/2026):
   - Substituição do botão estático 'Copy link' no `ShareBar.astro` pelo modal interativo acionado por `[ ⎋ Share ]`.
-  - Mini Preview Card estilo Notion contendo brand badge (`🪨 Minrock`), título do artigo e resumo da postagem.
+  - Mini Preview Card estilo Notion contendo brand badge (`🧱 Minrock`), título do artigo e resumo da postagem.
   - Barra de URL canônica com botão `[ 🔗 Copy URL ]` e transição de feedback visual instantâneo para `[ ✓ Copied! ]` em verde esmeralda (`#10b981`).
   - Fileira de 6 botões de compartilhamento social calibrados no design system do Minrock (quadrados com `border-radius: 6px`, sem circularidade excessiva): LinkedIn, X, WhatsApp, Telegram (posicionado cirurgicamente entre WhatsApp e Facebook), Facebook e Email.
   - Acessibilidade aprimorada (`role="dialog"`, `aria-modal="true"`, foco automático no input, fechamento via ESC ou clique no backdrop e resiliência a View Transitions com `astro:after-swap`).

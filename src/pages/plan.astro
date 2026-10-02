@@ -1,19 +1,426 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const months = [
+  {
+    month: '2026-09',
+    title: 'Mac migration + GPU runtime specialization',
+    source: 'PC',
+    intro: 'September is dominated by the Flywheel Mac migration and renewed local-GPU inference work.',
+    entries: [
+      {
+        date: '2026-09-26',
+        title: 'GPU runtime supervision',
+        body: ['Added gpu_supervisor.py, moving local GPU inference from standalone benchmark scripts toward a managed runtime.'],
+      },
+      {
+        date: '2026-09-22',
+        title: 'Qwen / EXL3 inference branch',
+        body: [
+          'Built a dedicated Qwen3.8-27B EXL3 evaluation and inference branch.',
+          'Covered native inference benchmarking, GSM8K, HumanEval, MMLU-Pro, vision/inference tests, Q4 KV-cache experiments, 4K / 8K context testing, and gpu_flywheel.py.',
+          'Renewed focus on extracting useful local-model performance from a consumer RTX GPU.',
+        ],
+      },
+      {
+        date: '2026-09-15',
+        title: 'Flywheel Mac migration',
+        body: [
+          'Created the Flywheel Mac migration snapshot carrying forward persona services, memory, RAG, sliding-window state, transcript lifecycle, diarization, LLM / TTS / ASR managers, PC launch/control code, and historical transcript-repair implementations.',
+          'Also isolated a smaller mac_port_core containing the pieces required for the Mac-side runtime.',
+          'This is a migration / architecture-port milestone rather than the creation date of every contained component.',
+        ],
+      },
+    ],
+  },
+  {
+    month: '2026-08',
+    title: 'LocalSlopStudio / Console begins',
+    source: 'PC',
+    entries: [
+      {
+        date: '2026-08-24',
+        title: 'Shared runtime integration',
+        body: ['durable_loadbearing.py appears inside the existing ALL-LLLM Pod/runtime tree, linking the new job-search project with existing local infrastructure.'],
+      },
+      {
+        date: '2026-08-20',
+        title: 'LocalSlopStudio worker',
+        body: [
+          'Created localslopstudio/worker.py.',
+          'This is the earliest Python evidence in the PC corpus for the project that later becomes Console.',
+        ],
+      },
+    ],
+  },
+  {
+    month: '2026-07',
+    title: 'Runtime / application work continues',
+    source: 'PC',
+    intro: 'No newly created Python files appear in the PC inventory for July. That does not indicate inactivity; July work belongs primarily to the Mac-side application/runtime history and will be merged separately.',
+    entries: [],
+  },
+  {
+    month: '2026-06',
+    title: 'Lifecycle pipelines + production consolidation',
+    source: 'PC',
+    entries: [
+      { date: '2026-06-30', title: 'NVIDIA / Twitter mode extension', body: ['Added a mode-specific Twitter daemon.'] },
+      { date: '2026-06-14–15', title: 'Panel + face diarization', body: ['Built successive panel-diarization variants, face diarization, and e136 pipeline integration.'] },
+      { date: '2026-06-11–12', title: 'Runtime control', body: ['Added Twitter daemon, response calibration, boot controller, and PC launcher.'] },
+      { date: '2026-06-10', title: 'Persona registry', body: ['Formalized persona management with persona_registry.py, alongside lifecycle and F5-manifest tooling.'] },
+      { date: '2026-06-09', title: 'Full transcript lifecycle', body: ['The lifecycle explicitly becomes: transcribe → diarize → classify → UMAP → visualize.'] },
+      { date: '2026-06-07', title: 'e136 / ghost-audio research consolidation', body: ['Collected beam testing, ghost detection/review, probes, visualization, and run analysis into a final working branch.'] },
+      { date: '2026-06-06', title: 'Flywheel checkpoint + Clownfish integration', body: ['Consolidated Flywheel work alongside Clownfish, episode-renaming, and manifest-backfill tooling.'] },
+      { date: '2026-06-04', title: 'Brody lifecycle work', body: ['Added Brody MVP v3, diarization lifecycle tooling, and schmidt.py.'] },
+      { date: '2026-06-01', title: 'Episode mirroring', body: ['Added mirror_episode.py as a service.'] },
+    ],
+  },
+  {
+    month: '2026-05',
+    title: 'ALL-LLLM Pod reaches its broadest architecture',
+    source: 'PC',
+    intro: 'May brings together the previously separate persona, runtime, transcript-intelligence, speaker-ID, memory, RAG, TTS, ASR, and multimodal branches.',
+    entries: [
+      { date: '2026-05-30', title: 'Local-model performance benchmarking', body: ['Built TTFT and memory benchmarks for local inference.'] },
+      { date: '2026-05-29', title: 'Identity-gated motion / DNA', body: ['Built frame extraction, identity-gated motion extraction, motion-curve compilation, proof/persona extraction, and statistics.'] },
+      { date: '2026-05-27–28', title: 'Jensen pipeline', body: ['Created a new end-to-end corpus pipeline covering diarization, speaker labeling, transcription, extraction, face DNA, and Brody-to-transcript processing.'] },
+      { date: '2026-05-26', title: 'Brody lineage consolidation', body: ['Built tooling to collect historical Brody implementations into a candidate set, turning months of transcript-repair experiments into an explicit maintained lineage.'] },
+      { date: '2026-05-20–23', title: 'Runtime observability', body: ['Added turn metrics and visible runtime/thought inspection tooling.'] },
+      { date: '2026-05-19', title: 'Online context + character RAG', body: ['Added streaming local-model client, online context, character RAG, brain trace, conversation history, and user corpus logging.'] },
+      { date: '2026-05-17–18', title: 'Personas become managed data', body: ['Created persona migration, endpoints, store, profiles, speech-pattern auditing, and user-fact extraction.', 'Persona behavior is now represented in persistent services/data rather than only prompts and model weights.'] },
+      { date: '2026-05-16', title: 'F5 dataset construction', body: ['Added extraction and F5 dataset-generation tooling.'] },
+      { date: '2026-05-13–14', title: 'Multimodal ground-truth pipeline', body: ['Consolidated face clustering, NeMo diarization, canonical speaker labels, puppet/body states, standalone transcription, speaker labeling, voice corpora/manifests, and F5 slicing.'] },
+      { date: '2026-05-10', title: 'Motion / visual-character experiments', body: ['Added SAM2 tooling for motion profiles, character segmentation, and face detection.'] },
+      { date: '2026-05-09', title: 'Persistent session state', body: ['Added session summarization and Supabase backfill.'] },
+      { date: '2026-05-08', title: 'Exemplars + sliding-window memory', body: ['Built exemplar mining/patching plus sliding-window state management and orchestration.'] },
+      { date: '2026-05-07', title: 'Agentic memory + model comparison', body: ['Added model/pipeline comparison, agentic memory, memory orchestration, authoritative ASR, disfluency mining, and speaker/persona fingerprinting.'] },
+      { date: '2026-05-05', title: 'Local / Mac model dispatch', body: ['Added persona prompts, local/Mac LLM separation, dispatch logic, model/persona benchmarks, and audio-quality testing.'] },
+      { date: '2026-05-04', title: 'Existing Pod consolidated', body: ['Created a major snapshot of the existing system alongside PC-launcher work.'] },
+    ],
+  },
+  {
+    month: '2026-04',
+    title: 'Transcript forensics becomes a research program',
+    source: 'PC',
+    intro: 'April is dominated by systematic investigation of Whisper/WhisperX failures, VAD, ghost audio, repetition, residual audio, and decoding behavior.',
+    entries: [
+      { date: '2026-04-28–30', title: 'Ghost capture + low-level probing', body: ['Built dedicated ghost-capture, Whisper-logit, and beam-search tooling.'] },
+      { date: '2026-04-25–27', title: 'Repetition HITL workflow', body: ['Created repetition labeling, review tooling, comparison/review queues, and ground-truth scripts.', 'Consolidated a larger analysis corpus around ASR comparison, transcript deltas, manifold mapping, and diarization review.'] },
+      { date: '2026-04-23–24', title: 'Controlled decoding experiments', body: ['Ran hybrid sweeps, token-chain experiments, determinism tests, repetition probes, and controlled trial matrices.', 'Transcript failures are being converted into reproducible hypotheses instead of one-off observations.'] },
+      { date: '2026-04-21', title: 'Beam-search root-cause analysis', body: ['Built beam-tree inspection, beam-search variants, beam-size tests, and root-cause beam analysis.'] },
+      { date: '2026-04-19–20', title: 'Multi-pass ASR', body: ['Added multiple ASR pipelines, two-pass ASR, logit inspection, and pipeline comparisons.'] },
+      { date: '2026-04-11–17', title: 'VAD + dropout investigation', body: ['Built dropout analysis, windowed NeMo processing, VAD comparisons, final VAD variants, and multi-panel handling.'] },
+      { date: '2026-04-10', title: 'Reproducible ASR/diarization branch', body: ['Created a dedicated branch around Whisper, WhisperX, NeMo, episode ASR, and full-episode diarization.'] },
+      { date: '2026-04-06–09', title: 'Ghost-audio / residual investigation', body: ['Explored WhisperX measurements, root-cause analysis, ghost visualization, VAD, spectral residuals, heatmaps, continuity, and matrix representations.'] },
+    ],
+  },
+  {
+    month: '2026-03',
+    title: 'Focused heuristic experiments',
+    source: 'PC',
+    entries: [
+      { date: '2026-03-06', title: 'Small classifier/transcript experiments', body: ['Created small experimental utilities around the continuing classifier/transcript work.'] },
+      { date: '2026-03-03–04', title: 'Heuristic analysis', body: ['Added heuristics.py and supporting count/analysis tooling.', 'The low creation count does not necessarily reflect low activity; several files later copied into April-created directories retain March modification dates.'] },
+    ],
+  },
+  {
+    month: '2026-02',
+    title: 'Flywheel becomes a modular multimodal runtime',
+    source: 'PC',
+    entries: [
+      { date: '2026-02-25', title: 'Voice stress / prosody service', body: ['Added speech-derived stress/prosody analysis as another signal in the voice stack.'] },
+      { date: '2026-02-24', title: 'Service boundaries become explicit', body: ['Separated runtime responsibilities into managers and routers for TTS, LLM, ASR streaming, generation, real-time TTS, and constrained/on-rails behavior.', 'Architecture shifts from a largely monolithic Flywheel toward a service-oriented runtime.'] },
+      { date: '2026-02-22', title: 'Streaming voice experiments', body: ['Added VibeVoice 1.5 LoRA inference, Parakeet streaming ASR, and additional prototype voice-service branches.'] },
+      { date: '2026-02-20', title: 'RAG service', body: ['Added a dedicated RAG service, transcript probing, and further local-inference experiments.'] },
+      { date: '2026-02-19', title: 'Local TTS evaluation', body: ['Evaluated and locally wrapped multiple TTS approaches, including NeuTTS and F5.'] },
+      { date: '2026-02-18', title: 'Persona voice-model training', body: ['Built tooling for VibeVoice training, LoRA formatting/training, persona identity datasets, canonical-hit extraction, interactive persona chat, and Nemotron integration.'] },
+      { date: '2026-02-13', title: 'Memory + GPU services', body: ['Added memory service, GPU monitoring, and shared utilities.'] },
+      { date: '2026-02-11', title: 'Alternative local models', body: ['Evaluated additional Mistral/Nemotron inference paths.'] },
+    ],
+  },
+  {
+    month: '2026-01',
+    title: 'Flywheel begins',
+    source: 'PC',
+    entries: [
+      { date: '2026-01-27–30', title: 'Search + timing experiments', body: ['Added search and runtime-timing tests.'] },
+      { date: '2026-01-26', title: 'Prediction triage', body: ['Built sorting, splitting, root-audit, and prediction-triage tools.'] },
+      { date: '2026-01-23', title: 'Main runtime + keyword intelligence', body: ['Added the main application entry point and keyword_miner.py.'] },
+      { date: '2026-01-16', title: 'Flywheel runtime', body: ['Created flywheel_main.py, iOS integration, ElevenLabs service, audio upload/testing, user-prosody handling, and OpenAI integration.', 'This is the first explicit Flywheel runtime in the corpus.'] },
+    ],
+  },
+  {
+    month: '2025-12',
+    title: 'Production transcript forensics',
+    source: 'PC',
+    entries: [
+      { date: '2025-12-25', title: 'Model + ground-truth evaluation', body: ['Added model-run, probe, and A/B evaluation tooling.'] },
+      { date: '2025-12-21–23', title: 'News ingestion + DM routing', body: ['Built a runtime branch for news ingestion, news-shock detection, DM routing/reading, preprocessing, and before/after evaluation.'] },
+      { date: '2025-12-18', title: 'Runtime state + news RAG', body: ['Added DM-hosting and news-RAG components to ALL-LLLM Pod.'] },
+      { date: '2025-12-03–13', title: 'Transcript contamination repair', body: ['Built successive tools for Brody review, batch contamination analysis, repair, contaminated-turn splitting, and probing repaired output.', 'This becomes the production HITL / transcript-forensics lineage.'] },
+    ],
+  },
+  {
+    month: '2025-11',
+    title: 'Transcript repair becomes explicit',
+    source: 'PC',
+    entries: [
+      { date: '2025-11-21', title: 'Training-data tooling', body: ['Continued preparing and curating training material.'] },
+      { date: '2025-11-16', title: 'Repair pipeline', body: ['Created a clear detect → split → repair → rewrite corpus workflow.'] },
+      { date: '2025-11-12–13', title: 'Containment / training experiments', body: ['Added containment, training, and merge experiments around the evolving transcript system.'] },
+    ],
+  },
+  {
+    month: '2025-10',
+    title: 'Speaker/transcript intelligence matures',
+    source: 'PC',
+    intro: 'October is the densest part of the 2025 PC work.',
+    entries: [
+      { date: '2025-10-24', title: 'Episode lifecycle infrastructure', body: ['Added migration/setup, manifests, episode management, unique-face linking, statistics, and short-segment filtering.', 'Hammerhead is now operating as a data-production system.'] },
+      { date: '2025-10-23', title: 'Unified transcript construction', body: ['Added unified transcript-building infrastructure.'] },
+      { date: '2025-10-22', title: 'Word alignment + speaker verification', body: ['Added WhisperX word alignment, reference-clip generation, and speaker verification.'] },
+      { date: '2025-10-19–21', title: 'Human review + heuristic resolution', body: ['Built facebank training, merge review, audit UI, banter review, micro-segment mapping, and heuristic resolution.', 'Ambiguous automated output now has explicit human-review paths.'] },
+      { date: '2025-10-16–18', title: 'Audio + face evidence converge', body: ['Hammerhead gains face mapping, audio mapping, enrollment manifests, patched clustering diarization, face backfill, and inline execution.'] },
+      { date: '2025-10-15', title: 'Hammerhead begins', body: ['Started a structured application around timeline validation, export, session management, and multimodal identity review.'] },
+      { date: '2025-10-08–10', title: 'Stable speaker-reference infrastructure', body: ['Built reusable reference-speaker tooling around embeddings, classifiers, Titanet references, CNN tests, and target-speaker comparisons.'] },
+      { date: '2025-10-06–07', title: 'Voting / similarity experiments', body: ['Added heuristic cleanup, MFCC similarity, and cluster-voting approaches.'] },
+      { date: '2025-10-05', title: 'Prosody / SER enters classification', body: ['Speaker identity expands beyond embeddings to include prosodic/emotional signals.'] },
+      { date: '2025-10-02–03', title: 'Legend begins', body: ['Built Whisper testing, embeddings, classifier generation, episode splitting, benchmarking, accuracy measurement, XG classification, 5-way classification, and a production pipeline.'] },
+      { date: '2025-10-01', title: 'NeMo 2', body: ['Created a new compact pipeline around embeddings, guest classification, PyAnnote tests, RTTM handling, and ASR.'] },
+    ],
+  },
+  {
+    month: '2025-09',
+    title: 'ALL-LLLM Pod becomes multimodal',
+    source: 'PC',
+    entries: [
+      { date: '2025-09-29–30', title: 'Classifier infrastructure extracted', body: ['Separated embedding extraction, classifier creation, XG classification, execution, and model inspection into reusable tooling.'] },
+      { date: '2025-09-28', title: 'Clownfish v2', body: ['Created a structured face/audio/speaker-export branch.'] },
+      { date: '2025-09-25–27', title: 'Jellyfish v2', body: ['Added timeline, clustering, enhanced diarization, episode selection, shared-clip UI, sessions, and exports.'] },
+      { date: '2025-09-21–22', title: 'Moon Jellyfish review application', body: ['Built a structured operator-facing environment for face mapping, similarity review, cluster review, visualization, timelines, audio, exports, overlap training, diarizer preview, confidence scoring, backfill, and cross-episode quality.'] },
+      { date: '2025-09-18–20', title: 'Go Fish → Clownfish → Jellyfish', body: ['Speaker identity, ASR, diarization, and face evidence begin converging into the same workflow.'] },
+      { date: '2025-09-17', title: 'Face recognition enters the system', body: ['Added custom face-analysis scripts alongside the speaker-classification work.'] },
+      { date: '2025-09-16', title: 'Speaker pipeline v3', body: ['Added multi-model feature extraction, Random Forest tests, pipeline training, and larger classifier prototypes.'] },
+      { date: '2025-09-12–15', title: 'Multi-persona expansion', body: ['Expanded persona work beyond Sacks to Chamath and Friedberg.', 'The ALL-LLLM Pod project identity becomes explicit in the filesystem.'] },
+      { date: '2025-09-07–11', title: 'Context + external information', body: ['Added experiments around push notifications, DM logic, web search, context hashing, and style handling.'] },
+      { date: '2025-09-05–06', title: 'iOS inference', body: ['Built iOS-facing local inference with remote, vLLM, and RAG variants.'] },
+      { date: '2025-09-01–03', title: 'Sacks v2 runtime iteration', body: ['Rapid experiments around prompting, no-prompt behavior, batching, minimal prompts, neutral behavior, and runtime structure.'] },
+    ],
+  },
+  {
+    month: '2025-08',
+    title: 'ALL-LLLM Pod v1 expands into speaker intelligence',
+    source: 'PC',
+    entries: [
+      { date: '2025-08-31', title: 'Sacks v2 begins', body: ['Started the next persona-runtime branch.'] },
+      { date: '2025-08-19', title: 'Embedding work consolidated', body: ['Collected earlier Chamath/Sacks/Friedberg classifiers, voice detection, embeddings, similarity analysis, bulk episode classification, and classifier validation.', 'Creation timestamps indicate this was likely a consolidation/migration event rather than the original creation date for every file.'] },
+      { date: '2025-08-14–15', title: 'Episode-scale processing', body: ['Moved from individual samples toward whole-episode and large-corpus processing.'] },
+      { date: '2025-08-13', title: 'Multi-speaker classification', body: ['Expanded from target-speaker recognition toward 4-way/5-way and multiscale speaker classification.'] },
+      { date: '2025-08-12', title: 'NeMo / Titanet pipeline', body: ['Built tooling around diarization, Titanet embeddings, NeMo embeddings, classifier training, evaluation, and VAD-aware classification.'] },
+      { date: '2025-08-11', title: 'Speaker-classification sprint', body: ['Created the first concentrated speaker-classification branch combining diarization with Sacks-specific recognition.'] },
+    ],
+  },
+  {
+    month: '2025-07',
+    title: 'ALL-LLLM Pod v1 becomes a local inference service',
+    source: 'PC',
+    entries: [
+      { date: '2025-07-13', title: 'Runtime consolidation', body: ['Added another consolidated runtime experiment around the evolving persona stack.'] },
+      { date: '2025-07-12', title: 'Inference optimization sprint', body: ['Iterated on faster, interactive local serving.'] },
+      { date: '2025-07-11', title: 'Train → merge → serve workflow', body: ['Formalized the model lifecycle into fine-tune → merge → serve.'] },
+      { date: '2025-07-10', title: 'Local / remote inference architecture expands', body: ['Added local inference, remote inference, 8-bit serving, model-run variants, and inference service boundaries.', 'Also continued development of the Sacks-v3 training branch.'] },
+      { date: '2025-07-04', title: 'Larger-model experimentation', body: ['Started a Mistral 8x7B branch to explore larger/MoE persona inference.'] },
+      { date: '2025-07-02', title: 'Mini Mogul', body: ['Built the first clear remote inference service for ALL-LLLM Pod v1.', 'Local persona models could now be exposed through a callable HTTP service rather than only run interactively on the host machine.'] },
+    ],
+  },
+  {
+    month: '2025-06',
+    title: 'ALL-LLLM Pod v1 begins',
+    source: 'PC',
+    entries: [
+      { date: '2025-06-30', title: 'First complete persona-training pipeline', body: ['Built the initial Mistral 7B + LoRA/PEFT training and merge workflow for a Sacks-style persona.', 'The system could load prompt/completion training data, train LoRA adapters, merge adapters into the base model, and output a standalone persona model.'] },
+      { date: '2025-06-29', title: 'First persona-model utility', body: ['Created the first Sacks persona-model utility.', 'This is the beginning of ALL-LLLM Pod v1.'] },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title=".plan"
+  description="Reverse-chronological build history for Mason Thompson's local AI, multimodal, and product systems."
+>
+  <main class="plan-page">
+    <header class="plan-header">
+      <p class="eyebrow">PROJECT HISTORY</p>
+      <h1>.plan</h1>
+      <p class="lede">
+        Reverse-chronological reconstruction of the systems I've been building.
+        Current pass is primarily PC-source evidence; Mac/Hibi history will be layered in next.
+      </p>
+    </header>
+
+    <div class="timeline">
+      {months.map((month) => (
+        <section class="month-block">
+          <header class="month-header">
+            <div>
+              <div class="month-date">{month.month}</div>
+              <h2>{month.title}</h2>
+            </div>
+            <span class="source-tag">[{month.source.toLowerCase()}]</span>
+          </header>
+
+          {month.intro && <p class="month-intro">{month.intro}</p>}
+
+          {month.entries.map((entry) => (
+            <article class="entry">
+              <div class="entry-date">{entry.date}</div>
+              <div class="entry-body">
+                <h3>{entry.title}</h3>
+                {entry.body.map((paragraph) => <p>{paragraph}</p>)}
+              </div>
+            </article>
+          ))}
+        </section>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
 
 <style>
-  /* Keep .plan nav typography identical to the other top-level links */
-  :global(header a[href="/plan"]),
-  :global(header a[href="/plan"]:visited),
-  :global(header a[href="/plan"][aria-current="page"]) {
-    font: inherit !important;
-    font-size: inherit !important;
-    font-weight: inherit !important;
-    letter-spacing: inherit !important;
-    color: inherit !important;
+  .plan-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.25rem 0 5rem;
+  }
+
+  .plan-header {
+    max-width: 760px;
+    margin-bottom: 3.5rem;
+  }
+
+  .eyebrow,
+  .month-date,
+  .entry-date,
+  .source-tag {
+    font-family: var(--font-mono);
+  }
+
+  .eyebrow {
+    margin: 0 0 0.7rem;
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+
+  .plan-header h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.3rem);
+    line-height: 1;
+  }
+
+  .lede {
+    max-width: 720px;
+    margin: 1rem 0 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .month-block {
+    padding: 0 0 3.25rem;
+    margin: 0 0 3.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .month-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .month-date {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+  }
+
+  .month-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    line-height: 1.3;
+  }
+
+  .source-tag {
+    flex: 0 0 auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    margin-top: 0.15rem;
+  }
+
+  .month-intro {
+    max-width: 760px;
+    margin: 0.25rem 0 1.5rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 1.5rem;
+    padding: 1.35rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .entry-date {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.5;
+    padding-top: 0.15rem;
+  }
+
+  .entry-body h3 {
+    margin: 0 0 0.45rem;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  .entry-body p {
+    margin: 0.35rem 0 0;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 700px) {
+    .plan-page {
+      padding-top: 1.25rem;
+    }
+
+    .month-header {
+      display: block;
+    }
+
+    .source-tag {
+      display: inline-block;
+      margin-top: 0.6rem;
+    }
+
+    .entry {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
   }
 </style>
 
 <style>
-  /* Keep .plan nav typography identical to the other top-level links */
   :global(header a[href="/plan"]),
   :global(header a[href="/plan"]:visited),
   :global(header a[href="/plan"][aria-current="page"]) {
