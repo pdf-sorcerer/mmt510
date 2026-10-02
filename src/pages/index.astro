@@ -6,14 +6,13 @@ import { getCollection } from 'astro:content';
 const projectOrder = [
   'console',
   'hibi',
-  'meat-head',
   'attribution',
   'all-lllm-pod',
 ];
 
-const allProjects = (await getCollection('projects')).sort(
-  (a, b) => projectOrder.indexOf(a.id) - projectOrder.indexOf(b.id)
-);
+const allProjects = (await getCollection('projects'))
+  .filter((project) => project.id !== 'meat-head')
+  .sort((a, b) => projectOrder.indexOf(a.id) - projectOrder.indexOf(b.id));
 ---
 
 <BaseLayout
