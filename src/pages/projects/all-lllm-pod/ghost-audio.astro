@@ -9,43 +9,37 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
     <header class="hero">
       <p class="eyebrow">TRANSCRIPT RECONSTRUCTION</p>
       <h1>Ghost Audio</h1>
-      <p class="lede"><em>An investigation into transcript text omissions</em></p>
+      <p class="lede">An investigation into transcript text omissions</p>
 
       <p>
-        <strong>Ghost Audio</strong> is a transcript failure mode where speech is clearly
-        present in the source audio but absent from the transcript.
+        <strong>Ghost Audio</strong> is speech that's present in the source but so faint or buried that even a human
+        struggles to hear it, causing it to vanish from the transcript without a trace. Unlike a
+        standard omission—the kind counted by word error rate—it leaves no visible gap, so nothing
+        signals that anything is missing. The only way to find it is by being familiar with the source.
       </p>
 
       <p>
-        It is easy to miss because the transcript can still look complete. Missing speech
-        quietly changes dialogue, context, and the training data built from it.
+        <strong>Why this matters:</strong> When an entire segment of a host's speech disappears,
+        the transcript can distort what they said, or what they were responding to, with no signs
+        of error. That directly degrades the training data, teaching models relationships and
+        response patterns that never actually occurred.
       </p>
 
       <p>
-        While auditing Episode 136 of the All-In Podcast, I found two Ghost Audio events
-        seconds apart. One had survived in an older transcript but disappeared from later,
-        otherwise superior pipelines. The other existed only in the source audio.
-      </p>
-
-      <p>
-        That discovery led to a month-long investigation into the acoustic stack, decoder
-        behavior, and a workflow for surfacing similar omissions elsewhere in the corpus.
+        To illustrate this, I use two movie examples: a staged clip from <em>Star Wars</em> and a
+        real one from <em>The Dark Knight</em>, found on YouTube.
       </p>
     </header>
 
     <section>
-      <h2>Why omissions matter</h2>
 
-      <p>
-        A missing utterance can preserve grammatical continuity while destroying meaning.
-      </p>
 
       <details class="accordion-block">
-        <summary><span>Why Omissions Matter: Featuring <em>The Empire Strikes Back (1980)</em></span></summary>
+        <summary><span>Illustrating Ghost Audio: <em>The Empire Strikes Back (1980)</em></span></summary>
 
         <div class="video-block">
           <video controls>
-            <source src="/all-lllm-pod/ghost-audio/sw_ghost.mp4" type="video/mp4" />
+            <source src="https://pdf-sorcerer.github.io/alp/sw_ghost.mp4" type="video/mp4" />
           </video>
           <div class="video-caption">SOURCE VIDEO · THE EMPIRE STRIKES BACK (1980)</div>
         </div>
@@ -81,9 +75,10 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             <div class="transcript-box">
               <p><strong>Vader:</strong> "If only you knew the power of the dark side. Obi-Wan never told you what happened to your father."</p>
               <p><strong>Luke:</strong> "He told me enough. He told me you killed him!"</p>
-              <p style="border-left: 4px solid #111; padding-left: 12px;">
-  <span class="ghost-loop-line"><strong>Vader:</strong> "No. I am your father."</span>
-</p>
+              <p class="ghost-quote">
+                <span class="ghost-icon" aria-hidden="true">👻</span>
+                <span class="ghost-loop-line"><strong>Vader:</strong> "No. I am your father."</span>
+              </p>
               <p><strong>Luke:</strong> "No. No. That's not true! That's impossible!"</p>
             </div>
           </div>
@@ -91,11 +86,11 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
       </details>
 
       <details class="accordion-block">
-        <summary><span>Why Omissions Matter: Featuring <em>The Dark Knight (2008)</em></span></summary>
+        <summary><span>Illustrating Ghost Audio: <em>The Dark Knight (2008)</em></span></summary>
 
         <div class="video-block">
           <video controls>
-            <source src="/all-lllm-pod/ghost-audio/out.mp4" type="video/mp4" />
+            <source src="https://pdf-sorcerer.github.io/alp/out.mp4" type="video/mp4" />
           </video>
           <div class="video-caption">SOURCE VIDEO · THE DARK KNIGHT (2008)</div>
         </div>
@@ -128,77 +123,129 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             <h3>Ghost Audio Transcript</h3>
             <div class="transcript-box">
               <p><strong>Joker:</strong> "There's only minutes left, so you'll have to play my little game if you want to save one of them."</p>
-              <p style="border-left: 4px solid #111; padding-left: 12px;">
-  <span class="ghost-loop-line"><strong>Batman:</strong> "Them?"</span>
-</p>
+              <p class="ghost-quote">
+                <span class="ghost-icon" aria-hidden="true">👻</span>
+                <span class="ghost-loop-line"><strong>Batman:</strong> "Them?"</span>
+              </p>
               <p><strong>Joker:</strong> "You know, for a while there, I thought you really were Dent."</p>
             </div>
           </div>
         </div>
       </details>
+
+      <div class="ghost-discovery">
+        <p>
+          While auditing Episode 136 of the All-In Podcast, I found two Ghost Audio events
+          seconds apart. One had survived in an older transcript but disappeared from later,
+          otherwise superior pipelines. The other existed only in the source audio.
+        </p>
+
+        <p>
+          That discovery led to a month-long investigation into the acoustic stack, decoder
+          behavior, and a workflow for surfacing similar omissions elsewhere in the corpus.
+        </p>
+      </div>
+
     </section>
 
 <section>
       <h2>Discovery — Episode 136</h2>
 
       <p>
-        In early 2026, I moved to Libsyn as the canonical source for All-In Podcast episodes
-        and reprocessed several older episodes as a quality check.
+        In early 2026, I moved to Libsyn as the canonical source for <em>All-In Podcast</em>
+        episodes and reprocessed several older episodes to check them against my existing transcripts.
       </p>
 
       <p>
-        Episode 136 exposed the problem.
+        Episode 136 was already a known problem case for my voice classifier, which attributes speech
+        to individual hosts. Its cold open is overlapping banter: the moderator, [name], was on vacation,
+        and the other hosts were mocking him.
       </p>
 
       <p>
-        Around t≈21s, Friedberg says <strong>"Oh, my god."</strong> The line was clearly
-        audible and had survived in an early transcript, but was absent from every later
-        pipeline.
+        About 21 seconds in, Friedberg says, <strong>“Oh, my god.”</strong> The line is clearly audible
+        and appeared in an early transcript, but every later pipeline dropped it. Moments later, guest
+        Brad Gerstner says the same phrase, but so quietly that I only noticed it while watching the
+        source video. It appeared in no transcript at all.
       </p>
 
-      <p>
-        Seconds later, guest Brad Gerstner says the same phrase. His line was missing from
-        every transcript. I only found it because I happened to be watching the source video
-        while investigating Friedberg's omission.
-      </p>
+      <div class="video-block">
+        <video controls>
+          <source src="https://pdf-sorcerer.github.io/alp/both_ghosts.mp4" type="video/mp4" />
+        </video>
+      </div>
 
-      <div class="comparison">
-        <div>
-          <h3>Ground truth</h3>
-          <p><strong>Chamath:</strong> "...shortest that's the fattest, and the fattest that's the dumbest."</p>
-          <p class="recovered"><strong>Friedberg:</strong> "Oh, my god."</p>
-          <p><strong>Friedberg:</strong> "He's not even here. You can't do that. It's awful."</p>
-          <p class="recovered"><strong>Gerstner:</strong> "Oh, my god."</p>
-          <p><strong>Friedberg:</strong> "That's just bullying. That's awful."</p>
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <h3>Ground Truth</h3>
+          <div class="transcript-box">
+            <p><strong>Chamath:</strong> "...shortest that's the fattest, and the fattest that's the dumbest."</p>
+
+            <p class="ghost-marked">
+              <strong>Friedberg:</strong> "Oh, my god."
+            </p>
+
+            <p><strong>Friedberg:</strong> "He's not even here. You can't do that. It's awful."</p>
+
+            <p class="ghost-marked">
+              <strong>Gerstner:</strong> "Oh, my god."
+            </p>
+
+            <p><strong>Friedberg:</strong> "That's just bullying. That's awful."</p>
+          </div>
         </div>
 
-        <div>
-          <h3>Ghost Audio transcript</h3>
-          <p><strong>Chamath:</strong> "...shortest that's the fattest, and the fattest that's the dumbest."</p>
-          <p class="ghost-loop-line"><strong>Friedberg:</strong> "Oh, my god."</p>
-          <p><strong>Friedberg:</strong> "He's not even here. You can't do that. It's awful."</p>
-          <p class="ghost-loop-line"><strong>Gerstner:</strong> "Oh, my god."</p>
-          <p><strong>Friedberg:</strong> "That's just bullying. That's awful."</p>
+        <div class="comparison-card">
+          <h3>Ghost Audio Transcript</h3>
+          <div class="transcript-box">
+            <p><strong>Chamath:</strong> "...shortest that's the fattest, and the fattest that's the dumbest."</p>
+
+            <p class="ghost-quote">
+              <span class="ghost-icon" aria-hidden="true">👻</span>
+              <span class="ghost-loop-line"><strong>Friedberg:</strong> "Oh, my god."</span>
+            </p>
+
+            <p><strong>Friedberg:</strong> "He's not even here. You can't do that. It's awful."</p>
+
+            <p class="ghost-quote">
+              <span class="ghost-icon" aria-hidden="true">👻</span>
+              <span class="ghost-loop-line"><strong>Gerstner:</strong> "Oh, my god."</span>
+            </p>
+
+            <p><strong>Friedberg:</strong> "That's just bullying. That's awful."</p>
+          </div>
         </div>
       </div>
-    </section>
-
-    <section>
-      <details class="accordion-block">
-        <summary><span>Ruling Out Audio Failure</span></summary>
-        
 
       <p>
-        Before blaming the decoder, I worked through the acoustic stack to establish whether
-        the missing speech actually existed in the signal.
+        Friedberg’s omission was detectable because an earlier version had the line. Gerstner’s was not.
+        Nothing in the transcripts pointed to it, and I can’t say how many others are missing.
+      </p>
+
+</section>
+
+    <section>
+      <h2>Process of Elimination: Ruling Out Audio Failure</h2>
+
+      <p>
+        I started by working with chatbots to understand the atomics of AI transcription—topics I hadn’t
+        really explored beyond being a meat proxy for models and copy-pasting code to process episodes
+        at scale. Then I probed each layer of the pipeline to find where the speech was disappearing.
+      </p>
+
+      <p>
+        First, I wanted to know whether the missing speech was actually in the audio. Sounds silly, but
+        I wanted to visualize the audio window and rule out simple explanations. One was whether Chamath’s
+        voice immediately before Friedberg was effectively outcompeting the quieter speech; another was
+        whether segmentation was dropping it before the decoder ever had a chance.
       </p>
 
       <ul>
-        <li>VAD onset and offset thresholds were varied</li>
-        <li>RMS energy confirmed voiced activity in both ghost regions</li>
-        <li>pYIN detected traces of Friedberg's pitch after spectral subtraction</li>
-        <li>cross-attention showed weak but non-zero activity in both ghost regions</li>
-        <li>speaker embeddings placed Friedberg's ghost inside Chamath's local embedding space</li>
+        <li><strong>VAD:</strong> I varied onset and offset thresholds to test whether segmentation was dropping the lines. <em>[Confirm outcome.]</em></li>
+        <li><strong>Energy:</strong> RMS showed energy above the noise floor in both regions.</li>
+        <li><strong>Pitch:</strong> After spectral subtraction against a Chamath-only noise reference (17–19s), pYIN recovered F0 traces in Friedberg's region that were absent from the raw audio. Gerstner's region showed none. Subtraction can create artifacts, so this is suggestive, not conclusive.</li>
+        <li><strong>Cross-attention:</strong> Near zero in Friedberg's region. Low but present around Gerstner's, though that region borders active speech.</li>
+        <li><strong>Speaker embeddings:</strong> Friedberg's ghost fell inside Chamath's local embedding space, suggesting the segment may have been absorbed into his turn rather than recognized as separate speech.</li>
       </ul>
 
       <div class="figure">
@@ -208,9 +255,8 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             alt="Libsyn spectral subtraction with pYIN F0"
           />
         </a>
-        <p>
-          Libsyn spectral subtraction — pYIN F0 on raw versus residual audio,
-          t=19–30s.
+        <p class="figure-caption">
+          <em>pYIN F0 on raw vs. residual audio, t=20–30s; arrow marks F0 recovered after subtraction.</em>
         </p>
       </div>
 
@@ -221,25 +267,37 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             alt="Whisper cross-attention around both Ghost Audio regions"
           />
         </a>
-        <p>
-          Whisper cross-attention filtered to audio-aligned heads. Attention is visible
-          around Friedberg's ghost region and weaker, but present, around Gerstner's.
+        <p class="figure-caption">
+          <em>Whisper cross-attention filtered to audio-aligned heads.</em>
         </p>
       </div>
 
       <p>
-        The audio existed. The model was seeing it.
+        <strong>Learning:</strong> Friedberg’s “Oh, my god.” omission could not be explained by an empty
+        or missing audio region. After spectral subtraction, pYIN recovered pitch overlapping the timestamps
+        where he spoke, while Whisper cross-attention showed only marginal, non-zero attention over the same
+        region. The speech signal appeared to be present, but the model was barely attending to it.
       </p>
 
       <p>
-        The question became: why wasn't it decoding it?
+        Gerstner’s line was never recovered by the acoustic analysis, so I drop that case from the
+        investigation here and focus on Friedberg going forward.
+      </p>
+
+      <p>
+        The question became: <strong>why wasn't it decoding the speech?</strong>
       </p>
     
-      </details>
     </section>
 
     <section>
       <h2>Decoder Fork</h2>
+
+      <p>
+        My production pipeline used CTranslate2, which didn't expose the decoder internals I needed
+        to inspect. So I built a parallel PWW pipeline using Pyannote, reference Whisper, and Wav2vec
+        to access cross-attention and token probabilities directly.
+      </p>
 
       <p>
         At timestamp anchor <code>&lt;|18.98|&gt;</code>, hundreds of possible decoder
@@ -289,60 +347,197 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
       </p>
     </section>
 
-    <section>
-      <h2>Timestamp-Token Finding</h2>
+    <section class="findings-section">
+      <h2>A couple findings</h2>
 
-      <p>
-        The practical result was simpler than the custom decoder work: the production
-        WhisperX pipeline could recover Friedberg's ghost by enabling timestamp tokens.
-      </p>
-
-      <div class="comparison">
-        <div>
-          <h3>Timestamp Tokens OFF</h3>
-
+      <ol class="finding-list">
+        <li>
           <p>
-            <strong>18.873–19.914</strong><br />
-            And the fattest, that's the dumbest.
+            Token timestamps—not to be confused with word-level Wav2Vec timestamps—were sufficient
+            to surface Friedberg's ghost in my production WhisperX pipeline. So, no PWW required,
+            which was great because compute cost was about <strong>3 minutes vs. 9.5 minutes</strong>.
           </p>
 
+          <details class="finding-accordion" open>
+            <summary>
+              <span>Production WHX beam=5 timestamp tokens</span>
+            </summary>
+
+            <div class="finding-body">
+              <div class="timestamp-grid">
+                <div class="timestamp-card">
+                  <h3>Production WHX beam=5, Timestamp Tokens OFF</h3>
+
+                  <div class="timestamp-content">
+                    <p>
+                      <strong>18.873–19.914</strong><br />
+                      And the fattest, that's the dumbest.
+                    </p>
+
+                    <p class="timestamp-ghost">
+                      <span class="ghost-icon timestamp-ghost-icon" aria-hidden="true">👻</span>
+                      <span class="ghost-fade-text">
+                        <strong>20.834–21.495</strong><br />
+                        Oh, my god.
+                      </span>
+                    </p>
+
+                    <p>
+                      <strong>25.317–26.097</strong><br />
+                      He's not even here.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="timestamp-card">
+                  <h3>Production WHX beam=5, Timestamp Tokens ON</h3>
+
+                  <div class="timestamp-content">
+                    <p>
+                      <strong>18.873–19.914</strong><br />
+                      And the fattest, that's the dumbest.
+                    </p>
+
+                    <p class="timestamp-recovered">
+                      <strong>20.834–21.495</strong><br />
+                      Oh, my god.
+                    </p>
+
+                    <p>
+                      <strong>25.317–26.097</strong><br />
+                      He's not even here.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </li>
+
+        <li>
           <p>
-            <strong>25.317–26.097</strong><br />
-            He's not even here.
-          </p>
-        </div>
-
-        <div>
-          <h3>Timestamp Tokens ON</h3>
-
-          <p>
-            <strong>18.873–19.914</strong><br />
-            And the fattest, that's the dumbest.
+            The custom pipeline was also tested at beam=1 and hallucinated text in the regions
+            spanning Friedberg and Gerstner. The failures manifested as localized repetition and
+            confabulation. With manual review, those failures can act as signals that a region
+            deserves inspection—even when the missing speech itself is not recoverable, as with Gerstner.
           </p>
 
-          <p class="recovered">
-            <strong>20.834–21.495</strong><br />
-            Oh, my god.
-          </p>
+          <details class="finding-accordion" open>
+            <summary>
+              <span>PWW beam=1 Speech Hallucinations</span>
+            </summary>
 
-          <p>
-            <strong>25.317–26.097</strong><br />
-            He's not even here.
-          </p>
-        </div>
-      </div>
+            <div class="finding-body">
+              <p class="table-meta">
+                Reference Whisper large-v3 · Pyannote decoder · Wav2Vec2 · beam=1 · 9.5 min GPU compute
+              </p>
 
-      <p>
-        That reduced the problem from a custom research pipeline to something detectable
-        inside the production stack.
-      </p>
+              <div class="finding-table-wrap">
+                <table class="finding-table">
+                  <thead>
+                    <tr>
+                      <th>Start</th>
+                      <th>End</th>
+                      <th>Text</th>
+                      <th>Flag</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>18.863</td>
+                      <td>19.897</td>
+                      <td>And the fattest, that's the dumbest.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>20.850</td>
+                      <td>21.499</td>
+                      <td>Oh, my god.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="row-repeat">
+                      <td>22.046</td>
+                      <td>23.100</td>
+                      <td>Oh, my god.</td>
+                      <td>⚠ localized repetition</td>
+                    </tr>
+
+                    <tr class="row-halluc">
+                      <td>23.444</td>
+                      <td>25.020</td>
+                      <td>I'm bullying when you're bullying.</td>
+                      <td>⚠ localized hallucination</td>
+                    </tr>
+
+                    <tr>
+                      <td>25.386</td>
+                      <td>26.063</td>
+                      <td>He's not even here.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>26.125</td>
+                      <td>26.638</td>
+                      <td>You can't do that.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>26.803</td>
+                      <td>27.032</td>
+                      <td>It's awful.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="row-halluc">
+                      <td>27.364</td>
+                      <td>28.902</td>
+                      <td>I'm bullying when you're bullying.</td>
+                      <td>⚠ localized hallucination</td>
+                    </tr>
+
+                    <tr>
+                      <td>29.024</td>
+                      <td>29.702</td>
+                      <td>That's just bullying.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>29.723</td>
+                      <td>30.077</td>
+                      <td>It's awful.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="row-halluc">
+                      <td>30.243</td>
+                      <td>30.942</td>
+                      <td>I'm bullying when you're bullying.</td>
+                      <td>⚠ localized hallucination</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="finding-note">
+                The hallucinations above are a happy accident of the PWW pipeline's decoder.
+              </p>
+            </div>
+          </details>
+        </li>
+      </ol>
     </section>
 
     <section>
       <h2>BERD-1</h2>
 
       <p>
-        BERD-1 operationalizes the finding by comparing two production-equivalent
+        BERD-1 operationalizes the first finding by comparing two production-equivalent
         WhisperX Beam=5 transcripts:
       </p>
 
@@ -355,43 +550,6 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         When the timestamp-enabled transcript contains speech absent from the
         timestamp-disabled transcript, BERD-1 generates a candidate repair for human review.
       </p>
-    </section>
-
-    <section>
-      <details class="accordion-block">
-        <summary><span>Experimental Decoder Behavior</span></summary>
-
-
-      <p>
-        A separate PyTorch Whisper pipeline at Beam=1 produced localized repetition and
-        hallucination in the same difficult regions.
-      </p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Start</th>
-            <th>End</th>
-            <th>Text</th>
-            <th>Flag</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>18.863</td><td>19.897</td><td>And the fattest, that's the dumbest.</td><td></td></tr>
-          <tr><td>20.850</td><td>21.499</td><td>Oh, my god.</td><td></td></tr>
-          <tr><td>22.046</td><td>23.100</td><td>Oh, my god.</td><td>⚠ localized repetition</td></tr>
-          <tr><td>23.444</td><td>25.020</td><td>I'm bullying when you're bullying.</td><td>⚠ localized hallucination</td></tr>
-          <tr><td>25.386</td><td>26.063</td><td>He's not even here.</td><td></td></tr>
-          <tr><td>26.125</td><td>26.638</td><td>You can't do that.</td><td></td></tr>
-          <tr><td>26.803</td><td>27.032</td><td>It's awful.</td><td></td></tr>
-          <tr><td>27.364</td><td>28.902</td><td>I'm bullying when you're bullying.</td><td>⚠ localized hallucination</td></tr>
-          <tr><td>29.024</td><td>29.702</td><td>That's just bullying.</td><td></td></tr>
-          <tr><td>29.723</td><td>30.077</td><td>It's awful.</td><td></td></tr>
-          <tr><td>30.243</td><td>30.942</td><td>I'm bullying when you're bullying.</td><td>⚠ localized hallucination</td></tr>
-        </tbody>
-      </table>
-    
-      </details>
     </section>
 
     <section>
@@ -688,67 +846,78 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
   }
 
 
-  /* Compact Decoder Fork */
+  /* Decoder Fork comparison */
   .decoder-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 42px;
+    gap: 0;
     margin: 28px 0 24px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 12px;
+    overflow: hidden;
   }
 
   .decoder-grid article {
-    padding: 0;
+    padding: 24px 26px 22px;
     border: 0;
-    border-radius: 0;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.16);
     min-height: 0;
   }
 
+  .decoder-grid article + article {
+    border-left: 1px solid rgba(0, 0, 0, 0.14);
+  }
+
   .decoder-grid article .eyebrow {
-    margin: 0 0 12px;
-    font-size: 0.78rem;
+    margin: 0 0 10px;
+    font-size: 0.76rem;
     letter-spacing: 0.11em;
+    opacity: 0.68;
   }
 
   .decoder-grid article h3 {
-    margin: 0 0 8px;
+    margin: 0 0 18px;
     font-size: 1.35rem;
-    line-height: 1.25;
+    line-height: 1.2;
   }
 
   .decoder-grid article table {
     width: 100%;
-    margin: 14px 0 10px;
+    margin: 0;
     border-collapse: collapse;
     font-size: 0.92rem;
   }
 
   .decoder-grid article td {
-    padding: 6px 8px;
+    padding: 8px 0;
     border: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
   }
 
   .decoder-grid article td:first-child {
     width: 55%;
-    padding-left: 0;
   }
 
   .decoder-grid article td:last-child {
     text-align: right;
-    padding-right: 0;
     font-variant-numeric: tabular-nums;
   }
 
   .decoder-grid article > p:last-child {
-    margin: 10px 0 0;
+    margin: 14px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.14);
     font-weight: 700;
   }
 
   @media (max-width: 700px) {
     .decoder-grid {
       grid-template-columns: 1fr;
-      gap: 30px;
+    }
+
+    .decoder-grid article + article {
+      border-left: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.14);
     }
   }
 
@@ -811,4 +980,408 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
     margin: 0 0 10px;
   }
 
+</style>
+
+<style>
+  .hero {
+    margin-bottom: 28px;
+  }
+
+  .ghost-page > section:first-of-type {
+    border-top: 0 !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+</style>
+
+<style>
+  .ghost-page > section:nth-of-type(2) {
+    border-top: 0 !important;
+    padding-top: 0 !important;
+    margin-top: 56px !important;
+  }
+</style>
+
+<style>
+  /* Decoder Fork — winner emphasis + cleaner rows */
+  .decoder-grid article td {
+    border-bottom: 0 !important;
+  }
+
+  .decoder-grid article > p:last-child {
+    border-top: 0 !important;
+    padding-top: 4px !important;
+  }
+
+  .decoder-grid article:last-child {
+    background: rgba(0, 0, 0, 0.045);
+    position: relative;
+  }
+
+  .decoder-grid article:last-child::after {
+    content: "WINNER";
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    padding: 4px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    border-radius: 999px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    line-height: 1;
+  }
+
+  .decoder-grid article:last-child > p:last-child {
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 700px) {
+    .decoder-grid article:last-child::after {
+      top: 18px;
+      right: 20px;
+    }
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child::after {
+    content: none !important;
+  }
+
+  .decoder-grid article:last-child {
+    background: rgba(0, 0, 0, 0.055);
+  }
+
+  .decoder-grid article:last-child .eyebrow {
+    opacity: 1;
+    font-weight: 700;
+  }
+
+  .decoder-grid article:last-child > p:last-child {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 7px 10px !important;
+    border: 1px solid rgba(0, 0, 0, 0.18) !important;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.28);
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child > p:last-child {
+    position: relative;
+  }
+
+  .decoder-grid article:last-child > p:last-child::before {
+    content: "👑";
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    font-size: 1.45rem;
+    line-height: 1;
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child > p:last-child {
+    background: #ffe991 !important;
+    border-color: rgba(0, 0, 0, 0.18) !important;
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child .eyebrow {
+    display: inline-block;
+    background: #ffe991;
+    padding: 2px 4px;
+  }
+</style>
+
+<style>
+  .ghost-quote {
+    position: relative;
+    padding-left: 58px !important;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ghost-quote::before {
+    content: "";
+    position: absolute;
+    left: 34px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #111;
+  }
+
+  .ghost-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.6rem;
+    line-height: 1;
+    opacity: 1 !important;
+  }
+</style>
+
+<style>
+  /* Ghost Audio transcript: ghost replaces the vertical omission marker */
+  .ghost-quote::before {
+    content: none !important;
+  }
+
+  .ghost-quote {
+    padding-left: 92px !important;
+    min-height: 82px;
+  }
+
+  .ghost-icon {
+    left: 0;
+    font-size: 4.6rem;
+    line-height: 1;
+  }
+</style>
+
+<style>
+  .ghost-quote {
+    padding-left: 74px !important;
+  }
+
+  .ghost-icon {
+    transform: translateY(-50%) scaleX(0.72) !important;
+    transform-origin: left center;
+  }
+</style>
+
+<style>
+  .ghost-loop-line {
+    opacity: 0.5;
+    animation: ghost-loop-fade 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes ghost-loop-fade {
+    0%   { opacity: 0.5; }
+    100% { opacity: 0.05; }
+  }
+</style>
+
+<style>
+  .ghost-loop-line {
+    opacity: 0.5;
+    animation: ghost-loop-fade 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes ghost-loop-fade {
+    0%   { opacity: 0.5; }
+    100% { opacity: 0.15; }
+  }
+</style>
+
+<style>
+  /* Decoder findings */
+  .finding-list {
+    margin: 24px 0 0;
+    padding-left: 1.5rem;
+  }
+
+  .finding-list > li {
+    margin-bottom: 34px;
+    padding-left: 4px;
+  }
+
+  .finding-list > li > p {
+    margin: 0 0 22px;
+  }
+
+  .finding-accordion {
+    width: 100%;
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 7px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .finding-accordion summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    font-family: monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: #087cff;
+  }
+
+  .finding-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .finding-accordion summary::before {
+    content: "▸";
+    margin-right: 12px;
+  }
+
+  .finding-accordion[open] summary::before {
+    content: "▾";
+  }
+
+  .finding-body {
+    padding: 24px;
+  }
+
+  .timestamp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .timestamp-card {
+    border: 1px solid rgba(0, 0, 0, 0.11);
+    border-radius: 6px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .timestamp-card h3 {
+    margin: 0;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    font-family: monospace;
+    font-size: 0.76rem;
+    line-height: 1.5;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    opacity: 0.68;
+  }
+
+  .timestamp-content {
+    padding: 20px 26px;
+    font-family: monospace;
+  }
+
+  .timestamp-content p {
+    margin: 0 0 28px;
+    line-height: 1.8;
+  }
+
+  .timestamp-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .timestamp-recovered,
+  .timestamp-recovered strong {
+    color: #5f9b6b;
+  }
+
+  .timestamp-ghost {
+    position: relative;
+    padding-left: 58px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    margin: 0 0 28px;
+  }
+
+  .timestamp-ghost-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.3rem;
+    line-height: 1;
+  }
+
+  .timestamp-ghost .ghost-fade-text,
+  .timestamp-ghost .ghost-fade-text strong {
+    color: #d98e83;
+    opacity: 0.5;
+    animation: ghost-loop-fade 5s ease-in-out infinite alternate;
+  }
+
+  .table-meta {
+    margin: 4px 0 20px;
+    font-family: monospace;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .finding-table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 6px;
+  }
+
+  .finding-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: monospace;
+    font-size: 0.8rem;
+  }
+
+  .finding-table th {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  .finding-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    vertical-align: top;
+  }
+
+  .finding-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .finding-table .row-repeat td {
+    background: rgba(123, 97, 255, 0.08);
+  }
+
+  .finding-table .row-halluc td {
+    background: rgba(212, 160, 23, 0.11);
+  }
+
+  .finding-note {
+    margin: 22px 0 4px;
+  }
+
+  @media (max-width: 700px) {
+    .timestamp-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .finding-body {
+      padding: 16px;
+    }
+  }
+</style>
+
+<style>
+  .timestamp-ghost .ghost-fade-text,
+  .timestamp-ghost .ghost-fade-text strong {
+    opacity: 0.6;
+    animation: timestamp-ghost-fade 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes timestamp-ghost-fade {
+    0%   { opacity: 0.6; }
+    100% { opacity: 0.2; }
+  }
 </style>
