@@ -1,6 +1,22 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 105.2,
+      "date" : "2026-10-06T18:46:32Z",
+      "distance_meters" : 2745.3,
+      "distance_miles" : 1.7058498063,
+      "distance_yards" : 3002,
+      "elapsed_time" : 1596,
+      "elevation_gain_meters" : 30,
+      "id" : 20483242372,
+      "max_heartrate" : 116,
+      "moving_time" : 1596,
+      "name" : "Evening Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "_s_fF~odiVI`AF^ZvECDGBk@HaBNKQi@@i@Bk@NOHi@JQGc@DUDSJSBUFg@DuC^KAMSMYC?kDNeELm@Hg@J[NUTc@Zm@N@@_@DUDaAH_ANUCWDU@KC_@@QIK?_AHcBDkAFmABk@FQ?iBHk@H_@Ka@BQJa@FO^]GuFTYAKMk@@KGIHs@Hq@?i@FqBHYCi@L[?KEGY}@CgALk@PcAHoAR]J]@{@LiAJOJW@QE_Cb@AXDf@AACBNn@Fb@OxB?n@RlCJz@DpBLx@JhAPfAAz@Bv@",
+      "url" : "https://www.strava.com/activities/20483242372"
+    },
+    {
       "average_heartrate" : 92.5,
       "date" : "2026-10-05T20:58:13Z",
       "distance_meters" : 2827.6,
@@ -811,22 +827,6 @@
       "sport_type" : "Swim",
       "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20222105752"
-    },
-    {
-      "average_heartrate" : 126.7,
-      "date" : "2026-09-17T18:54:46Z",
-      "distance_meters" : 2796.4,
-      "distance_miles" : 1.7376018644000002,
-      "distance_yards" : 3058,
-      "elapsed_time" : 1515,
-      "elevation_gain_meters" : 25,
-      "id" : 20222115277,
-      "max_heartrate" : 144,
-      "moving_time" : 1515,
-      "name" : "Evening Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "ks_fFlpdiVEJf@tGCJYLi@Ae@Ja@DOCAKq@@{@H_C\\m@Kw@LsAJi@Jw@H[Oe@?WDwDN{@Fc@Gw@Fy@Ro@Zg@BSJc@D@BBAqAT{@FkBTYCy@OYDaCHg@D{CHwALuBJy@?WBKB[`@eH\\cABWAeALaCPo@AoAHGUKK@Ee@B[?gBNQNaBRkATw@BWJwAJCLa@Ec@Ho@Dg@Na@BIHBNLTFZBb@@hABT?ZEX?b@PjBBd@J`AAd@RzBB|@Jb@Bl@Hr@AZBn@JhA@^QRKD",
-      "url" : "https://www.strava.com/activities/20222115277"
     }
   ],
   "athlete" : {
@@ -835,5 +835,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-07T01:52:23Z"
+  "generated_at" : "2026-10-07T02:52:37Z"
 }
