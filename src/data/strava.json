@@ -1,6 +1,22 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 99.3,
+      "date" : "2026-10-06T23:57:10Z",
+      "distance_meters" : 2754.9,
+      "distance_miles" : 1.7118149679,
+      "distance_yards" : 3013,
+      "elapsed_time" : 5108,
+      "elevation_gain_meters" : 26,
+      "id" : 20485439142,
+      "max_heartrate" : 118,
+      "moving_time" : 1996,
+      "name" : "Night Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "gs_fF~qdiVZjE@`@IT_CPm@Em@F_BX{C\\}B\\o@D[@MMMSMIY@]E_CFsBVSAo@DkARa@Ni@h@_AZkAH}C^k@@e@QY@s@FmBDiH`@UIy@De@Ik@EMBMLKTMNOBYLcADS?KCS@S@MHU?}@Ja@@S?_@E_@SO?aBLkDLQAW_@oADk@AQ@_A`@g@JwBZoCVGBE|@N~ABl@RvAH@^ID@?C@BAHAKDA?B@CABIGE?@DACBHBB@EFBAEBDCDCE@B?C@?AB@E@??CBFEEC?HBA@EEDHGCH@@CGOEFCHCE@ABDBC@DGI?DBCELAGDIBJ?ALEM@@GCJB??EGF@CBBEC@MCBD?CBBEC?B?@DCA?HAAD?AGBLCGA@BECABBABAC@BDA?DA@EEAE@FC?BACA@@DEEEEBD??CC@DD@A?DBAE?@?ABBCAA?BAAB@?B",
+      "url" : "https://www.strava.com/activities/20485439142"
+    },
+    {
       "average_heartrate" : 88.7,
       "date" : "2026-10-06T21:21:26Z",
       "distance_meters" : 2865,
@@ -811,22 +827,6 @@
       "sport_type" : "Swim",
       "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20234603370"
-    },
-    {
-      "average_heartrate" : 106.3,
-      "date" : "2026-09-18T18:49:22Z",
-      "distance_meters" : 2841.5,
-      "distance_miles" : 1.7656256965000001,
-      "distance_yards" : 3108,
-      "elapsed_time" : 1705,
-      "elevation_gain_meters" : 30,
-      "id" : 20234603385,
-      "max_heartrate" : 117,
-      "moving_time" : 1678,
-      "name" : "Evening Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "ir_fFntdiVJtBOf@CRA@O?sAJe@JIECGk@DO?o@JWF}Ej@SF_ALaAJYG[g@A?sCN_ABgAJa@Aq@@eANm@X[\\WNSHo@J{@FaBXy@Hq@?MIWGWBIEQ@}@LiABuAJ_@@a@Cm@F{@@MBaA?u@HQFo@Bc@\\U?o@JsDPOGeBN[GU?UK{APc@?g@FeAAm@BEAMa@[Ba@Ec@?u@JSJAFOAYBkB^oAPSFQAaAJWJB@A@YBIEUFiBRIRDfAFZB\\INKLJ~@AjARvCRx@AZJp@FlA@p@Hr@FrACP@XLpAF|@OLMDE?@?SJABD@",
-      "url" : "https://www.strava.com/activities/20234603385"
     }
   ],
   "athlete" : {
@@ -835,5 +835,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-07T06:59:29Z"
+  "generated_at" : "2026-10-07T09:26:10Z"
 }
