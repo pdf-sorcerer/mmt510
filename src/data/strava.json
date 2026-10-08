@@ -11,7 +11,7 @@
       "id" : 20507788312,
       "max_heartrate" : 98,
       "moving_time" : 171,
-      "name" : "Afternoon Walk",
+      "name" : "Sync test - update",
       "sport_type" : "Walk",
       "summary_polyline" : "ks_fFjldiVEWBDEC\\w@B@GTCPKZ?NDf@",
       "url" : "https://www.strava.com/activities/20507788312"
@@ -833,5 +833,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-08T21:17:43Z"
+  "generated_at" : "2026-10-08T21:44:50Z"
 }
