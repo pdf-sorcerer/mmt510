@@ -1,6 +1,22 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 100,
+      "date" : "2026-10-08T23:47:58Z",
+      "distance_meters" : 2381.4,
+      "distance_miles" : 1.4797328994,
+      "distance_yards" : 2604,
+      "elapsed_time" : 1754,
+      "elevation_gain_meters" : 38,
+      "id" : 20511862987,
+      "max_heartrate" : 109,
+      "moving_time" : 1650,
+      "name" : "Night Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "ms_fFtodiVCHD\\@^Z|D?\\BTGPy@FSB_@PO@EAUSy@L_AHWFwFn@c@J_@@q@LUQI[MCO@MAc@FwBJI@c@As@Fe@@SDc@?kAPMHUF]b@_@Pc@J@?u@J_@@eBXk@FQ?k@COIMAUBSIg@FQFg@Dw@?wAJYAW@SDcABSDc@@_CPg@?SFINIBa@B{@Ji@?eAHGBW?o@HcBDUBaA@SEQ?QIOAeAHo@Ak@H]g@IBOEKBOCS@k@Hc@D[Jo@DmAT]NgABOFk@Fu@DAF@\\J|@C`@FVJJA|@Fr@FJH?h@KC@CA@@",
+      "url" : "https://www.strava.com/activities/20511862987"
+    },
+    {
       "average_heartrate" : 92.9,
       "date" : "2026-10-08T21:57:56Z",
       "distance_meters" : 2805.1,
@@ -809,22 +825,6 @@
       "sport_type" : "Walk",
       "summary_polyline" : "mr_fFzndiVKB?ZFnAPxBOd@BBDL?\\EJ@REDk@BoANU@AO?FEBHASAOBu@BOCaAPe@Dm@JY@a@Hc@FU?q@LeAN[EWOMME?SDgCF]DM?e@B{@@ODaABeAPSH]RKNa@Tm@PsAJs@NcBTi@CMCUKK?YFg@Ak@DUG_ABg@MWAYBc@?e@FY?_@FmBDy@Ji@Ac@JOVc@Bo@@KFSBaA@e@DY@SHe@H]Am@Pu@BcAFUFkAB[CUBm@QUAQa@E@s@@UDw@HmAZsBTi@LSA[?w@Pk@DMF_@Bq@PyALCHA^Lr@?RB`@F^JREp@CJG@CDENDdAPzBDP@|AL~@FnAHj@B^HVBVAz@P|BCJGH]D",
       "url" : "https://www.strava.com/activities/20262884928"
-    },
-    {
-      "average_heartrate" : 87.4,
-      "date" : "2026-09-20T14:13:29Z",
-      "distance_meters" : 2837.7,
-      "distance_miles" : 1.7632644867,
-      "distance_yards" : 3103,
-      "elapsed_time" : 2069,
-      "elevation_gain_meters" : 28,
-      "id" : 20260845398,
-      "max_heartrate" : 108,
-      "moving_time" : 2069,
-      "name" : "Afternoon Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "idcfFbjfiVA??KO_AKy@BUA_@KyAIWCs@?g@SoACE?o@Cg@EOUqD@D@UEuCSkA?_@JOb@MNI^EPMLAf@O^GN?nBYTGBIJAnDWREfBUDBFHJB\\ANFFZfAG`@?hAG|@Cb@G~@AbAGxGYdAGNa@LAZ?PCP?bAGtCMNC~@AlAMvBEj@IL?\\LXDb@AzASxAOZIj@EZQT[PO|@W\\Gb@Af@Ep@Ap@G`@?l@EP?JD`@ANEFLJBP@b@CVRbCY^ApB]tC_@fAI@CACPBFLDZLC`@AdBO@USeDHQEoAQsA?ORBA?AI",
-      "url" : "https://www.strava.com/activities/20260845398"
     }
   ],
   "athlete" : {
@@ -833,5 +833,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-09T07:03:23Z"
+  "generated_at" : "2026-10-09T08:04:12Z"
 }
