@@ -1,6 +1,22 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 98,
+      "date" : "2026-10-09T21:33:40Z",
+      "distance_meters" : 2870.7,
+      "distance_miles" : 1.7837697297,
+      "distance_yards" : 3139,
+      "elapsed_time" : 2642,
+      "elevation_gain_meters" : 41,
+      "id" : 20522848521,
+      "max_heartrate" : 131,
+      "moving_time" : 1931,
+      "name" : "Night Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "ydcfFhjfiVLBBKSsAMiDCUGOCWBmA]uAMcBISEwAI}@Dy@AgBQsAEu@|@QHMPK`AMPI@ANALDTCPAXKVAfB]`BQR@p@KNBXAr@MXDNCLDRBFNPLR@bAM`CEREdAEv@Ih@@n@GfCIt@K`@?`BMdAAbCQ~AIr@?r@IX@p@GP@b@CtAK`@M`@BPEjAIj@Il@E~@QP?d@UZ_@`@Uz@SVA|@GhCI~@I`CKNN@VHJrASp@GhBYz@Gf@K`Da@F?Rl@`BSn@CDGAa@g@cG@WDEDO?OEWH@?BB?FHBUHI",
+      "url" : "https://www.strava.com/activities/20522848521"
+    },
+    {
       "average_heartrate" : 117.5,
       "date" : "2026-10-09T19:15:46Z",
       "distance_meters" : 1188.7,
@@ -12,7 +28,7 @@
       "laps" : 20,
       "max_heartrate" : 146,
       "moving_time" : 1261,
-      "name" : "Swim and Dadbod’s first sync 🎉",
+      "name" : "Evening Swim + app",
       "pace100yd_seconds" : 97,
       "sport_type" : "Swim",
       "summary_polyline" : "",
@@ -811,22 +827,6 @@
       "sport_type" : "Swim",
       "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20291016125"
-    },
-    {
-      "average_heartrate" : 109.9,
-      "date" : "2026-09-22T18:54:26Z",
-      "distance_meters" : 2832.1,
-      "distance_miles" : 1.7597848091,
-      "distance_yards" : 3097,
-      "elapsed_time" : 1669,
-      "elevation_gain_meters" : 28,
-      "id" : 20291016130,
-      "max_heartrate" : 128,
-      "moving_time" : 1642,
-      "name" : "Evening Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "os_fFxndiVABAN?Rb@xFD~@ABaAFm@Ji@BEEGC{@H]FSCi@FQ?MME?g@HoBRw@LoBTGAQKGAwENe@Fm@Bg@?e@Be@Dk@LQFID_@`@QJo@T@CEBO?k@No@Fg@HyAPm@Aa@OcAFyCJoAL_@C_CPuDJm@XoBLu@Dy@S_AHw@?e@HiDL_AHo@@]BMDMCGOCYs@DOAaAFe@FGJADB@C@QAYB}BZEBSDS?c@HmAJaBXm@Bk@HQJ@TEVAXFXFp@DhBEx@@NBPDt@JpAB|@Dz@VlBP~BFtA?PHbBMVW@UL",
-      "url" : "https://www.strava.com/activities/20291016130"
     }
   ],
   "athlete" : {
@@ -835,5 +835,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-10T04:32:21Z"
+  "generated_at" : "2026-10-10T05:33:01Z"
 }
