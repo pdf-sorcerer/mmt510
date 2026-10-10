@@ -339,6 +339,7 @@
       "elapsed_time" : 3682,
       "elevation_gain_meters" : 0,
       "id" : 20452967152,
+      "laps" : 27,
       "max_heartrate" : 142,
       "moving_time" : 1450,
       "name" : "Bilateral lossy breathing",
@@ -832,5 +833,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-10T11:43:52Z"
+  "generated_at" : "2026-10-10T12:49:55Z"
 }
