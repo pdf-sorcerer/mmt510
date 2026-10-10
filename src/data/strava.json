@@ -1,6 +1,22 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 113.3,
+      "date" : "2026-10-10T00:44:27Z",
+      "distance_meters" : 2355.9,
+      "distance_miles" : 1.4638879389000001,
+      "distance_yards" : 2576,
+      "elapsed_time" : 1392,
+      "elevation_gain_meters" : 30,
+      "id" : 20523896806,
+      "max_heartrate" : 127,
+      "moving_time" : 1392,
+      "name" : "Night Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "wr_fFpodiVCJDTDfAA^Kn@RrCKFSDa@?UFYAWDYGgAFqC^O@eAPq@FsAT_AFS?IIQa@EAwCPo@?aBJ{@@m@Fu@PUHk@l@g@Ps@JQ?cAJUH{@LGA_@Fg@Ck@OkAJe@?aAFe@?WDmABkEXcDNI?u@Dm@LmAC_CLUDWBw@BWAo@H{@By@JWCW@g@HSKIYIEc@BYEM?cAFaBf@yAVe@DS?eARq@FKFEp@Jv@CNN~@?ZF|@LNL?VI",
+      "url" : "https://www.strava.com/activities/20523896806"
+    },
+    {
       "average_heartrate" : 98,
       "date" : "2026-10-09T21:33:40Z",
       "distance_meters" : 2870.7,
@@ -809,24 +825,6 @@
       "sport_type" : "Walk",
       "summary_polyline" : "ur_fFzodiVCNFp@?^Ix@JlA@p@FXCJG@o@Fg@HaAF_@GY@y@Pe@Ae@DUCoAJQEc@FYJq@@[Fm@FQFE?[Us@HuABiBJcCFuARYLu@p@s@Vi@BiBXW@o@Jm@?U@KGUGaAFKAeCNuADKAm@FqADOBy@BiBLk@Be@?SBw@DQDs@AiDP]JMJUD{@B]DKAOGS@UEi@?oBJSCG_@e@B]CEDS@OAq@Hi@TkC`@m@F[@cAPmAL}@Nk@@]HIRBXFPN`A?r@Dn@Hh@?LW\\EXFdACVRjA@|@Dx@Jp@FfAHXJhA?bBPfBCHQJQ@_@J",
       "url" : "https://www.strava.com/activities/20305302707"
-    },
-    {
-      "average_heartrate" : 117.8,
-      "date" : "2026-09-22T19:28:03Z",
-      "distance_meters" : 868.7,
-      "distance_miles" : 0.5397849877,
-      "distance_yards" : 950,
-      "elapsed_time" : 1951,
-      "elevation_gain_meters" : 0,
-      "id" : 20291016125,
-      "laps" : 19,
-      "max_heartrate" : 138,
-      "moving_time" : 915,
-      "name" : "Evening Swim",
-      "pace100yd_seconds" : 96,
-      "sport_type" : "Swim",
-      "summary_polyline" : "",
-      "url" : "https://www.strava.com/activities/20291016125"
     }
   ],
   "athlete" : {
@@ -835,5 +833,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-10T07:34:25Z"
+  "generated_at" : "2026-10-10T09:49:02Z"
 }
