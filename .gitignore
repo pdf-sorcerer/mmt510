@@ -34,3 +34,4 @@ src.backup-*/
 *.pre-classic-space
 .vercel
 .env*.local
+.env*

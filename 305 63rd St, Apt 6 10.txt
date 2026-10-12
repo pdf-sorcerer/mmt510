@@ -1,0 +1,250 @@
+Well...
+Why?
+Okay, here we go.
+Go time.
+Hi Jennifer.
+Happy Monday.
+Happy Monday.
+How are you?
+I'm good today.
+Thank you.
+Thanks for taking the time to connect with me.
+I am working on this opportunity with Indigo to find their product manager for the AI space.
+I'm part of Deep Woman company and I saw some things in your profile that looked relevant in your background.
+So I'd love to chat with you more about the opportunity there and some of your experience, especially Zero to One, you know, Mary Jenna came in the loop, so those relevant things.
+So, yeah.
+Happy to dive in.
+Yeah.
+So, yeah, so, so I, we could start at the top or you can go closer to the bottom and just kind of, you know.
+Hmm.
+Talk about some of your history and what you've been doing, especially in specific areas.
+Sure.
+So just a typical elevator pitch.
+I'm Mason.
+Career in tech started back in 2015 at Zenefits.
+I had a really cool job of automating insurance forms.
+So, for example, customers would enroll and upload all their information.
+on insurance forms, thousands of them, because every state, every line of coverage, every insurance company had their own unique forms for different tasks.
+So I was responsible for consolidating all that for every task, open enrollment, new hires, terminations, qualifying events.
+This is like in 2016, I started with open enrollment and making sure like bottom line, the customer information got to the right insurance company on the right form and was processed correctly.
+So I see a lot of potential overlap in the medical space and also the legal space with these problems.
+I'm gonna come back to that in a second.
+Ease was an integrations product manager where I worked with a development team of like eight or nine devs.
+working at scale much more than Zenefits supporting more people, worked with insurance companies and internal stakeholders like ops implementation support, really more of an internal sort of back-end technical PM than a like growth or like you know that kind of a fit.
+Blissfully the same thing.
+When I joined Blissfully, unfortunately, they told me that they were being acquired.
+I didn't know that.
+And so my time there was short.
+I did a whole lot of scoping, sandboxing, testing APIs.
+My dev team wasn't hired until November.
+The gap, really quick.
+I just want to address that head on.
+My dad passed away in May 2022.
+He had been sick for years before that.
+Ongoing my employee career gap today is because of one, the market.
+I don't think that needs all too much introduction, but also there have been substantial family and legal obligations that have required my attention at a state.
+and i would not be able to do any job here in the sfa uh with this ongoing uh
+Not easy.
+Five cancers in four years.
+It's brutal.
+Yeah.
+But I just want to, yeah, just get that out of the way.
+I've been respecializing just daily in using CodeGen chatbots, and I built apps.
+So I have several.
+I think they're on my resume.
+One is a Mac, like a local LOM orchestrator, virtual environment manager, because a lot of my work is like constant iteration and tinkering with things.
+and doing like, you know, restarting my terminal is super boring and it's tedious.
+I can do it with one button click instead of like taking 10 seconds to do it manually.
+Finding ways of optimizing and augmenting myself so I can work faster.
+The other is job search.
+It's an aggregator.
+And what's kind of funny is that sort of like, all this work with CodeGen to make things more optimal to like rewrite bullet points so that they're better aligned to
+job descriptions, I've realized there's so much hand-holding involved that it kind of defeats the purpose.
+So that's sort of like the steady state I've reached at.
+The number one coolest thing I've built by far.
+is this resume engagement feature.
+So like if you were to click on my profile on the header section, LinkedIn or portfolio, I get a push notification.
+And that's specific to whoever is interacting, not the person, but like a company or a pro.
+Like if I put on my website, which I have, someone downloads it and engages with it later elsewhere, I get notified.
+And I do that because LinkedIn is not providing me any.
+credible information like 99% of the people that look at my profile are completely private.
+So just trying to find like useful ways of using technology to solve problems including like discovery like who's interacting with me and trying to go from there like constantly improve.
+So that's going to be in a nutshell.
+Cool okay love it so this this company is in Workman's Comp.
+so they're trying to take all that burden off so like it's still so they don't i don't think they mention it in that shared job um so yeah they're just taking an entire burden off they have four 34 clinical sites there's 30 people in the company um and they're really looking for someone to come in who's initially you're going to be interacting a lot with physicians like 70 ox okay and then so
+you've done some ops stuff too which is interesting.
+Yeah.
+So before I ask you their questions I would love to hear actually this might be on there.
+Let me take a question.
+I'm going to help them with this because they weren't getting the candidates that they wanted.
+Okay so I'm looking at questions.
+I think it's actually one of the questions.
+Okay so there's two questions.
+So one of them here is the first month is 50% operations.
+at least sitting with the ops team and physicians in the field.
+How do you feel about that?
+And where have you done hands-on or different things in product work before?
+Yeah.
+Okay.
+Completely fine with that.
+Operations, sort of the backend internal teams are my favorites because those are the people that actually products that we make are made successful for customers.
+Understanding.
+Product operations at Zenefits was like, the way I like to describe it is, we were sort of like the test pilots for internal tools that allowed us to scale getting information from point A to point B correctly and on time.
+And we became, myself especially, the subject experts of how the tool worked, how to configure it, and how to root cause when things are going wrong.
+So product would be sort of like the people getting requirements, specifications, engineers are the ones who are building it.
+I'm the test pilot actually building the material in the internal tool and seeing its results in real time at scale of like, hey, I get emails back from insurance companies saying this form is blank.
+This is a great example.
+My entire team, I didn't get the email.
+My team got emails back from insurance companies.
+These are like.
+They're processing paper forms.
+They're taking digital forms because that's how we're working.
+The form's blank.
+It went days without a manager stepping in.
+I looked at it.
+Okay, send me a picture.
+Okay, so it is a blank form.
+So this is possibly a problem.
+No one else is reporting this.
+Follow that up with a product manager who puts me with the engineering person.
+They changed the PDF MIME type.
+So it's like the file.
+PDF, the file type, they changed the setting in it.
+And that made Windows 7.
+which was still being used elsewhere, unable to render the document.
+So we're sending everything correctly.
+The forms are valid on our end, but our customers are not.
+That's the sort of mentality that I have as a product person, manager, ops person, specialist, builder, is to turn over every stone because if someone's complaining, they're probably valid.
+And our ops team are the people, in my experience, that are in the trenches doing that work.
+So I have a lot of empathy towards them.
+And part of this too is the physicians.
+So they do scheduling.
+I'm looking at my notes too that I was talking.
+Scheduling, history, and takes coordinating on-site to then the candidates or the patients go on-site to one of the 34 clinical sites.
+And then they do billing and processing.
+And they have these different doctors that can come work at those sites and make some.
+like a lot of good at out of extra cash by just kind of you know working a little bit in addition to what they're doing so um yes you're meeting with with a variety of different people yeah um another question is tell me about an energetic ai product you shipped to production
+What was your role and what did you just actually do with it?
+Yeah.
+So the answer is if this were, if the criteria is like a paid position at a company, I don't have anything there.
+However, if it's possible, an eugenic AI.
+So what I've done is for one of my projects, the All-N Podcast, which is all LLM for local large language model.
+is I went into YouTube, downloaded every episode of the All In podcast, a very popular tech podcast, and then I transcribed them using an AI pipeline.
+I then created training data for the four hosts.
+And I put that training data, so audio into text, and then text the transcript into a human-in-the-loop tool to help repair and fix errors that the transcription process created, which is just endemic because of how these models work.
+to then create the training data, to create the personas, J. Cal, David Sacks, so on, so that I could talk with them via, like, a FaceTime, where I'm actually talking voice to them, and they're responding within seconds or texting.
+so that's like one big feature but they're agents for each person right you're talking they have their own unique persona their own system prompt they have their own embedding space where they can recall memories and then what i did is i i'm able to orchestrate all there's more than four of them now into like a group panel i have jensen wong in there too where i can drop in like here's the prompt it's like
+I have a little bit of humor in me.
+Hopefully this isn't invalidating, but The Onion put out an article six months ago about OpenAI building a data center.
+you know, just building a data center.
+So I fed that.
+This is the orchestration.
+Talk about this.
+And so Jensen introduced it.
+David Sachs responds to it.
+Mark Zuckerberg then starts to comment on it.
+And that can go in a loop.
+And because I have a very limited platform, because it's all local for me.
+um it ends up getting into sort of like a circular framework that then it's like hey that's actually a problem that's not fun let's like poke at that to see if we can make it better and that's sort of like where i've wound up with all my tools which is i got it done it works but there's like a long tail of like trying to figure out how to actually optimize this so that it's really cool
+Yeah, it's very interesting.
+Yeah, there's a video, there's test videos at the very bottom of actually me engaging with these guys and I'm going to take a look eventually.
+That's cool.
+I think for this, I'm working on the Paraform platform.
+I don't know if you've heard of that, but it's a recruiting marketplace.
+They're an AI startup themselves.
+This is a role they've been having troubles with.
+They brought me on to help them with being really particular.
+So I think for this one, because you have, I love what you did.
+It's super cool and I'm just working with all that.
+I think you're obviously highly intelligent, you've done a lot of really cool things, but for this role, I'm going to have to really get done exactly what they want.
+But it doesn't mean I won't find another role at Paraform, there's always new roles coming up, and you've got a very interesting background.
+But because they kind of brought me on to triage, I was like, help them out, I've really got to get this on the mark.
+But just so I know, like...
+For other roles, what would you be looking for, like, to give me an idea of your compensation range?
+Yeah, I mean, right now, I'm looking at, like, a base 150, 160, and it really depends.
+Like, product management right now is, you know, everything's undergoing so much change.
+And from the outside, I can see that.
+As a re-entry employee, I'm looking even down to like product specialist or like product owner, anything that can just get me in, you know, pardon my language, my butt in a seat and get back into tech because that's the most important thing right now.
+It's a little concerning that even though the skills aren't a match for this job, I get it.
+Trust, I get it.
+More broadly, it's like.
+the only activity I'm having are inbound, like these emails.
+And I have no idea where my email is associated.
+You got me in my personal, not my professional.
+So it's just like, I don't know.
+It's just so much weirdness out there right now.
+But yeah.
+We have an email finder and Paraform has a bunch of AI tools.
+I mean, myself, I'm consulting.
+I left tech to start a couple of many things, but I left, I was a tech leader.
+And I left, I mean, I'm consulting now on Paraform, right?
+But, um.
+It is hard once you've taken a break to get back into consulting might be another angle for you.
+Okay.
+Because then you'll meet people too.
+Think about it.
+You're consulting.
+It works out.
+You obviously can do the work.
+and then they can bring you on full-time.
+Look at contracting and consulting and stuff because that's how you can meet people.
+And then also, well, maybe, because I also, I've been in tech for 27 years, and then, well, 25, and I stepped out, and then I would back in, and the market was down, and I had stepped out, and I'm middle-aged.
+So it became challenging stuff.
+Here, I love it, it's super fun.
+I'm working all kinds of work, I'm a CPO role too.
+kinds of fun stuff so i'm enjoying being in it but i am touch the consulting right okay so i'll definitely look at it because it's just yeah it's weird that's a good way to get back in then you start networking then you've done these projects that someone's paying for right consulting companies and then it's like i think that could be a good way too okay
+Thank you for that.
+But I'll let you know if something else comes up as well, some of these, but I do know I have to deliver like exactly what they want on this one.
+No, I get it.
+I totally get it.
+Yeah.
+Yeah, totally get it.
+Cool, well, there's new stuff all the time, you know, and I think, again, yeah, take a look at different contract consulting companies, you know, that also hire people.
+I can't, in my head, I'm trying to think of recruiting ones, but you'll find them, you know, different engineering product, you know, that have...
+product managers, so I would maybe look at that, to network and start building stuff that people might.
+Okay.
+One question for you before we wrap it up.
+Just overall, resume-wise, how does it look, like from your point of view?
+Like good, bad, open-tooth?
+Yeah, no, I think, I love what you did.
+Like, I think your resume looks good.
+I could see the gap, you know, obviously I was gonna pull it up again.
+But you know, it's like I could see what you did as I reached out to you.
+I could see the work you've done before and I was reading all the stuff you were doing now.
+So yeah, I think people see the gap, right?
+And I talk about that.
+But that's why again, I think like, I feel like you can get a good entry consulting.
+I can't think of like...
+consulting companies but I would just do some research like product management consulting and obviously look at posts too and then there's companies that have contractors too they hire like I've done that recruiting there was one down in the LA area called Chifton Ross when I worked at Northrop Bremen for two and a half years it was actually through Chifton Ross.
+Okay.
+So
+And that's an LA one, you know, so I don't know, you know, but look at different, yeah.
+I mean, Aero, Aero Tech and Robert Half right now, but so far.
+Yeah.
+Yeah.
+Okay.
+That's good.
+There might be some other ones though.
+Yeah.
+And yeah, there's other ones too, maybe more boutique-y.
+Yeah, take a look.
+I mean, it takes a minute, but.
+I think your experience looks really good.
+I reached out to you.
+I looked at your profile very specifically, and I saw the zero-to-one.
+I saw the human in the loop.
+I saw some of the other companies.
+I saw that you were doing your own stuff, but I really wanted to still find out what it was you were doing.
+Fantastic.
+I appreciate that.
+I really appreciate the feedback.
+Best of luck with the search.
+Thank you.
+Yep, yep.
+I know.
+You have a good rest of your day.
+Likewise.
+You too.
+Bye now.
+Bye.
+Bye.

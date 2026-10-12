@@ -498,42 +498,103 @@ Moments later, guest Brad Gerstner says the exact same thing. I only discovered 
 
 <p>At timestamp anchor <code>&lt;|18.98|&gt;</code>, hundreds of possible token paths existed.</p>
 <p>Two were especially interesting.</p>
-<div class="decoder-grid">
-        <article>
-          <p class="eyebrow">GHOST PATH · GROUND TRUTH</p>
-          <h3>"Oh, my god."</h3>
+<div class="decoder-grid decoder-comparison-v2">
+  <article class="decoder-path decoder-path-ground-truth">
+    <p class="eyebrow">GROUND TRUTH · RUNNER-UP</p>
+    <p class="decoder-kicker">What was said</p>
+    <h3>"Oh, my god."</h3>
 
-          <table>
-            <tbody>
-              <tr><td>Oh</td><td>89.24%</td></tr>
-              <tr><td>,</td><td>49.93%</td></tr>
-              <tr><td>my</td><td>97.67%</td></tr>
-              <tr><td>god</td><td>90.67%</td></tr>
-              <tr><td>.</td><td>90.67%</td></tr>
-            </tbody>
-          </table>
-
-          <p><strong>Joint: 35.78%</strong></p>
-        </article>
-
-        <article>
-          <p class="eyebrow">WINNER PATH · PRODUCTION OUTPUT</p>
-          <h3>"He's not even here."</h3>
-
-          <table>
-            <tbody>
-              <tr><td>He</td><td>45.29%</td></tr>
-              <tr><td>'s</td><td>99.94%</td></tr>
-              <tr><td>not</td><td>99.96%</td></tr>
-              <tr><td>even</td><td>99.98%</td></tr>
-              <tr><td>here</td><td>99.78%</td></tr>
-              <tr><td>.</td><td>92.01%</td></tr>
-            </tbody>
-          </table>
-
-          <p><strong>Joint: 41.53%</strong></p>
-        </article>
+    <div class="decoder-token-list" aria-label="Ground-truth token probabilities">
+      <div class="decoder-token-row">
+        <span class="decoder-token">Oh</span>
+        <span class="decoder-probability-bar" style="--p: 89.24%"></span>
+        <span class="decoder-probability">89.24%</span>
       </div>
+
+      <div class="decoder-token-row decoder-token-row-punctuation">
+        <span class="decoder-token">,</span>
+        <span class="decoder-probability-bar" style="--p: 49.93%"></span>
+        <span class="decoder-probability">49.93%</span>
+      </div>
+
+      <div class="decoder-token-row">
+        <span class="decoder-token">my</span>
+        <span class="decoder-probability-bar" style="--p: 97.67%"></span>
+        <span class="decoder-probability">97.67%</span>
+      </div>
+
+      <div class="decoder-token-row">
+        <span class="decoder-token">god</span>
+        <span class="decoder-probability-bar" style="--p: 90.67%"></span>
+        <span class="decoder-probability">90.67%</span>
+      </div>
+
+      <div class="decoder-token-row decoder-token-row-punctuation">
+        <span class="decoder-token">.</span>
+        <span class="decoder-probability-bar" style="--p: 90.67%"></span>
+        <span class="decoder-probability">90.67%</span>
+      </div>
+    </div>
+
+    <div class="decoder-joint">
+      <strong>Joint: 35.78%</strong>
+      <span>Joint = product of token probabilities</span>
+    </div>
+  </article>
+
+  <article class="decoder-path decoder-path-winner">
+    <p class="eyebrow">PRODUCTION · WINNER</p>
+    <p class="decoder-kicker">What Whisper wrote</p>
+    <h3>"He's not even here."</h3>
+
+    <div class="decoder-token-list" aria-label="Production-output token probabilities">
+      <div class="decoder-token-row">
+        <span class="decoder-token">He</span>
+        <span class="decoder-probability-bar" style="--p: 45.29%"></span>
+        <span class="decoder-probability">45.29%</span>
+      </div>
+
+      <div class="decoder-token-row">
+        <span class="decoder-token">'s</span>
+        <span class="decoder-probability-bar" style="--p: 99.94%"></span>
+        <span class="decoder-probability">99.94%</span>
+      </div>
+
+      <div class="decoder-token-row">
+        <span class="decoder-token">not</span>
+        <span class="decoder-probability-bar" style="--p: 99.96%"></span>
+        <span class="decoder-probability">99.96%</span>
+      </div>
+
+      <div class="decoder-token-row">
+        <span class="decoder-token">even</span>
+        <span class="decoder-probability-bar" style="--p: 99.98%"></span>
+        <span class="decoder-probability">99.98%</span>
+      </div>
+
+      <div class="decoder-token-row">
+        <span class="decoder-token">here</span>
+        <span class="decoder-probability-bar" style="--p: 99.78%"></span>
+        <span class="decoder-probability">99.78%</span>
+      </div>
+
+      <div class="decoder-token-row decoder-token-row-punctuation">
+        <span class="decoder-token">.</span>
+        <span class="decoder-probability-bar" style="--p: 92.01%"></span>
+        <span class="decoder-probability">92.01%</span>
+      </div>
+    </div>
+
+    <div class="decoder-joint decoder-joint-winner">
+      <strong>Joint: 41.53%</strong>
+      <span>Joint = product of token probabilities</span>
+    </div>
+  </article>
+</div>
+
+<p class="decoder-comparison-takeaway">
+  <strong>Whisper chose the fluent phrase even though it was wrong.</strong>
+</p>
 <h3>Decoder Conclusion</h3>
 
 <h3>The winning path, which was wrong, won by <strong>5.75 percentage points</strong>.</h3>
@@ -1560,38 +1621,6 @@ Moments later, guest Brad Gerstner says the exact same thing. I only discovered 
     opacity: 1;
     font-weight: 700;
   }
-
-  .decoder-grid article:last-child > p:last-child {
-    display: inline-block;
-    margin-top: 16px;
-    padding: 7px 10px !important;
-    border: 1px solid rgba(0, 0, 0, 0.18) !important;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.28);
-  }
-</style>
-
-<style>
-  .decoder-grid article:last-child > p:last-child {
-    position: relative;
-  }
-
-  .decoder-grid article:last-child > p:last-child::before {
-    content: "👑";
-    position: absolute;
-    top: -24px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-4deg);
-    font-size: 1.45rem;
-    line-height: 1;
-  }
-</style>
-
-<style>
-  .decoder-grid article:last-child > p:last-child {
-    background: #ffe991 !important;
-    border-color: rgba(0, 0, 0, 0.18) !important;
-  }
 </style>
 
 <style>
@@ -2242,5 +2271,436 @@ Moments later, guest Brad Gerstner says the exact same thing. I only discovered 
 
   .triage-pipeline-zoom img {
     border-radius: 10px;
+  }
+</style>
+
+<style>
+  /* Decoder Fork — probability-path comparison */
+  .decoder-grid.decoder-comparison-v2 {
+    width: min(1050px, calc(100vw - 48px));
+    max-width: none;
+    margin: 34px 0 20px;
+    margin-left: 0;
+    transform: none;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: 22px;
+
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .decoder-comparison-v2 .decoder-path {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 28px 30px 26px;
+
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .decoder-comparison-v2 .decoder-path-winner {
+    background: rgba(0, 0, 0, 0.055);
+  }
+
+  .decoder-comparison-v2 .eyebrow {
+    align-self: flex-start;
+    margin: 0 0 13px;
+
+    font-size: 0.72rem;
+    letter-spacing: 0.10em;
+    line-height: 1.25;
+    white-space: nowrap;
+    opacity: 0.68;
+  }
+
+  .decoder-comparison-v2 .decoder-path-winner .eyebrow {
+    padding: 4px 7px;
+    background: #ffe991;
+    opacity: 1;
+    font-weight: 700;
+  }
+
+  .decoder-kicker {
+    margin: 0 0 5px;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    font-weight: 800;
+  }
+
+  .decoder-comparison-v2 .decoder-path h3 {
+    margin: 0 0 28px;
+    font-size: clamp(1.45rem, 2vw, 1.85rem);
+    line-height: 1.12;
+  }
+
+  .decoder-token-list {
+    display: grid;
+    gap: 13px;
+  }
+
+  .decoder-token-row {
+    display: grid;
+    grid-template-columns: 54px minmax(150px, 1fr) 72px;
+    align-items: center;
+    gap: 13px;
+    min-height: 28px;
+  }
+
+  .decoder-token {
+    font-size: 1rem;
+  }
+
+  .decoder-probability {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.96rem;
+  }
+
+  .decoder-probability-bar {
+    display: block;
+    height: 18px;
+    border-radius: 6px;
+
+    background:
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.20) 0,
+        rgba(0, 0, 0, 0.20) var(--p),
+        rgba(0, 0, 0, 0.055) var(--p),
+        rgba(0, 0, 0, 0.055) 100%
+      );
+  }
+
+  .decoder-token-row-punctuation {
+    opacity: 1;
+  }
+
+  .decoder-token-row-punctuation .decoder-token,
+  .decoder-token-row-punctuation .decoder-probability {
+    opacity: 0.60;
+  }
+
+  .decoder-joint {
+    margin-top: auto;
+    padding-top: 30px;
+  }
+
+  .decoder-joint strong {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1.1;
+  }
+
+  .decoder-joint span {
+    display: block;
+    margin-top: 7px;
+
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    white-space: nowrap;
+    opacity: 0.58;
+  }
+
+  .decoder-joint-winner {
+    margin-top: auto;
+    padding: 18px 20px;
+    border-radius: 10px;
+    background: rgba(255, 233, 145, 0.72);
+  }
+
+  .decoder-delta {
+    align-self: center;
+    justify-self: center;
+
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 10px;
+    background: var(--background, #f7f4ea);
+
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .decoder-comparison-takeaway {
+    width: min(900px, 100%);
+    margin: 4px auto 28px;
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 900px) {
+    .decoder-grid.decoder-comparison-v2 {
+      width: 100%;
+      margin-left: 0;
+      transform: none;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .decoder-delta {
+      justify-self: center;
+    }
+
+    .decoder-comparison-v2 .decoder-path {
+      padding: 22px 20px;
+    }
+
+    .decoder-comparison-v2 .eyebrow {
+      white-space: normal;
+    }
+
+    .decoder-joint span {
+      white-space: normal;
+    }
+
+    .decoder-token-row {
+      grid-template-columns: 42px minmax(80px, 1fr) 68px;
+      gap: 9px;
+    }
+  }
+</style>
+
+<style>
+  /* Decoder comparison: keep it inside normal article width */
+  .decoder-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 24px 0 14px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .decoder-grid > * {
+    min-width: 0;
+  }
+
+  .decoder-grid article {
+    padding: 18px 18px 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .decoder-grid .eyebrow {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.11em !important;
+    line-height: 1.25 !important;
+  }
+
+  .decoder-grid article h2,
+  .decoder-grid article h3,
+  .decoder-grid article h4 {
+    font-size: 1.05rem !important;
+    line-height: 1.12 !important;
+    margin: 8px 0 8px !important;
+  }
+
+  .decoder-grid article p {
+    font-size: 0.95rem !important;
+  }
+
+  /* token / probability rows */
+  .decoder-grid article table {
+    width: 100% !important;
+  }
+
+  .decoder-grid article td {
+    font-size: 0.92rem !important;
+    padding: 8px 0 !important;
+  }
+
+  /* if rows are div-based instead of table-based */
+  .decoder-grid article [class*="row"] {
+    gap: 8px !important;
+  }
+
+  .decoder-grid article [class*="bar"] {
+    height: 12px !important;
+    border-radius: 999px !important;
+  }
+
+  .decoder-grid article [class*="label"] {
+    font-size: 0.92rem !important;
+  }
+
+  .decoder-grid article [class*="prob"] {
+    font-size: 0.9rem !important;
+  }
+
+  /* joint score block */
+  .decoder-grid article > p:last-child {
+    margin-top: 14px !important;
+    padding-top: 0 !important;
+    font-size: 0.98rem !important;
+  }
+
+  /* yellow winner box / footer if present */
+  .decoder-grid article:last-child > p:last-child,
+  .decoder-grid article:last-child [class*="joint"] {
+    padding: 12px 14px !important;
+    font-size: 0.96rem !important;
+  }
+
+  /* middle delta badge if it's a pseudo-element */
+  .decoder-grid::after {
+    font-size: 0.72rem !important;
+    padding: 8px 10px !important;
+  }
+
+  /* middle delta badge if it's a real node */
+  .decoder-grid [class*="delta"],
+  .decoder-grid [class*="gap"] {
+    font-size: 0.72rem !important;
+    padding: 8px 10px !important;
+  }
+
+  @media (max-width: 1100px) {
+    .decoder-grid {
+      grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr) !important;
+      gap: 10px !important;
+    }
+
+    .decoder-grid article {
+      padding: 16px 16px 14px !important;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .decoder-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+<style>
+  /* Decoder comparison — compact desktop fit */
+  .decoder-comparison-v2 .decoder-path {
+    padding: 16px 16px 14px !important;
+  }
+
+  .decoder-comparison-v2 .eyebrow {
+    font-size: 0.56rem !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  .decoder-comparison-v2 .decoder-path-winner .eyebrow {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .decoder-kicker {
+    font-size: 0.92rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .decoder-comparison-v2 .decoder-path h3 {
+    font-size: 1rem !important;
+    line-height: 1.08 !important;
+    margin: 0 0 18px !important;
+  }
+
+  .decoder-token-list {
+    gap: 9px !important;
+  }
+
+  .decoder-token-row {
+    grid-template-columns: 28px minmax(70px, 1fr) 52px !important;
+    gap: 7px !important;
+    min-height: 22px !important;
+  }
+
+  .decoder-token {
+    font-size: 0.78rem !important;
+  }
+
+  .decoder-probability {
+    font-size: 0.76rem !important;
+  }
+
+  .decoder-probability-bar {
+    height: 10px !important;
+  }
+
+  .decoder-joint {
+    padding-top: 16px !important;
+  }
+
+  .decoder-joint strong {
+    font-size: 1rem !important;
+  }
+
+  .decoder-joint span {
+    margin-top: 4px !important;
+    font-size: 0.56rem !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  .decoder-joint-winner {
+    padding: 10px 12px !important;
+  }
+
+  .decoder-delta {
+    padding: 6px 7px !important;
+    font-size: 0.58rem !important;
+  }
+
+  .decoder-comparison-takeaway {
+    font-size: 0.88rem !important;
+    margin-top: 8px !important;
+  }
+
+  @media (max-width: 900px) {
+    .decoder-comparison-v2 .eyebrow,
+    .decoder-joint span {
+      white-space: normal !important;
+    }
+  }
+</style>
+
+<style>
+  /* Decoder comparison — align Joint blocks */
+  .decoder-comparison-v2 .decoder-joint {
+    margin-top: auto !important;
+    min-height: 64px;
+    box-sizing: border-box;
+    padding: 10px 12px !important;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .decoder-comparison-v2 .decoder-joint-winner {
+    min-height: 64px;
+    padding: 10px 12px !important;
+  }
+</style>
+
+<style>
+  /* Decoder probability bars — uniform grey */
+  .decoder-probability-bar {
+    background:
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.22) 0,
+        rgba(0, 0, 0, 0.22) var(--p),
+        rgba(0, 0, 0, 0.055) var(--p),
+        rgba(0, 0, 0, 0.055) 100%
+      ) !important;
   }
 </style>

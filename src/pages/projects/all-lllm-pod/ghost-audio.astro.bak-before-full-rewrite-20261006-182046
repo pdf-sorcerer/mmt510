@@ -1,0 +1,1554 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="ALL-LLLM Pod — Ghost Audio">
+  <main class="ghost-page">
+    <a class="back" href="/projects/all-lllm-pod/">← ALL-LLLM Pod</a>
+
+    <header class="hero">
+      <p class="eyebrow">TRANSCRIPT RECONSTRUCTION</p>
+      <h1>Ghost Audio</h1>
+      <p class="lede">An investigation into transcript text deletions</p>
+
+      <div class="callout">
+        <p>
+          <strong>Bottom Line, Up Front:</strong> This page deals with speech that failed to be transcribed into text. That's a big problem for training data quality.
+
+          <div class="bluf-qa">
+            <p><strong>Q: How big of a problem is this?</strong></p>
+            <p>A: Significant. LLMs have been created by scraping text from the Internet. New models will increasingly depend on transcribing audio and video into text as a source—and if content is silently dropped, that's a training-data quality problem.</p>
+
+            <p><strong>Q: Why does this happen?</strong></p>
+            <p>A: A variety of reasons: characteristics of the source audio, beam search, and choices made by the transcription decoder. Higher-quality audio does not necessarily guarantee a more complete transcript—as Episode 136 demonstrates.</p>
+
+            <p><strong>Q: How do you find and recover missing text when there's no record of it existing?</strong></p>
+            <p>A: There is no panacea. A couple observations:</p>
+            <ol>
+              <li>Compare two transcript runs in Streamlit: one with timestamp tokens enabled, the other without. Using BERD-1, this surfaced about 5–8 Ghost Audio segments depending on settings, mostly short disfluencies such as <code>uh</code>, <code>ah</code>, and <code>right</code>.</li>
+              <li>Instantiate the model to emit repetitive hallucinated text, which can act as a diagnostic marker for speech that failed to be transcribed.</li>
+            </ol>
+          </div></p>
+      </div>
+
+      <nav class="ghost-toc" aria-label="On this page">
+        <ol>
+          <li><strong>Discovery</strong></li>
+          <li><strong>Episode 136 Video + Transcripts</strong></li>
+          <li><strong>Triage: Ruling Out Audio Failure</strong></li>
+          <li><strong>Triage: Decoder Fork</strong></li>
+          <li><strong>Early Results</strong></li>
+          <li><strong>BERD-1</strong></li>
+        </ol>
+      </nav>
+
+      <h2>Introduction</h2>
+
+      <p>
+        Late in development, I switched from YouTube audio rips to episodes downloaded from Libsyn. The files were higher quality, and Libsyn gave me one canonical source per episode instead of a pile of YouTube pages to manage.
+      </p>
+
+      <p>
+        What I didn't expect was that two audio sources of All-In Podcast Episode 136 would produce two different transcripts. Both were pre-processed identically, yet the lower-quality audio transcribed a statement by David Friedberg the higher-quality file did not.
+      </p>
+
+      <blockquote>
+        <p>David Friedberg: “Oh, my god.”</p>
+      </blockquote>
+
+      <p>
+        The loss of this statement is marginal. But still, it bothered me. I had put immense effort into QA after transcription, but I had never seriously considered that the transcriber itself might vary in completeness upstream of all that work.
+      </p>
+
+      <p>
+        I spent weeks debugging, hunting for content I knew was there, like one of those 1990s paranormal ghost-hunting shows. Hence the name: <strong>Ghost Audio</strong>.
+      </p>
+
+      <p>
+        Ghost Audio is a deletion in <a class="wer-link" href="https://en.wikipedia.org/wiki/Word_error_rate" target="_blank" rel="noopener noreferrer">word error rate (WER)</a>: speech is present in the source audio but never appears as text in the transcript. WER works by comparing a transcript against a reference. Episode 136 had no reference. Producing one was the entire point of the project, and the transcript I was producing was already showing signs that it couldn't be trusted as ground truth.
+      </p>
+
+      <p>
+        <strong><em>What matters most here is training-data completeness.</em></strong> A transcript with silent gaps can teach a model patterns that never occurred, or leave it responding to a conversation that skips content. And you can produce such a transcript without any sign that something is missing.
+      </p>
+
+      <p>
+        A couple examples of what that looks like below: a staged example from <em>The Empire Strikes Back</em>, and a real example from <em>The Dark Knight</em> on YouTube.
+      </p>
+    </header>
+
+    <section>
+
+
+      <details class="accordion-block">
+        <summary><span>Illustrating Ghost Audio: <em>The Empire Strikes Back (1980)</em></span></summary>
+
+        <div class="video-block">
+          <video controls>
+            <source src="https://pdf-sorcerer.github.io/alp/sw_ghost.mp4" type="video/mp4" />
+          </video>
+          <div class="video-caption">SOURCE VIDEO · THE EMPIRE STRIKES BACK (1980)</div>
+        </div>
+
+        <div class="callout">
+          <p>
+            This staged example removes Vader's central reveal:
+            <code>"No. I am your father."</code>
+          </p>
+
+          <p>
+            Nothing appears broken in the transcript. Luke still reacts emotionally,
+            but the cause of that reaction is gone. A downstream model would see Luke
+            rejecting his own accusation, not responding to new information from Vader.
+          </p>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h3>Movie Screenplay</h3>
+            <div class="transcript-box">
+              <p><strong>Vader:</strong> "If only you knew the power of the dark side. Obi-Wan never told you what happened to your father."</p>
+              <p><strong>Luke:</strong> "He told me enough. He told me you killed him!"</p>
+              <p style="border-left: 4px solid #111; padding-left: 12px;">
+  <strong>Vader:</strong> "No. I am your father."
+</p>
+              <p><strong>Luke:</strong> "No. No. That's not true! That's impossible!"</p>
+            </div>
+          </div>
+
+          <div class="comparison-card">
+            <h3>Ghost Audio Transcript</h3>
+            <div class="transcript-box">
+              <p><strong>Vader:</strong> "If only you knew the power of the dark side. Obi-Wan never told you what happened to your father."</p>
+              <p><strong>Luke:</strong> "He told me enough. He told me you killed him!"</p>
+              <p class="ghost-quote">
+                <span class="ghost-icon" aria-hidden="true">👻</span>
+                <span class="ghost-loop-line"><strong>Vader:</strong> "No. I am your father."</span>
+              </p>
+              <p><strong>Luke:</strong> "No. No. That's not true! That's impossible!"</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion-block">
+        <summary><span>Illustrating Ghost Audio: <em>The Dark Knight (2008)</em></span></summary>
+
+        <div class="video-block">
+          <video controls>
+            <source src="https://pdf-sorcerer.github.io/alp/out.mp4" type="video/mp4" />
+          </video>
+          <div class="video-caption">SOURCE VIDEO · THE DARK KNIGHT (2008)</div>
+        </div>
+
+        <div class="callout">
+          <p>
+            YouTube ASR failed to transcribe Batman's single-word response:
+            <code>"Them?"</code>
+          </p>
+
+          <p>
+            The word marks the moment Batman realizes there are two hostages rather than one.
+            Nothing else in the transcript makes the omission obvious.
+          </p>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h3>Movie Screenplay</h3>
+            <div class="transcript-box">
+              <p><strong>Joker:</strong> "There's only minutes left, so you'll have to play my little game if you want to save one of them."</p>
+              <p style="border-left: 4px solid #111; padding-left: 12px;">
+  <strong>Batman:</strong> "Them?"
+</p>
+              <p><strong>Joker:</strong> "You know, for a while there, I thought you really were Dent."</p>
+            </div>
+          </div>
+
+          <div class="comparison-card">
+            <h3>Ghost Audio Transcript</h3>
+            <div class="transcript-box">
+              <p><strong>Joker:</strong> "There's only minutes left, so you'll have to play my little game if you want to save one of them."</p>
+              <p class="ghost-quote">
+                <span class="ghost-icon" aria-hidden="true">👻</span>
+                <span class="ghost-loop-line"><strong>Batman:</strong> "Them?"</span>
+              </p>
+              <p><strong>Joker:</strong> "You know, for a while there, I thought you really were Dent."</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+
+
+    </section>
+
+<section>
+      <h2>Discovery</h2>
+
+      <p>
+        Episode 136 opens with David Friedberg acting as moderator. The usual moderator, Jason Calacanis [Jcal], was on vacation and insisted the show must go on. Friedberg asked how Jcal opens the show — which led to Chamath impersonating Jcal.
+      </p>
+
+      <p>
+        At the end, Friedberg says, <strong>“Oh, my god.”</strong> Moments later, Brad Gerstner says the same thing — which I only discovered later, after watching video of this moment.
+      </p><div class="video-block">
+        <video controls>
+          <source src="https://pdf-sorcerer.github.io/alp/both_ghosts.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <h3>Ground Truth</h3>
+          <div class="transcript-box">
+            <p><strong>Chamath:</strong> "...shortest that's the fattest, and the fattest that's the dumbest."</p>
+
+            <p class="ghost-marked">
+              <strong>Friedberg:</strong> "Oh, my god."
+            </p>
+
+            <p>
+        Friedberg's deleted speech had been present in a much earlier transcript, generated months earlier. Brad Gerstner's “ghost” did not appear in any transcript, under any settings.
+      </p>
+
+            <p class="ghost-marked">
+              <strong>Gerstner:</strong> "Oh, my god."
+            </p>
+
+            <p><strong>Friedberg:</strong> "That's just bullying. That's awful."</p>
+          </div>
+        </div>
+
+        <div class="comparison-card">
+          <h3>Ghost Audio Transcript</h3>
+          <div class="transcript-box">
+            <p><strong>Chamath:</strong> "...shortest that's the fattest, and the fattest that's the dumbest."</p>
+
+            <p class="ghost-quote">
+              <span class="ghost-icon" aria-hidden="true">👻</span>
+              <span class="ghost-loop-line"><strong>Friedberg:</strong> "Oh, my god."</span>
+            </p>
+
+            <p><strong>Friedberg:</strong> "He's not even here. You can't do that. It's awful."</p>
+
+            <p class="ghost-quote">
+              <span class="ghost-icon" aria-hidden="true">👻</span>
+              <span class="ghost-loop-line"><strong>Gerstner:</strong> "Oh, my god."</span>
+            </p>
+
+            <p><strong>Friedberg:</strong> "That's just bullying. That's awful."</p>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Friedberg's deleted speech had been present in a much earlier transcript, generated months earlier. Brad Gerstner's “ghost” did not appear in any transcript, under any settings.
+      </p>
+
+</section>
+
+    <section>
+      <h2>Triage: Ruling Out Audio Failure</h2>
+
+      <p>
+        I wanted to know whether the missing speech was actually in the audio. Sounds silly, but I wanted to visualize the audio window and rule out simple explanations.
+      </p>
+
+      <p>
+        One possible explanation was whether Chamath’s voice immediately before Friedberg's “Oh, my god” was effectively outcompeting Friedberg's speech. I had a hunch this may be the case because elsewhere, AI was attributing what Friedberg said to Chamath. Another possibility was whether segmentation was dropping it before the decoder ever had a chance.
+      </p>
+
+      <ul>
+        <li><strong>VAD:</strong> I varied onset and offset thresholds to test whether segmentation was dropping the lines. <em>[Confirm outcome.]</em></li>
+        <li><strong>Energy:</strong> RMS showed energy above the noise floor in both regions.</li>
+        <li><strong>Pitch:</strong> After spectral subtraction against a Chamath-only noise reference (17–19s), pYIN recovered F0 traces in Friedberg's region that were absent from the raw audio. Gerstner's region showed none. Subtraction can create artifacts, so this is suggestive, not conclusive.</li>
+        <li><strong>Cross-attention:</strong> Near zero in Friedberg's region. Low but present around Gerstner's, though that region borders active speech.</li>
+        <li><strong>Speaker embeddings:</strong> Friedberg's ghost fell inside Chamath's local embedding space, suggesting the segment may have been absorbed into his turn rather than recognized as separate speech.</li>
+      </ul>
+
+      <div class="figure">
+        <a href="https://pdf-sorcerer.github.io/alp/residual.png" target="_blank">
+          <img
+            src="https://pdf-sorcerer.github.io/alp/residual.png"
+            alt="Libsyn spectral subtraction with pYIN F0"
+          />
+        </a>
+        <p class="figure-caption">
+          <em>pYIN F0 on raw vs. residual audio, t=20–30s; arrow marks F0 recovered after subtraction.</em>
+        </p>
+      </div>
+
+      <div class="figure">
+        <a href="https://pdf-sorcerer.github.io/alp/attention_both_ghosts.png" target="_blank">
+          <img
+            src="https://pdf-sorcerer.github.io/alp/attention_both_ghosts.png"
+            alt="Whisper cross-attention around both Ghost Audio regions"
+          />
+        </a>
+        <p class="figure-caption">
+          <em>Whisper cross-attention filtered to audio-aligned heads.</em>
+        </p>
+      </div>
+
+      <p>
+        <strong>Friedberg:</strong> The omission could not be explained by an empty or missing audio region. His speech was present, although weak.
+      </p>
+
+      <ul>
+        <li>After spectral subtraction, pYIN recovered pitch overlapping the timestamps where he spoke.</li>
+        <li>Whisper cross-attention over the same region was faint but non-zero. The model was registering the region, but barely.</li>
+      </ul>
+
+      <p><strong>Gerstner:</strong></p>
+
+      <ul>
+        <li>pYIN did not recover pitch in his speech window.</li>
+        <li>Whisper cross-attention was even fainter, with the marked region sitting between areas of substantially higher attention.</li>
+      </ul>
+
+      <p>
+        I’m dropping Gerstner from the investigation going forward. None of the methods I tested recovered his speech well enough to investigate the decoder path.
+      </p>
+
+      <p>
+        The question became: <strong>why wasn't it decoding Friedberg's speech?</strong>
+      </p>
+    
+    </section>
+
+    <section>
+      <h2>Triage: Decoder Fork</h2>
+
+      <div class="pipeline-diagram" aria-label="Transcription pipeline flow chart">
+        <div class="pipeline-node">
+          <div class="pipeline-node-title">Source Audio</div>
+          <div class="pipeline-node-subtitle">16 kHz mono WAV</div>
+        </div>
+
+        <div class="pipeline-connector" aria-hidden="true">
+          <span class="pipeline-line"></span>
+          <span class="pipeline-arrowhead">→</span>
+        </div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-title">VAD / Segmentation</div>
+          <div class="pipeline-node-subtitle">speech-region detection</div>
+        </div>
+
+        <div class="pipeline-connector" aria-hidden="true">
+          <span class="pipeline-line"></span>
+          <span class="pipeline-arrowhead">→</span>
+        </div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-title">Whisper Encoder</div>
+          <div class="pipeline-node-subtitle">audio representations</div>
+        </div>
+
+        <div class="pipeline-connector" aria-hidden="true">
+          <span class="pipeline-line"></span>
+          <span class="pipeline-arrowhead">→</span>
+        </div>
+
+        <div class="pipeline-node pipeline-node-emphasis">
+          <div class="pipeline-node-title">CTranslate2 / Decoder</div>
+          <div class="pipeline-node-subtitle">beam search + token selection</div>
+        </div>
+
+        <div class="pipeline-connector" aria-hidden="true">
+          <span class="pipeline-line"></span>
+          <span class="pipeline-arrowhead">→</span>
+        </div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-title">Transcript Output</div>
+          <div class="pipeline-node-subtitle">time-aligned text</div>
+        </div>
+      </div>
+
+
+      <p>
+        My production pipeline used CTranslate2, which didn't expose the decoder internals I needed
+        to inspect. So I built a parallel PWW pipeline using Pyannote, reference Whisper, and Wav2vec
+        to access cross-attention and token probabilities directly.
+      </p>
+
+      <p>
+        At timestamp anchor <code>&lt;|18.98|&gt;</code>, hundreds of possible decoder
+        paths opened up, but two mattered.
+      </p>
+
+      <div class="decoder-grid">
+        <article>
+          <p class="eyebrow">GHOST PATH · GROUND TRUTH</p>
+          <h3>"Oh, my god."</h3>
+
+          <table>
+            <tbody>
+              <tr><td>Oh</td><td>89.24%</td></tr>
+              <tr><td>,</td><td>49.93%</td></tr>
+              <tr><td>my</td><td>97.67%</td></tr>
+              <tr><td>god</td><td>90.67%</td></tr>
+              <tr><td>.</td><td>90.67%</td></tr>
+            </tbody>
+          </table>
+
+          <p><strong>Joint: 35.78%</strong></p>
+        </article>
+
+        <article>
+          <p class="eyebrow">WINNER PATH · PRODUCTION OUTPUT</p>
+          <h3>"He's not even here."</h3>
+
+          <table>
+            <tbody>
+              <tr><td>He</td><td>45.29%</td></tr>
+              <tr><td>'s</td><td>99.94%</td></tr>
+              <tr><td>not</td><td>99.96%</td></tr>
+              <tr><td>even</td><td>99.98%</td></tr>
+              <tr><td>here</td><td>99.78%</td></tr>
+              <tr><td>.</td><td>92.01%</td></tr>
+            </tbody>
+          </table>
+
+          <p><strong>Joint: 41.53%</strong></p>
+        </article>
+      </div>
+
+      <p>
+        The decoder skipped Friedberg's earlier utterance and jumped ahead to his next spoken
+        words. The ground-truth path lost by 5.75 percentage points.
+      </p>
+    </section>
+
+    <section class="findings-section">
+      <h2>Early Results</h2>
+
+      <ol class="finding-list">
+        <li>
+          <p>
+            Token timestamps—not to be confused with word-level Wav2Vec timestamps—were sufficient
+            to surface Friedberg's ghost in my production WhisperX pipeline. So, no PWW required,
+            which was great because compute cost was about <strong>3 minutes vs. 9.5 minutes</strong>.
+          </p>
+
+          <details class="finding-accordion" open>
+            <summary>
+              <span>Production WHX beam=5 timestamp tokens</span>
+            </summary>
+
+            <div class="finding-body">
+              <div class="timestamp-grid">
+                <div class="timestamp-card">
+                  <h3>Production WHX beam=5, Timestamp Tokens OFF</h3>
+
+                  <div class="timestamp-content">
+                    <p>
+                      <strong>18.873–19.914</strong><br />
+                      And the fattest, that's the dumbest.
+                    </p>
+
+                    <p class="timestamp-ghost">
+                      <span class="ghost-icon timestamp-ghost-icon" aria-hidden="true">👻</span>
+                      <span class="ghost-fade-text">
+                        <strong>20.834–21.495</strong><br />
+                        Oh, my god.
+                      </span>
+                    </p>
+
+                    <p>
+                      <strong>25.317–26.097</strong><br />
+                      He's not even here.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="timestamp-card">
+                  <h3>Production WHX beam=5, Timestamp Tokens ON</h3>
+
+                  <div class="timestamp-content">
+                    <p>
+                      <strong>18.873–19.914</strong><br />
+                      And the fattest, that's the dumbest.
+                    </p>
+
+                    <p class="timestamp-recovered">
+                      <strong>20.834–21.495</strong><br />
+                      Oh, my god.
+                    </p>
+
+                    <p>
+                      <strong>25.317–26.097</strong><br />
+                      He's not even here.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </li>
+
+        <li>
+          <p>
+            The custom pipeline was also tested at beam=1 and hallucinated text in the regions
+            spanning Friedberg and Gerstner. The failures manifested as localized repetition and
+            confabulation. With manual review, those failures can act as signals that a region
+            deserves inspection—even when the missing speech itself is not recoverable, as with Gerstner.
+          </p>
+
+          <details class="finding-accordion" open>
+            <summary>
+              <span>PWW beam=1 Speech Hallucinations</span>
+            </summary>
+
+            <div class="finding-body">
+              <p class="table-meta">
+                Reference Whisper large-v3 · Pyannote decoder · Wav2Vec2 · beam=1 · 9.5 min GPU compute
+              </p>
+
+              <div class="finding-table-wrap">
+                <table class="finding-table">
+                  <thead>
+                    <tr>
+                      <th>Start</th>
+                      <th>End</th>
+                      <th>Text</th>
+                      <th>Flag</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>18.863</td>
+                      <td>19.897</td>
+                      <td>And the fattest, that's the dumbest.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>20.850</td>
+                      <td>21.499</td>
+                      <td>Oh, my god.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="row-repeat">
+                      <td>22.046</td>
+                      <td>23.100</td>
+                      <td>Oh, my god.</td>
+                      <td>⚠ localized repetition</td>
+                    </tr>
+
+                    <tr class="row-halluc">
+                      <td>23.444</td>
+                      <td>25.020</td>
+                      <td>I'm bullying when you're bullying.</td>
+                      <td>⚠ localized hallucination</td>
+                    </tr>
+
+                    <tr>
+                      <td>25.386</td>
+                      <td>26.063</td>
+                      <td>He's not even here.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>26.125</td>
+                      <td>26.638</td>
+                      <td>You can't do that.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>26.803</td>
+                      <td>27.032</td>
+                      <td>It's awful.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="row-halluc">
+                      <td>27.364</td>
+                      <td>28.902</td>
+                      <td>I'm bullying when you're bullying.</td>
+                      <td>⚠ localized hallucination</td>
+                    </tr>
+
+                    <tr>
+                      <td>29.024</td>
+                      <td>29.702</td>
+                      <td>That's just bullying.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>29.723</td>
+                      <td>30.077</td>
+                      <td>It's awful.</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="row-halluc">
+                      <td>30.243</td>
+                      <td>30.942</td>
+                      <td>I'm bullying when you're bullying.</td>
+                      <td>⚠ localized hallucination</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="finding-note">
+                The hallucinations above are a happy accident of the PWW pipeline's decoder.
+              </p>
+            </div>
+          </details>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>BERD-1</h2>
+
+      <p>
+        BERD-1 operationalizes the first finding by comparing two production-equivalent
+        WhisperX Beam=5 transcripts:
+      </p>
+
+      <ul>
+        <li><strong>Timestamp Tokens OFF</strong> — <code>without_timestamps=True</code></li>
+        <li><strong>Timestamp Tokens ON</strong> — <code>without_timestamps=False</code></li>
+      </ul>
+
+      <p>
+        When the timestamp-enabled transcript contains speech absent from the
+        timestamp-disabled transcript, BERD-1 generates a candidate repair for human review.
+      </p>
+    </section>
+
+    <section>
+      <h2>What I Found</h2>
+
+      <ul>
+        <li>Friedberg's ghost was successfully recovered</li>
+        <li>BERD-1 surfaced roughly <strong>5–8 additional candidates</strong>, depending on settings</li>
+        <li>most were short disfluencies such as <code>uh</code>, <code>ah</code>, and <code>right</code></li>
+        <li>the custom Whisper pipeline produced localized hallucinations around otherwise difficult-to-transcribe speech</li>
+      </ul>
+
+      <p>
+        The corpus-wide impact remains unknown and is probably small.
+      </p>
+
+      <p class="closing">
+        But Ghost Audio is no longer invisible. It can be surfaced, reviewed, and repaired.
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .ghost-page {
+    width: min(100% - 32px, 980px);
+    margin: 0 auto;
+    padding: 48px 0 96px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 48px;
+  }
+
+  .hero {
+    max-width: 820px;
+    margin-bottom: 64px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+  }
+
+  .hero h1 {
+    margin: 0 0 18px;
+    font-size: clamp(3rem, 9vw, 6rem);
+    line-height: 0.9;
+  }
+
+  .lede {
+    margin-bottom: 36px;
+    font-size: 1.1rem;
+  }
+
+  section {
+    padding: 42px 0 54px;
+    border-top: 1px solid var(--border-color, #d8cdb8);
+  }
+
+  section h2 {
+    margin-top: 0;
+  }
+
+  h3 {
+    margin-top: 28px;
+  }
+
+  h4 {
+    margin: 24px 0 8px;
+  }
+
+  code {
+    font-size: 0.9em;
+  }
+
+  .example-grid,
+  .comparison,
+  .decoder-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    margin: 28px 0;
+  }
+
+  .example,
+  .comparison > div,
+  .decoder-grid > article {
+    padding: 22px;
+    border: 1px solid var(--border-color, #d8cdb8);
+    border-radius: 12px;
+  }
+
+  .recovered {
+    padding-left: 10px;
+    border-left: 3px solid currentColor;
+  }
+
+  .figure {
+    margin: 32px 0;
+  }
+
+  .figure img {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--border-color, #d8cdb8);
+    border-radius: 12px;
+  }
+
+  .figure p {
+    margin-top: 10px;
+    font-size: 0.88rem;
+    opacity: 0.68;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 0.92rem;
+  }
+
+  th,
+  td {
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border-color, #d8cdb8);
+  }
+
+  th {
+    font-weight: 700;
+  }
+
+  .closing {
+    margin-top: 32px;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 700px) {
+    .ghost-page {
+      width: min(100% - 24px, 980px);
+    }
+
+    .example-grid,
+    .comparison,
+    .decoder-grid {
+      grid-template-columns: 1fr;
+    }
+
+    table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+
+  .accordion-block {
+    margin: 28px 0 36px;
+    border: 1px solid var(--border-color, #d8cdb8);
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .accordion-block summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-family: monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    list-style: none;
+  }
+
+  .accordion-block summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion-block summary::before {
+    content: "▸";
+    margin-right: 10px;
+  }
+
+  .accordion-block[open] summary::before {
+    content: "▾";
+  }
+
+  .video-block {
+    margin: 0 0 28px;
+    border-top: 1px solid var(--border-color, #d8cdb8);
+    border-bottom: 1px solid var(--border-color, #d8cdb8);
+    background: #111;
+  }
+
+  .video-block video {
+    display: block;
+    width: 100%;
+  }
+
+  .video-caption {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.96);
+    font-family: monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .callout {
+    margin: 24px 20px 34px;
+    padding: 18px 20px;
+    border-left: 3px solid #0A84FF;
+    background: rgba(10,132,255,0.10);
+    border-radius: 6px;
+  }
+
+  .callout p:last-child {
+    margin-bottom: 0;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin: 0 20px 24px;
+  }
+
+  .comparison-card {
+    border: 1px solid var(--border-color, #d8cdb8);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.45);
+  }
+
+  .comparison-card h3 {
+    margin: 0;
+    padding: 11px 14px;
+    font-family: monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color, #d8cdb8);
+  }
+
+  .transcript-box {
+    padding: 18px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .transcript-box p {
+    margin: 0 0 10px;
+  }
+
+  .transcript-box p:last-child {
+    margin-bottom: 0;
+  }
+
+  .ghost-line {
+    color: #c0392b;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 700px) {
+    .comparison-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ghost-loop-line {
+    color: #d98e83;
+    opacity: 0.35;
+    animation: ghost-loop-fade 3.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes ghost-loop-fade {
+    0%   { opacity: 0.35; }
+    100% { opacity: 0.1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ghost-loop-line {
+      animation: none;
+      opacity: 0.25;
+    }
+  }
+
+
+  /* Decoder Fork comparison */
+  .decoder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin: 28px 0 24px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .decoder-grid article {
+    padding: 24px 26px 22px;
+    border: 0;
+    background: rgba(255, 255, 255, 0.16);
+    min-height: 0;
+  }
+
+  .decoder-grid article + article {
+    border-left: 1px solid rgba(0, 0, 0, 0.14);
+  }
+
+  .decoder-grid article .eyebrow {
+    margin: 0 0 10px;
+    font-size: 0.76rem;
+    letter-spacing: 0.11em;
+    opacity: 0.68;
+  }
+
+  .decoder-grid article h3 {
+    margin: 0 0 18px;
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .decoder-grid article table {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+
+  .decoder-grid article td {
+    padding: 8px 0;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  }
+
+  .decoder-grid article td:first-child {
+    width: 55%;
+  }
+
+  .decoder-grid article td:last-child {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .decoder-grid article > p:last-child {
+    margin: 14px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.14);
+    font-weight: 700;
+  }
+
+  @media (max-width: 700px) {
+    .decoder-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .decoder-grid article + article {
+      border-left: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.14);
+    }
+  }
+
+
+  
+
+  
+
+  .ghost-fade {
+    color: #d98e83;
+    opacity: 0.35;
+    animation: ghost-loop-fade 3.6s ease-in-out infinite alternate;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ghost-fade {
+      animation: none;
+      opacity: 0.25;
+    }
+  }
+
+
+  
+
+  
+
+  
+
+  @media (prefers-reduced-motion: reduce) {
+    
+  }
+
+
+  
+
+  
+
+  .ghost-fade-text {
+    color: #d98e83;
+    opacity: 0.35;
+    animation: ghost-loop-fade 3.6s ease-in-out infinite alternate;
+  }
+
+
+  .ghost-marked {
+    border-left: 3px solid #111;
+    padding-left: 12px;
+    margin: 0 0 10px;
+  }
+
+  .ghost-fade-static {
+    color: #d98e83;
+    opacity: 0.55;
+  }
+
+
+  .ghost-marker {
+    border-left: 3px solid #111;
+    padding-left: 12px;
+    margin: 0 0 10px;
+  }
+
+
+  .ghost-page figure {
+    border: 1px solid var(--border-color, #d8cdb8);
+    border-radius: 18px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.45);
+  }
+
+  .ghost-page figure img {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--border-color, #d8cdb8);
+    border-radius: 12px;
+  }
+
+
+  .pipeline-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 28px;
+  }
+
+  .pipeline-step {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color, #d8cdb8);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    font-size: 0.95rem;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .pipeline-arrow {
+    font-size: 1rem;
+    color: var(--muted-color, #6f6a63);
+    line-height: 1;
+  }
+
+  @media (max-width: 720px) {
+    .pipeline-flow {
+      gap: 8px;
+    }
+
+    .pipeline-step {
+      white-space: normal;
+    }
+  }
+
+</style>
+
+<style>
+  .hero {
+    margin-bottom: 28px;
+  }
+
+  .ghost-page > section:first-of-type {
+    border-top: 0 !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+</style>
+
+<style>
+  .ghost-page > section:nth-of-type(2) {
+    border-top: 0 !important;
+    padding-top: 0 !important;
+    margin-top: 56px !important;
+  }
+</style>
+
+<style>
+  /* Decoder Fork — winner emphasis + cleaner rows */
+  .decoder-grid article td {
+    border-bottom: 0 !important;
+  }
+
+  .decoder-grid article > p:last-child {
+    border-top: 0 !important;
+    padding-top: 4px !important;
+  }
+
+  .decoder-grid article:last-child {
+    background: rgba(0, 0, 0, 0.045);
+    position: relative;
+  }
+
+  .decoder-grid article:last-child::after {
+    content: "WINNER";
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    padding: 4px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    border-radius: 999px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    line-height: 1;
+  }
+
+  .decoder-grid article:last-child > p:last-child {
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 700px) {
+    .decoder-grid article:last-child::after {
+      top: 18px;
+      right: 20px;
+    }
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child::after {
+    content: none !important;
+  }
+
+  .decoder-grid article:last-child {
+    background: rgba(0, 0, 0, 0.055);
+  }
+
+  .decoder-grid article:last-child .eyebrow {
+    opacity: 1;
+    font-weight: 700;
+  }
+
+  .decoder-grid article:last-child > p:last-child {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 7px 10px !important;
+    border: 1px solid rgba(0, 0, 0, 0.18) !important;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.28);
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child > p:last-child {
+    position: relative;
+  }
+
+  .decoder-grid article:last-child > p:last-child::before {
+    content: "👑";
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    font-size: 1.45rem;
+    line-height: 1;
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child > p:last-child {
+    background: #ffe991 !important;
+    border-color: rgba(0, 0, 0, 0.18) !important;
+  }
+</style>
+
+<style>
+  .decoder-grid article:last-child .eyebrow {
+    display: inline-block;
+    background: #ffe991;
+    padding: 2px 4px;
+  }
+</style>
+
+<style>
+  .ghost-quote {
+    position: relative;
+    padding-left: 58px !important;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ghost-quote::before {
+    content: "";
+    position: absolute;
+    left: 34px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #111;
+  }
+
+  .ghost-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.6rem;
+    line-height: 1;
+    opacity: 1 !important;
+  }
+</style>
+
+<style>
+  /* Ghost Audio transcript: ghost replaces the vertical omission marker */
+  .ghost-quote::before {
+    content: none !important;
+  }
+
+  .ghost-quote {
+    padding-left: 92px !important;
+    min-height: 82px;
+  }
+
+  .ghost-icon {
+    left: 0;
+    font-size: 4.6rem;
+    line-height: 1;
+  }
+</style>
+
+<style>
+  .ghost-quote {
+    padding-left: 74px !important;
+  }
+
+  .ghost-icon {
+    transform: translateY(-50%) scaleX(0.72) !important;
+    transform-origin: left center;
+  }
+</style>
+
+<style>
+  .ghost-loop-line {
+    opacity: 0.5;
+    animation: ghost-loop-fade 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes ghost-loop-fade {
+    0%   { opacity: 0.5; }
+    100% { opacity: 0.05; }
+  }
+</style>
+
+<style>
+  .ghost-loop-line {
+    opacity: 0.5;
+    animation: ghost-loop-fade 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes ghost-loop-fade {
+    0%   { opacity: 0.5; }
+    100% { opacity: 0.15; }
+  }
+</style>
+
+<style>
+  /* Decoder findings */
+  .finding-list {
+    margin: 24px 0 0;
+    padding-left: 1.5rem;
+  }
+
+  .finding-list > li {
+    margin-bottom: 34px;
+    padding-left: 4px;
+  }
+
+  .finding-list > li > p {
+    margin: 0 0 22px;
+  }
+
+  .finding-accordion {
+    width: 100%;
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 7px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .finding-accordion summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    font-family: monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: #087cff;
+  }
+
+  .finding-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .finding-accordion summary::before {
+    content: "▸";
+    margin-right: 12px;
+  }
+
+  .finding-accordion[open] summary::before {
+    content: "▾";
+  }
+
+  .finding-body {
+    padding: 24px;
+  }
+
+  .timestamp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .timestamp-card {
+    border: 1px solid rgba(0, 0, 0, 0.11);
+    border-radius: 6px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .timestamp-card h3 {
+    margin: 0;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    font-family: monospace;
+    font-size: 0.76rem;
+    line-height: 1.5;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    opacity: 0.68;
+  }
+
+  .timestamp-content {
+    padding: 20px 26px;
+    font-family: monospace;
+  }
+
+  .timestamp-content p {
+    margin: 0 0 28px;
+    line-height: 1.8;
+  }
+
+  .timestamp-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .timestamp-recovered,
+  .timestamp-recovered strong {
+    color: #5f9b6b;
+  }
+
+  .timestamp-ghost {
+    position: relative;
+    padding-left: 58px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    margin: 0 0 28px;
+  }
+
+  .timestamp-ghost-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.3rem;
+    line-height: 1;
+  }
+
+  .timestamp-ghost .ghost-fade-text,
+  .timestamp-ghost .ghost-fade-text strong {
+    color: #d98e83;
+    opacity: 0.5;
+    animation: ghost-loop-fade 5s ease-in-out infinite alternate;
+  }
+
+  .table-meta {
+    margin: 4px 0 20px;
+    font-family: monospace;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .finding-table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 6px;
+  }
+
+  .finding-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: monospace;
+    font-size: 0.8rem;
+  }
+
+  .finding-table th {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  .finding-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    vertical-align: top;
+  }
+
+  .finding-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .finding-table .row-repeat td {
+    background: rgba(123, 97, 255, 0.08);
+  }
+
+  .finding-table .row-halluc td {
+    background: rgba(212, 160, 23, 0.11);
+  }
+
+  .finding-note {
+    margin: 22px 0 4px;
+  }
+
+  @media (max-width: 700px) {
+    .timestamp-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .finding-body {
+      padding: 16px;
+    }
+  }
+</style>
+
+<style>
+  .timestamp-ghost .ghost-fade-text,
+  .timestamp-ghost .ghost-fade-text strong {
+    opacity: 0.6;
+    animation: timestamp-ghost-fade 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes timestamp-ghost-fade {
+    0%   { opacity: 0.6; }
+    100% { opacity: 0.2; }
+  }
+</style>
+
+<style>
+  .wer-link {
+    color: #2563eb;
+    font-weight: 700;
+  }
+</style>
+
+<style>
+  /* Match Hibi image treatment */
+  .ghost-page figure {
+    border: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .ghost-page figure img {
+    display: block;
+    width: 100%;
+    outline: 3px solid rgba(0, 0, 0, 0.48) !important;
+    outline-offset: 0 !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+      0 5px 16px rgba(0, 0, 0, 0.18) !important;
+  }
+</style>
+
+<style>
+  /* Hibi border treatment for Ghost Audio analysis images */
+  .ghost-page section img,
+  .ghost-page section a > img {
+    outline: 3px solid rgba(0, 0, 0, 0.48) !important;
+    outline-offset: 0 !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+      0 5px 16px rgba(0, 0, 0, 0.18) !important;
+  }
+</style>
