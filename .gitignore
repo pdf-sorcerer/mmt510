@@ -35,3 +35,6 @@ src.backup-*/
 .vercel
 .env*.local
 .env*
+
+# Local transcripts
+305 63rd St, Apt 6 10.*
