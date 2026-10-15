@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" role="img" aria-label="Placeholder for Aura screenshot">
+<rect width="720" height="520" fill="#191c1d"/>
+<rect x="32" y="32" width="656" height="456" rx="22" fill="#272b2d" stroke="#565c5c" stroke-width="2"/>
+<circle cx="69" cy="68" r="7" fill="#858b89"/><circle cx="92" cy="68" r="7" fill="#696f6c"/><circle cx="115" cy="68" r="7" fill="#565c59"/>
+<text x="64" y="152" font-family="-apple-system,Arial,sans-serif" fill="#f5f2e9" font-size="37" font-weight="700">Aura</text>
+<text x="64" y="194" font-family="-apple-system,Arial,sans-serif" fill="#b5bdb9" font-size="21">Health trends</text>
+<path d="M65 352 L154 308 L240 330 L331 256 L418 285 L509 227 L652 268" fill="none" stroke="#b7c9bc" stroke-width="5" stroke-linejoin="round"/>
+<path d="M65 399 H652 M65 326 H652 M65 253 H652" stroke="#4b5352" stroke-width="2" stroke-dasharray="5 9"/>
+<rect x="64" y="433" width="154" height="27" rx="7" fill="#3e4744"/>
+<text x="141" y="452" font-family="-apple-system,Arial,sans-serif" text-anchor="middle" font-size="13" fill="#d1d7d1">SCREENSHOT SOON</text>
+</svg>

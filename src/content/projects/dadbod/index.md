@@ -1,5 +1,5 @@
 ---
-title: "Dadbod — Health & Fitness Intelligence"
+title: "Dab Bod — Health & Fitness Intelligence"
 description: "Connects Garmin and Apple Health data to reveal fitness patterns over time."
 date: 2026-10-10
 span: "Oct 2026–Present"
@@ -12,76 +12,111 @@ featured: true
 
 ## Core idea
 
-This year, I've been swimming laps at **Spieker Plaza at Cal**. I learned to swim pretty early in life and was quite good at it, but that never translated into lap swimming until I began timing myself.
+I've been swimming laps at **Spieker Plaza at Cal** this year. I learned to swim young and was pretty good at it, but I never got into lap swimming until I started timing myself.
 
-My Garmin captures a detailed swim log, and I've been feeding screenshots from Garmin Connect into ChatGPT to help analyze my workouts. It's been useful both as a motivator and as a way to close the feedback loop between what I'm noticing in the pool and what the data actually shows.
+My Garmin records each swim in detail. I started sharing Garmin Connect screenshots with ChatGPT to make sense of the numbers, and it turned out to be a useful way to connect what I felt in the pool with what the data showed.
 
-But copying screenshots and measurements back and forth got tedious. First, I had to synchronize my watch with Garmin Connect to get the data into Garmin's cloud. Then I had to take screenshots and send them to ChatGPT. All of which is particularly frustrating when the RSF locker room is a primordial black hole for both cellular signal and Wi-Fi.
+The process was clumsy: sync my watch to Garmin Connect, wait for the data to reach the cloud, take screenshots, then upload them for analysis.
 
-So when Strava recently suggested that I—and other users—try a Claude MCP integration, I decided to build my own app instead.
+When Strava suggested trying a Claude MCP integration, I decided I'd rather build the app I actually wanted.
 
-Dadbod is the result: a native iOS app built with SwiftUI, SwiftData, HealthKit, and direct Garmin Bluetooth integration. It brings my fitness history together locally, preserving individual records while revealing patterns across workouts.
+**Dab Bod** is a native iOS app built with SwiftUI, SwiftData, HealthKit, and direct Garmin Bluetooth connectivity. It brings the records together locally so I can explore my progress without constantly moving data between apps.
 
 ## 01 Aura
 
-Aura combines resting heart rate, overnight HRV, blood pressure, sleep, weight, body composition, and daily activity in one health dashboard.
+<div class="dab-multi-panel dab-multi-aura" aria-label="aura screenshots">
+  <a href="/projects/dadbod/aura.png" target="_blank" rel="noopener" aria-label="Enlarge Aura health dashboard"><img src="/projects/dadbod/aura.png" alt="Aura health dashboard" loading="lazy" /></a>
+  <a href="/projects/dadbod/aura-expanded.png" target="_blank" rel="noopener" aria-label="Enlarge Aura expanded health view"><img src="/projects/dadbod/aura-expanded.png" alt="Aura expanded health view" loading="lazy" /></a>
+</div>
 
-Interactive charts support both long-term trends and inspection of individual measurements. Rather than treating each health metric as an isolated number, Aura makes it easier to understand how those measurements change alongside exercise, recovery, and body composition.
 
-*[Screenshot: Aura dashboard and health trends]*
+
+Aura brings heart rate, HRV, blood pressure, sleep, weight, body composition, and daily activity into one place.
+
+I can look at the longer-term trends or inspect a single reading, then see how it lines up with training and recovery.
+
 
 ## 02 Fishmaxx
 
-Fishmaxx analyzes Garmin pool-swim activities across sessions: pacing, stroke efficiency, interval consistency, and fatigue.
+<div class="dab-multi-panel dab-multi-fishmaxx" aria-label="fishmaxx screenshots">
+  <a href="/projects/dadbod/fishmaxx-progress.png" target="_blank" rel="noopener" aria-label="Enlarge Fishmaxx weekly progress"><img src="/projects/dadbod/fishmaxx-progress.png" alt="Fishmaxx weekly progress" loading="lazy" /></a>
+  <a href="/projects/dadbod/fishmaxx-history.png" target="_blank" rel="noopener" aria-label="Enlarge Fishmaxx swim history"><img src="/projects/dadbod/fishmaxx-history.png" alt="Fishmaxx swim history" loading="lazy" /></a>
+  <a href="/projects/dadbod/fishmaxx-activity.png" target="_blank" rel="noopener" aria-label="Enlarge Fishmaxx individual swim statistics"><img src="/projects/dadbod/fishmaxx-activity.png" alt="Fishmaxx individual swim statistics" loading="lazy" /></a>
+</div>
 
-Targeted AI analysis looks for unusual or repeatable patterns, separates observations from hypotheses, and suggests what to test next.
+Fishmaxx compares my Garmin swims over time in a denser interface, with far less jumping between screens than Strava or Garmin Connect.
 
-The goal isn't another workout summary. It's discovering things about my swimming that I wouldn't necessarily notice myself.
+I can track pace, stroke efficiency, consistency, and where fatigue starts to show—which, frankly, seems to be both everywhere and nowhere. I'm still learning how to breathe properly, and so far, that's been my biggest limitation.
 
-*[Screenshot: Fishmaxx swim history and activity analysis]*
+Instead of asking AI for another workout recap, I use it to investigate patterns, distinguish what the data shows from what might explain it, and suggest something worth testing next.
+
+The point is to notice changes I might otherwise miss.
 
 ### Go Fish 🐠 — Direct Garmin Sync
 
-One frustration with Garmin Connect is getting my swims to synchronize while I'm still in the RSF locker room. Go Fish bypasses Garmin Connect entirely, communicating directly with my watch over Bluetooth.
+The RSF locker room is a primordial black hole for cellular signal and Wi-Fi. Normally, I have to wait 5–10 minutes until I'm back inside the gym before I can review my swim logs.
 
-Built around Garmin's BLE file-transfer protocol, Go Fish discovers activity files on the watch, retrieves and decodes FIT records, cross-references them against existing workouts in SwiftData, and presents new swims for review before import.
+**No longer!**
 
-Previously, I'd built an alternative synchronization pipeline using a GitHub-based synchronization workflow and Supabase, but fetching swim data routinely took **50–110 seconds**.
+<div class="dab-connectivity-table">
+  <div class="dab-connectivity-column">
+    <h4>v1 — Garmin Cloud</h4>
+    <p>My original GitHub Actions and Supabase pipeline worked, but retrieving a swim took <strong>50–110 seconds</strong> and required an internet connection.</p>
+    <a href="/projects/dadbod/garmin-cloud.png" target="_blank" rel="noopener noreferrer">
+      <img src="/projects/dadbod/garmin-cloud.png" alt="v1 Garmin cloud synchronization log" loading="lazy">
+    </a>
+  </div>
+  <div class="dab-connectivity-column">
+    <h4>v2 — Go Fish 🐠</h4>
+    <p>Direct Garmin Bluetooth synchronization, bypassing Garmin Connect. One transfer took <strong>13.5 seconds</strong>, including discovery, transfer, and FIT decoding—approximately <strong>3.7–8.1× faster</strong> in the observed runs.</p>
+    <a href="/projects/dadbod/go-fish.png" target="_blank" rel="noopener noreferrer">
+      <img src="/projects/dadbod/go-fish.png" alt="v2 Go Fish direct Bluetooth synchronization" loading="lazy">
+    </a>
+  </div>
+</div>
 
-With Go Fish, a targeted Bluetooth fetch completed in **13.5 seconds**, including activity discovery, transfer, and FIT decoding.
+Using Garmin's BLE file-transfer protocol, Go Fish finds activity files, decodes FIT records, checks for duplicates in SwiftData, and lets me review new swims before importing them.
 
-That's approximately **3.7–8.1× faster** than the earlier cloud-based workflow in those observed runs, with no dependence on cellular reception or Wi-Fi for the watch-to-app transfer.
-
-*[Screenshot: Go Fish Bluetooth synchronization and elapsed time]*
-
-*[Screenshot: FIT verification and swim approval modal]*
-
-The result is a direct, inspectable path from Garmin to Fishmaxx, without waiting for Garmin Connect, cloud synchronization, or Strava.
+The BLE connection is still brittle, and there's plenty of work ahead. I'm also exploring direct access to other Garmin measurements, including heart rate, stress, and Body Battery.
 
 ## 03 Mog Log
 
-Mog Log brings strength-training activity into the same personal fitness environment, making it easier to follow progress alongside swimming and other health measurements.
+<div class="dab-mog-triptych">
+  <a href="/projects/dadbod/mog-log.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/mog-log.png" alt="Mog Log physique history" loading="lazy">
+  </a>
+  <a href="/projects/dadbod/mog-log-day.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/mog-log-day.png" alt="Mog Log daily progress" loading="lazy">
+  </a>
+  <a href="/projects/dadbod/mog-log-third.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/mog-log-third.png" alt="Mog Log additional progress view" loading="lazy">
+  </a>
+</div>
 
-Instead of treating lifting, cardio, and body composition as disconnected activities, Dadbod provides a shared history for understanding how they relate.
 
-*[Screenshot: Mog Log strength-training history]*
+
+Mog Log is a visual journal of how my body changes over time. Before COVID, progress selfies were a surprisingly strong motivation to keep exercising.
+
+The trouble was finding those photos later and figuring out when I'd taken them. Mog Log puts them in one chronological record, alongside my swimming, strength training, and health measurements.
+
 
 ## 04 LiveWhale
 
-Published pool hours don't always reflect actual availability. LiveWhale cross-references facility announcements with swim-team and water-polo schedules to identify potential conflicts before I head to the pool.
+<div class="dab-livewhale-pair">
+  <a href="/projects/dadbod/livewhale-plan.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/livewhale-plan.png" alt="Pool schedule" loading="lazy">
+  </a>
+  <a href="/projects/dadbod/livewhale.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/livewhale.png" alt="LiveWhale availability" loading="lazy">
+  </a>
+</div>
 
-It's a small but practical example of making existing information more useful.
 
-*[Screenshot: LiveWhale pool availability]*
 
-## Approach
 
-Dadbod favors readable trends, inspectable source records, and focused AI assistance over another collection of disconnected fitness scores.
 
-The architecture combines native SwiftUI interfaces, SwiftData persistence, Apple Health integration, Garmin FIT decoding, and direct Bluetooth communication.
 
-Where possible, measurements and comparisons are deterministic. AI is used to investigate patterns, explain unusual observations, and suggest useful experiments—not invent data or replace the underlying records.
 
-What started as a way to make sense of my swimming has become a broader project in personal health and fitness intelligence.
+Published pool hours don't always mean there's room to swim. LiveWhale checks facility announcements against swim-team and water-polo schedules to flag possible conflicts before I head over.
 
-**The goal is practical insight from information I'm already collecting, without making me work to retrieve it.**
+It's a small feature, but it solves a very real annoyance.
