@@ -12,15 +12,18 @@ featured: true
 
 ## Core idea
 
-I've been swimming laps at **Spieker Plaza at Cal** this year. I learned to swim young and was pretty good at it, but I never got into lap swimming until I started timing myself.
+I’ve been swimming a bunch at Cal’s Spieker Pool. Dab Bod brings together health and fitness data scattered across Apple Health, Garmin Connect, and Strava in an interface I've designed around how I want to use it, with the option to share data with ChatGPT or my local LLM for analysis and feedback.
 
-My Garmin records each swim in detail. I started sharing Garmin Connect screenshots with ChatGPT to make sense of the numbers, and it turned out to be a useful way to connect what I felt in the pool with what the data showed.
+<div class="dab-core-images">
+  <a href="/projects/dadbod/core-logo.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/core-logo.png" alt="Dab Bod logo" loading="lazy" />
+  </a>
+  <a href="/projects/dadbod/core-pool.webp" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/core-pool.webp" alt="Swimming pool" loading="lazy" />
+  </a>
+</div>
 
-The process was clumsy: sync my watch to Garmin Connect, wait for the data to reach the cloud, take screenshots, then upload them for analysis.
-
-When Strava suggested trying a Claude MCP integration, I decided I'd rather build the app I actually wanted.
-
-**Dab Bod** is a native iOS app built with SwiftUI, SwiftData, HealthKit, and direct Garmin Bluetooth connectivity. It brings the records together locally so I can explore my progress without constantly moving data between apps.
+<p style="text-align:right;font-size:0.75rem;color:#888;margin-top:-1rem;">Photo: Jay Adwere-Boamah</p>
 
 ## 01 Aura
 
@@ -29,12 +32,9 @@ When Strava suggested trying a Claude MCP integration, I decided I'd rather buil
   <a href="/projects/dadbod/aura-expanded.png" target="_blank" rel="noopener" aria-label="Enlarge Aura expanded health view"><img src="/projects/dadbod/aura-expanded.png" alt="Aura expanded health view" loading="lazy" /></a>
 </div>
 
+Aura is the app's landing page, bringing HRV, blood pressure, sleep, weight, body composition, and daily activity into one place. Until recently, these measurements relied on daily synchronization between Garmin and Apple Health, introducing delays and unnecessary friction.
 
-
-Aura brings heart rate, HRV, blood pressure, sleep, weight, body composition, and daily activity into one place.
-
-I can look at the longer-term trends or inspect a single reading, then see how it lines up with training and recovery.
-
+Thanks to the open-source <a href="https://github.com/gwerneckp/garmin-ble" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:none;"><code style="color:inherit;">garmin-ble</code></a> project, I'm beginning to retrieve wellness measurements directly from my watch over Bluetooth. What started as days of playing Marco Polo with my Garmin has turned into immediate results, with heart rate, stress, and Body Battery now reporting in-app on launch.
 
 ## 02 Fishmaxx
 
@@ -44,13 +44,73 @@ I can look at the longer-term trends or inspect a single reading, then see how i
   <a href="/projects/dadbod/fishmaxx-activity.png" target="_blank" rel="noopener" aria-label="Enlarge Fishmaxx individual swim statistics"><img src="/projects/dadbod/fishmaxx-activity.png" alt="Fishmaxx individual swim statistics" loading="lazy" /></a>
 </div>
 
-Fishmaxx compares my Garmin swims over time in a denser interface, with far less jumping between screens than Strava or Garmin Connect.
+Fishmaxx presents my Garmin swims in a denser interface, with less jumping between screens than other apps.
 
-I can track pace, stroke efficiency, consistency, and where fatigue starts to show—which, frankly, seems to be both everywhere and nowhere. I'm still learning how to breathe properly, and so far, that's been my biggest limitation.
+Metrics like average pace, stroke count, and consistency are intended to reveal where fatigue begins to affect performance. 
 
-Instead of asking AI for another workout recap, I use it to investigate patterns, distinguish what the data shows from what might explain it, and suggest something worth testing next.
+I've also added a button that copies my swim and daily health data into a format I can paste into ChatGPT or, eventually, feed into my local LLM for text and text-to-speech responses. I plan to reuse my earlier ALL-LLLM work on WebSocket-based voice interaction so I can speak directly to my local machine and get a response. Fun times.
 
-The point is to notice changes I might otherwise miss.
+The most interesting finding so far is that my opening 25-yard length is often significantly slower than subsequent lengths. Whether that's a genuine pacing pattern or an artifact of Garmin's lap-detection algorithm remains an open question.
+
+## 03 Mog Log
+
+<div class="dab-side-panel dab-side-panel--mog">
+<div class="dab-mog-triptych">
+  <a href="/projects/dadbod/mog-log.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/mog-log.png" alt="Mog Log physique history" loading="lazy">
+  </a>
+  <a href="/projects/dadbod/mog-log-day.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/mog-log-day.png" alt="Mog Log daily progress" loading="lazy">
+  </a>
+  <a href="/projects/dadbod/mog-log-third.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/mog-log-third.png" alt="Mog Log additional progress view" loading="lazy">
+  </a>
+</div>
+</div>
+
+
+
+
+
+
+
+Mog Log is a visual journal of how my body changes over time. Before COVID, progress selfies were a surprisingly strong motivation to keep exercising.
+
+The trouble was finding those photos later and figuring out when I'd taken them. Mog Log puts them in one chronological record, alongside my swimming, strength training, and health measurements.
+
+
+## 04 LiveWhale
+
+<div class="dab-side-panel dab-side-panel--livewhale">
+<div class="dab-livewhale-pair">
+  <a href="/projects/dadbod/livewhale-plan.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/livewhale-plan.png" alt="Pool schedule" loading="lazy">
+  </a>
+  <a href="/projects/dadbod/livewhale.png" target="_blank" rel="noopener noreferrer">
+    <img src="/projects/dadbod/livewhale.png" alt="LiveWhale availability" loading="lazy">
+  </a>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+LiveWhale is the calendar platform UC Berkeley uses to coordinate campus events and facility schedules.
+
+UC Berkeley publishes [lap swim hours](https://recwell.berkeley.edu/schedules-reservations/lap-swim/), but those hours don't always account for other activities taking place in the pool. A facility can technically be open for lap swimming without having much room to swim.
+
+So I integrated the published hours with known swim-team and water-polo schedules, along with facility announcements, to flag potential conflicts before I head over.
+
+It's a small feature, but it solves a real inconvenience—and, ironically, it's the one thing that hasn't broken throughout app development.
+
+## 05 Technical
 
 ### Go Fish 🐠 — Direct Garmin Sync
 
@@ -78,45 +138,3 @@ The RSF locker room is a primordial black hole for cellular signal and Wi-Fi. No
 Using Garmin's BLE file-transfer protocol, Go Fish finds activity files, decodes FIT records, checks for duplicates in SwiftData, and lets me review new swims before importing them.
 
 The BLE connection is still brittle, and there's plenty of work ahead. I'm also exploring direct access to other Garmin measurements, including heart rate, stress, and Body Battery.
-
-## 03 Mog Log
-
-<div class="dab-mog-triptych">
-  <a href="/projects/dadbod/mog-log.png" target="_blank" rel="noopener noreferrer">
-    <img src="/projects/dadbod/mog-log.png" alt="Mog Log physique history" loading="lazy">
-  </a>
-  <a href="/projects/dadbod/mog-log-day.png" target="_blank" rel="noopener noreferrer">
-    <img src="/projects/dadbod/mog-log-day.png" alt="Mog Log daily progress" loading="lazy">
-  </a>
-  <a href="/projects/dadbod/mog-log-third.png" target="_blank" rel="noopener noreferrer">
-    <img src="/projects/dadbod/mog-log-third.png" alt="Mog Log additional progress view" loading="lazy">
-  </a>
-</div>
-
-
-
-Mog Log is a visual journal of how my body changes over time. Before COVID, progress selfies were a surprisingly strong motivation to keep exercising.
-
-The trouble was finding those photos later and figuring out when I'd taken them. Mog Log puts them in one chronological record, alongside my swimming, strength training, and health measurements.
-
-
-## 04 LiveWhale
-
-<div class="dab-livewhale-pair">
-  <a href="/projects/dadbod/livewhale-plan.png" target="_blank" rel="noopener noreferrer">
-    <img src="/projects/dadbod/livewhale-plan.png" alt="Pool schedule" loading="lazy">
-  </a>
-  <a href="/projects/dadbod/livewhale.png" target="_blank" rel="noopener noreferrer">
-    <img src="/projects/dadbod/livewhale.png" alt="LiveWhale availability" loading="lazy">
-  </a>
-</div>
-
-
-
-
-
-
-
-Published pool hours don't always mean there's room to swim. LiveWhale checks facility announcements against swim-team and water-polo schedules to flag possible conflicts before I head over.
-
-It's a small feature, but it solves a very real annoyance.
