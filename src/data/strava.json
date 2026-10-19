@@ -25,6 +25,7 @@
       "elapsed_time" : 2734,
       "elevation_gain_meters" : 0,
       "id" : 20590421470,
+      "laps" : 23,
       "max_heartrate" : 153,
       "moving_time" : 1459,
       "name" : "Evening Swim",
@@ -834,5 +835,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-19T11:29:30Z"
+  "generated_at" : "2026-10-19T11:45:28Z"
 }
