@@ -15,6 +15,14 @@ function apnsJwt() {
   const raw = process.env.APNS_PRIVATE_KEY || process.env.APNS_AUTH_KEY;
   if (!team || !keyId || !raw) throw new Error('APNs signing configuration incomplete');
   const keyText = raw.replace(/\\n/g, '\n');
+  console.info('portfolio-visit: APNs key diagnostic', {
+    present: Boolean(raw),
+    length: raw.length,
+    hasHeader: keyText.includes('-----BEGIN PRIVATE KEY-----'),
+    hasFooter: keyText.includes('-----END PRIVATE KEY-----'),
+    literalNewlines: raw.includes('\\n'),
+    actualNewlines: keyText.includes('\\n'),
+  });
   const key = createPrivateKey(keyText);
   const header = base64url(JSON.stringify({ alg: 'ES256', kid: keyId }));
   const payload = base64url(JSON.stringify({ iss: team, iat: Math.floor(Date.now() / 1000) }));
