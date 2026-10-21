@@ -1,6 +1,24 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 133,
+      "date" : "2026-10-20T19:23:07Z",
+      "distance_meters" : 1143,
+      "distance_miles" : 0.710227053,
+      "distance_yards" : 1250,
+      "elapsed_time" : 2325,
+      "elevation_gain_meters" : 0,
+      "id" : 20669693204,
+      "laps" : 22,
+      "max_heartrate" : 158,
+      "moving_time" : 1212,
+      "name" : "Evening Swim",
+      "pace100yd_seconds" : 97,
+      "sport_type" : "Swim",
+      "summary_polyline" : "",
+      "url" : "https://www.strava.com/activities/20669693204"
+    },
+    {
       "average_heartrate" : 82.7,
       "date" : "2026-10-19T22:42:09Z",
       "distance_meters" : 2864.6,
@@ -811,22 +829,6 @@
       "sport_type" : "Walk",
       "summary_polyline" : "wt_fF`mdiVSAs@Jk@FKJNhBDr@CDUL[Jo@DkAPQ?aC\\sBToATHnAANQ`@EDkAHaA@e@DqAHa@AeAHU@gAJ[NY^_@VOD{AR_@J_@@c@Ji@DQDO?e@EM@WLQAOFSBc@@Y@MDq@BSASBsAHo@BWBOC_@BUBkCNg@BWAa@DCREHiAH}ADsCR{ABuAJo@BO?MBq@@_@Ds@BMHCTNbAJd@JpBKf@Fn@CTSPyAZa@Bc@GBFANE@c@A",
       "url" : "https://www.strava.com/activities/20416132850"
-    },
-    {
-      "average_heartrate" : 108.7,
-      "date" : "2026-10-01T20:00:02Z",
-      "distance_meters" : 2888.9,
-      "distance_miles" : 1.7950786819000002,
-      "distance_yards" : 3159,
-      "elapsed_time" : 1899,
-      "elevation_gain_meters" : 25,
-      "id" : 20415138667,
-      "max_heartrate" : 129,
-      "moving_time" : 1825,
-      "name" : "Evening Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "qdcfFjjfiVD?DE?EEa@CEKo@Gy@Cs@Kk@GcBAg@U_AAi@B_@A[]}A@YIqA@KAEFs@Eq@J_@Km@?SQ_@Gc@DODCfASH?XG\\?JI?GFGb@Kf@C`BWV?p@Sj@ErAE?CZIr@IN@bAS@@B`@AADCCDHEJDNNNBTAd@@h@GxAGR@n@Iz@?TER?REX@r@ET?fAKf@@NET?nAMLMLGdAQ|CI|@IT?~@GR@LCz@IdACx@Gt@?TFP@NDTAv@I`@IxAKNGbAKXMNOLSLI^QZIPAVD\\Ed@Cf@@t@Q`@CVCZ?`AExAMHMG_@IoABE|AWR?XOZETGR?JENQNIh@E`AQbBQVGOsCJ?nASpAQ@INYAAv@d@Tk@]SID",
-      "url" : "https://www.strava.com/activities/20415138667"
     }
   ],
   "athlete" : {
@@ -835,5 +837,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-21T02:45:44Z"
+  "generated_at" : "2026-10-21T03:46:35Z"
 }
