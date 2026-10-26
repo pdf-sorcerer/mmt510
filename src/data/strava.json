@@ -1,6 +1,22 @@
 {
   "activities" : [
     {
+      "average_heartrate" : 106,
+      "date" : "2026-10-25T23:47:23Z",
+      "distance_meters" : 2359.9,
+      "distance_miles" : 1.4663734229,
+      "distance_yards" : 2581,
+      "elapsed_time" : 1610,
+      "elevation_gain_meters" : 18,
+      "id" : 20733854577,
+      "max_heartrate" : 116,
+      "moving_time" : 1547,
+      "name" : "Night Walk",
+      "sport_type" : "Walk",
+      "summary_polyline" : "gs_fFjndiVEb@?f@\\bFBbAqAJa@Hc@@EEEAsAH}@Pg@DoDb@cANU@w@LQCKUGWYDSAeBJiBFq@Fe@?k@@{@N[JWPa@^u@ZsBR{BZ{@AOIMCOBU?OBsDJ{@Du@ASB{@?c@DKJiDNIROBs@Dg@L}@BcDRu@@KCc@Q_@AiAFe@FiABwAFS_@EAqADw@Ja@HWPo@Bg@HS?uBZaBPEF?n@Db@HXPjCFHHBAFVB?CAF@A",
+      "url" : "https://www.strava.com/activities/20733854577"
+    },
+    {
       "average_heartrate" : 106.2,
       "date" : "2026-10-23T23:56:43Z",
       "distance_meters" : 2312.1,
@@ -809,22 +825,6 @@
       "sport_type" : "Swim",
       "summary_polyline" : "",
       "url" : "https://www.strava.com/activities/20452967152"
-    },
-    {
-      "average_heartrate" : 110.1,
-      "date" : "2026-10-04T11:28:01Z",
-      "distance_meters" : 2774.4,
-      "distance_miles" : 1.7239317024,
-      "distance_yards" : 3034,
-      "elapsed_time" : 1584,
-      "elevation_gain_meters" : 28,
-      "id" : 20452443949,
-      "max_heartrate" : 127,
-      "moving_time" : 1584,
-      "name" : "Lunch Walk",
-      "sport_type" : "Walk",
-      "summary_polyline" : "cs_fFnodiVBNG|@FNCX?\\VbD?XOBi@BqANOAEGs@D_Db@WCSBi@JwANk@JwALMGY_@}@FS?OAACK?QBMHy@BIBY?o@DY@KGU@UBUHm@HYFYRQPUR{@V{@JY@WDe@?sAPwAC}BJ{@@eAHk@@QAi@Dq@@eAJk@?c@FeABSBKNQLe@AUDo@?WDiBDuBRe@?m@DYAOEc@CoAHaAAm@DM?EIAIISg@DS?aBLaB`@q@HcDh@KAW@QFOBU@s@Hs@Bw@TGJ@HLx@Pv@?f@El@BdALbB@t@N~@BfAPtAHhBDd@L^?T@TAXJrB",
-      "url" : "https://www.strava.com/activities/20452443949"
     }
   ],
   "athlete" : {
@@ -833,5 +833,5 @@
     "lastname" : "Thompson",
     "profile_url" : "https://www.strava.com/athletes/295229"
   },
-  "generated_at" : "2026-10-26T05:48:45Z"
+  "generated_at" : "2026-10-26T07:18:58Z"
 }
