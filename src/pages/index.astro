@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -36,12 +37,34 @@ const allProjects = (await getCollection('projects'))
     </section>
 
     <section class="projects-panel">
-      <!-- Keep your existing project listing unchanged -->
+      <header class="panel-header">
+        <div class="panel-title-row">
+          <h1>Projects</h1>
+        </div>
+      </header>
+
+      <div class="projects-list" id="projects-list">
+        {allProjects.map((proj, index) => (
+          <div class="project-item">
+            <ProjectCard
+              title={proj.data.title}
+              description={proj.data.description}
+              date={proj.data.date}
+              slug={proj.id}
+              index={index + 1}
+              tags={proj.data.tags}
+              stars={proj.data.stars}
+              repoUrl={proj.data.repoUrl}
+              demoUrl={proj.data.demoUrl}
+              icon={proj.data.icon}
+            />
+          </div>
+        ))}
+      </div>
     </section>
 
   </div>
 </BaseLayout>
-
 
 <style>
   .projects-container {
@@ -159,5 +182,4 @@ const allProjects = (await getCollection('projects'))
     border-color: #0B1526;
     box-shadow: 10px 10px 0 #0B1526;
   }
-
 </style>
